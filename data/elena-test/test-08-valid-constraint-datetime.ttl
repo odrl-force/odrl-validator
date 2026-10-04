@@ -1,0 +1,18 @@
+@prefix : <http://example.com/> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:policy1 a odrl:Policy ;
+    odrl:permission :perm1 .
+
+:perm1 a odrl:Permission ;
+    odrl:action odrl:use ;
+    odrl:target :file1 ;
+    odrl:constraint :constraint1 .
+
+:constraint1 a odrl:Constraint ;
+    odrl:leftOperand odrl:dateTime ;
+    odrl:operator odrl:lt ;
+    odrl:rightOperand "2026-12-31"^^xsd:date .
+
+:file1 a odrl:Asset .

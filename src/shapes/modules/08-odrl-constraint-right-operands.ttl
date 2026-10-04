@@ -1,0 +1,48 @@
+#################################################
+# RightOperand datatype per leftOperand
+#################################################
+
+# R50: the rightOperand of odrl:count must be an xsd:integer
+
+:CountRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:integer ]
+    ) ;
+    sh:message "The rightOperand of odrl:count should be an xsd:integer." .
+
+
+# R52: the rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime
+
+:DateTimeRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:dateTime ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime." .
+
+
+# R54: the rightOperand of odrl:delayPeriod must be an xsd:duration
+# R56: the rightOperand of odrl:deliveryChannel must be an IRI, a string, or a list of these
+# R58: the rightOperand of odrl:elapsedTime must be an xsd:duration
+# R60: the rightOperand of odrl:event must be an IRI or a string
+# R62: the rightOperand of odrl:fileFormat must be an IRI or a string
+# R64: the rightOperand of odrl:industry must be an IRI or a string
+# R66: the rightOperand of odrl:language must be a string
+# R68: the rightOperand of odrl:media must be a string
+# R70: the rightOperand of odrl:meteredTime must be an xsd:duration
+# R72: the rightOperand of odrl:payAmount must be an xsd:decimal
+# R74: the rightOperand of odrl:percentage must be an xsd:decimal between 0 and 100
+# R76: the rightOperand of odrl:product must be an IRI or a string
+# R78: the rightOperand of odrl:purpose must be an IRI or a string
+# R80: the rightOperand of odrl:recipient must be an IRI or a string
+# R87: the rightOperand of odrl:spatial must be an IRI
+# R90: the rightOperand of odrl:systemDevice must be an IRI or a string
+# R92: the rightOperand of odrl:timeInterval must be an xsd:duration
+# R94: the rightOperand of odrl:unitOfCount must be a string
+# R96: the rightOperand of odrl:version must be a string
+# R98: the rightOperand of odrl:virtualLocation must be a string

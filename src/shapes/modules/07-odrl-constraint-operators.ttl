@@ -1,0 +1,102 @@
+#################################################
+# Operator compatibility per leftOperand
+#################################################
+
+# R45: odrl:absolutePosition is only compatible with comparison operators
+
+:AbsolutePositionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absolutePosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absolutePosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R46: odrl:absoluteSpatialPosition is only compatible with comparison operators
+
+:AbsoluteSpatialPositionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSpatialPosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absoluteSpatialPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R47: odrl:absoluteTemporalPosition is only compatible with comparison operators
+
+:AbsoluteTemporalPositionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteTemporalPosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absoluteTemporalPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R48: odrl:absoluteSize is only compatible with comparison operators
+
+:AbsoluteSizeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSize ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absoluteSize is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R49: odrl:count is only compatible with comparison operators
+
+:CountOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:count is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R51: odrl:dateTime is only compatible with comparison operators
+
+:DateTimeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:dateTime is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R53: odrl:delayPeriod is only compatible with odrl:eq, odrl:gt or odrl:gteq
+# R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf
+# R57: odrl:elapsedTime is only compatible with odrl:eq, odrl:lt, odrl:lteq or odrl:neq
+# R59: odrl:event is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R61: odrl:fileFormat is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R63: odrl:industry is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R65: odrl:language is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R67: odrl:media is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R69: odrl:meteredTime is only compatible with odrl:eq, odrl:lt or odrl:lteq
+# R71: odrl:payAmount is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R73: odrl:percentage is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R75: odrl:product is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R77: odrl:purpose is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R79: odrl:recipient is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R81: odrl:relativePosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R82: odrl:relativeSpatialPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R83: odrl:relativeTemporalPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R84: odrl:relativeSize is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R85: odrl:resolution is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R86: odrl:spatial is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R88: odrl:spatialCoordinates is only compatible with odrl:eq or odrl:neq
+# R89: odrl:systemDevice is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R91: odrl:timeInterval is only compatible with odrl:eq
+# R93: odrl:unitOfCount is only compatible with odrl:eq or odrl:neq
+# R95: odrl:version is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R97: odrl:virtualLocation is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf

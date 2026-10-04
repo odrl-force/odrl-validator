@@ -169,8 +169,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:message "Action should be a supported action or a blank node with rdf:value and odrl:refinement." ;
     sh:path odrl:action ;
     sh:or ([
-      sh:nodeKind sh:IRI
-    ] [
       sh:node <http://example.com/ActionShape>
     ] [
       sh:node <http://example.com/ActionWithRefinementShape>
@@ -193,8 +191,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:message "Target should be a supported asset or a blank node with rdf:value." ;
     sh:path odrl:target ;
     sh:or ([
-      sh:nodeKind sh:IRI
-    ] [
       sh:node <http://example.com/AssetShape>
     ] [
       sh:node <http://example.com/AssetCollectionShape>
@@ -624,145 +620,119 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ]) .
 
-<http://example.com/ConstraintValidationShape> a sh:NodeShape ;
-  sh:targetClass odrl:Constraint ;
-  sh:node <http://example.com/AbsolutePositionOperatorShape>, <http://example.com/AbsoluteSpatialPositionOperatorShape>, <http://example.com/AbsoluteTemporalPositionOperatorShape>, <http://example.com/AbsoluteSizeOperatorShape>, <http://example.com/CountOperatorShape>, <http://example.com/CountRightOperandShape>, <http://example.com/DateTimeOperatorShape>, <http://example.com/DateTimeRightOperandShape> ;
-  sh:severity sh:Warning .
-
 <http://example.com/AbsolutePositionOperatorShape> a sh:NodeShape ;
-  sh:message "Absolute Position is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and (sh:property [
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:absolutePosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
       sh:path odrl:leftOperand ;
       sh:hasValue odrl:absolutePosition
-    ] sh:property [
-      sh:path odrl:operator ;
-      sh:not [
-        sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-      ]
-    ])
-  ] .
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning .
 
 <http://example.com/AbsoluteSpatialPositionOperatorShape> a sh:NodeShape ;
-  sh:message "Absolute Spatial Position is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and (sh:property [
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:absoluteSpatialPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
       sh:path odrl:leftOperand ;
-      sh:hasValue odrl:AbsoluteSpatialPosition
-    ] sh:property [
-      sh:path odrl:operator ;
-      sh:not [
-        sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-      ]
-    ])
-  ] .
+      sh:hasValue odrl:absoluteSpatialPosition
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning .
 
 <http://example.com/AbsoluteTemporalPositionOperatorShape> a sh:NodeShape ;
-  sh:message "Absolute Temporal Position is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and (sh:property [
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:absoluteTemporalPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
       sh:path odrl:leftOperand ;
-      sh:hasValue odrl:AbsoluteTemporalPosition
-    ] sh:property [
-      sh:path odrl:operator ;
-      sh:not [
-        sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-      ]
-    ])
-  ] .
+      sh:hasValue odrl:absoluteTemporalPosition
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning .
 
 <http://example.com/AbsoluteSizeOperatorShape> a sh:NodeShape ;
-  sh:message "Absolute Size is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and (sh:property [
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:absoluteSize is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
       sh:path odrl:leftOperand ;
-      sh:hasValue odrl:AbsoluteSize
-    ] sh:property [
-      sh:path odrl:operator ;
-      sh:not [
-        sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-      ]
-    ])
-  ] .
+      sh:hasValue odrl:absoluteSize
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning .
 
 <http://example.com/CountOperatorShape> a sh:NodeShape ;
-  sh:message "Count is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and (sh:property [
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:count is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
       sh:path odrl:leftOperand ;
       sh:hasValue odrl:count
-    ] sh:property [
-      sh:path odrl:operator ;
-      sh:not [
-        sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-      ]
-    ])
-  ] .
-
-<http://example.com/CountRightOperandShape> a sh:NodeShape ;
-  sh:message "The rightOperand for count should be an integer." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and ([
-      sh:property [
-        sh:path odrl:leftOperand ;
-        sh:hasValue odrl:count
-      ]
-    ] [
-      sh:property [
-        sh:path odrl:rightOperand ;
-        sh:not [
-          sh:datatype xsd:integer
-        ]
-      ]
-    ])
-  ] .
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning .
 
 <http://example.com/DateTimeOperatorShape> a sh:NodeShape ;
-  sh:message "DataTime is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and ([
-      sh:property [
-        sh:path odrl:leftOperand ;
-        sh:hasValue odrl:dateTime
-      ]
-    ] [
-      sh:property [
-        sh:path odrl:operator ;
-        sh:minCount 1 ;
-        sh:not [
-          sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-        ]
-      ]
-    ])
-  ] .
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:dateTime is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:dateTime
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning .
 
-<http://example.com/DataTimeRightOperandShape> a sh:NodeShape ;
-  sh:message "The rightOperand for dateTime should be a valid date or date time." ;
-  sh:severity sh:Warning ;
-  sh:not [
-    sh:and ([
-      sh:property [
-        sh:path odrl:leftOperand ;
-        sh:hasValue odrl:dateTime
-      ]
+<http://example.com/CountRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:count
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:datatype xsd:integer
+  ]) ;
+  sh:severity sh:Warning .
+
+<http://example.com/DateTimeRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:dateTime
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:or ([
+      sh:datatype xsd:date
     ] [
-      sh:property [
-        sh:path odrl:rightOperand ;
-        sh:not [
-          sh:or ([
-            sh:datatype xsd:date
-          ] [
-            sh:datatype xsd:dateTime
-          ])
-        ]
-      ]
+      sh:datatype xsd:dateTime
     ])
-  ] .
+  ]) ;
+  sh:severity sh:Warning .
 `
