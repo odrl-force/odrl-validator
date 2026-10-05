@@ -295,8 +295,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:in (odrl:acceptTracking odrl:aggregate odrl:anonymize odrl:annotate odrl:archive odrl:attribute odrl:compensate odrl:concurrentUse odrl:delete odrl:derive odrl:digitize odrl:display odrl:distribute odrl:ensureExclusivity odrl:execute odrl:extract odrl:give odrl:grantUse odrl:include odrl:index odrl:inform odrl:install odrl:modify odrl:move odrl:nextPolicy odrl:obtainConsent odrl:play odrl:present odrl:print odrl:read odrl:reproduce odrl:reviewPolicy odrl:sell odrl:stream odrl:synchronize odrl:textToSpeech odrl:transfer odrl:transform odrl:translate odrl:uninstall odrl:use odrl:watermark <http://creativecommons.org/ns#Attribution> <http://creativecommons.org/ns#CommercialUse> <http://creativecommons.org/ns#DerivativeWorks> <http://creativecommons.org/ns#Distribution> <http://creativecommons.org/ns#Notice> <http://creativecommons.org/ns#Reproduction> <http://creativecommons.org/ns#ShareAlike> <http://creativecommons.org/ns#Sharing> <http://creativecommons.org/ns#SourceCode> odrl:append odrl:appendTo odrl:copy odrl:export odrl:lease odrl:license odrl:lend odrl:pay odrl:preview odrl:secondaryUse odrl:share odrl:write odrl:writeTo odrl:adHocShare odrl:extractChar odrl:extractPage odrl:extractWord odrl:timedCount)
   ] [
     sh:class odrl:Action
-  ] [
-    sh:nodeKind sh:BlankNode
   ]) ;
   sh:severity sh:Warning .
 

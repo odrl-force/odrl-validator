@@ -113,7 +113,5 @@
             ) 
     ][ 
         sh:class odrl:Action 
-    ][ 
-        sh:nodeKind sh:BlankNode 
     ]) ;
     sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." .
