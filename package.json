@@ -12,7 +12,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run makeRules && npm run makeShapes && tsc",
+    "build": "npm run clean && npm run buildShapes && npm run makeRules && npm run makeShapes && tsc",
+    "buildShapes": "tsx src/shapes/scripts/build-shapes.ts",
     "makeRules": "tsx scripts/MakeRules.ts ",
     "makeShapes": "tsx scripts/MakeShapes.ts ",
     "clean": "rm -rf ./dist",
