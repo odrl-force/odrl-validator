@@ -16,7 +16,7 @@
     "makeRules": "tsx scripts/MakeRules.ts ",
     "makeShapes": "tsx scripts/MakeShapes.ts ",
     "clean": "rm -rf ./dist",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "demo": "tsx demo.ts",
     "prepare": "npm run build",
     "release": "npm run build && npm publish --access public"
