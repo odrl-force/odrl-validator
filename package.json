@@ -12,10 +12,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run buildShapes && npm run makeRules && npm run makeShapes && tsc",
+    "build": "npm run clean && npm run buildShapes && npm run makeRules && npm run makeShapes && npm run makeProfiles && tsc",
     "buildShapes": "tsx src/shapes/scripts/build-shapes.ts",
     "makeRules": "tsx scripts/MakeRules.ts ",
     "makeShapes": "tsx scripts/MakeShapes.ts ",
+    "makeProfiles": "tsx scripts/MakeProfiles.ts",
     "clean": "rm -rf ./dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "demo": "tsx demo.ts",

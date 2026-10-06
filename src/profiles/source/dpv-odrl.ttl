@@ -1,0 +1,400 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix tech: <https://w3id.org/dpv/tech#> .
+@prefix pd: <https://w3id.org/dpv/pd#> .
+@prefix loc: <https://w3id.org/dpv/loc#> .
+@prefix legal-eu: <https://w3id.org/dpv/legal/eu#> .
+@prefix eu-gdpr: <https://w3id.org/dpv/legal/eu/gdpr#> .
+@prefix risk: <https://w3id.org/dpv/risk#> .
+@prefix justifications: <https://w3id.org/dpv/justifications#> .
+@prefix ai: <https://w3id.org/dpv/ai#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+# DPV entities - ODRL mapping #
+
+dpv-odrl:Entity a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Entity ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Agent a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Agent ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:LegalEntity a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:LegalEntity ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:HumanSubject a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:HumanSubject ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Organisation a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Organisation ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Recipient a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Recipient ;
+	skos:broader odrl:recipient ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Actor a odrl:Party, odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch tech:Actor ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+### All other entity concepts should be added 
+### dpv-odrl:Patient a odrl:Party, skos:Concept ;
+### 	skos:exactMatch dpv:Patient .
+
+# DPV processing - ODRL action mapping #
+
+dpv-odrl:Processing a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Processing .
+
+dpv-odrl:Tracking a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Tracking ;
+	skos:related odrl:acceptTracking .
+
+dpv-odrl:Aggregate a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Aggregate ;
+	skos:related odrl:aggregate .
+
+dpv-odrl:Anonymise a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Anonymise ;
+	skos:related odrl:anonymize .
+
+dpv-odrl:Delete a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Delete ;
+	skos:related odrl:delete .
+
+dpv-odrl:Derive a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Derive ;
+	skos:related odrl:derive .
+
+dpv-odrl:Display a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Display ;
+	skos:related odrl:display .
+
+dpv-odrl:Modify a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Modify ;
+	skos:related odrl:modify .
+
+dpv-odrl:Move a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Move ;
+	skos:related odrl:move .
+
+dpv-odrl:Transfer a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Transfer ;
+	skos:related odrl:transfer .
+
+dpv-odrl:Transform a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Transform ;
+	skos:related odrl:transform .
+
+dpv-odrl:Use a odrl:Action, skos:Concept ;
+	skos:exactMatch dpv:Use ;
+	skos:related odrl:use .
+
+### All other processing concepts should be added 
+### dpv-odrl:Collect a odrl:Action, skos:Concept ;
+### 	skos:exactMatch dpv:Collect .
+
+# DPV data - ODRL mapping #
+
+dpv-odrl:Data a odrl:Asset, skos:Concept, odrl:LeftOperand ;
+	skos:exactMatch dpv:Data ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:PersonalData a odrl:Asset, skos:Concept, odrl:LeftOperand ;
+	skos:exactMatch dpv:PersonalData ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Age a odrl:Asset, skos:Concept, odrl:LeftOperand ;
+	skos:exactMatch pd:Age ;
+	skos:note "Only the odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, and odrl:neq operators MUST be used."@en .
+
+dpv-odrl:Gender a odrl:Asset, skos:Concept, odrl:LeftOperand ;
+	skos:exactMatch pd:Gender ;
+	skos:note "Only the odrl:eq and odrl:neq operators MUST be used."@en .
+
+dpv-odrl:Nationality a odrl:Asset, skos:Concept, odrl:LeftOperand ;
+	skos:exactMatch pd:Nationality ;
+	skos:note "Only the odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:DataSource a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:DataSource ;
+	skos:note "Only the odrl:isA, odrl:eq, and odrl:neq operators MUST be used."@en .
+
+### All other data concepts should be added 
+### dpv-odrl:Name a odrl:Asset, skos:Concept ;
+### 	skos:exactMatch pd:Name .
+
+# DPV tech - ODRL mapping #
+
+dpv-odrl:Technology a odrl:Asset, skos:Concept, odrl:LeftOperand ;
+	skos:exactMatch dpv:Technology ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+### All other technology concepts should be added 
+### dpv-odrl:GPAI a odrl:Asset, skos:Concept ;
+### 	skos:exactMatch ai:GPAI .
+
+# DPV purpose - ODRL left operand mapping #
+
+dpv-odrl:Purpose a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Purpose ;
+	skos:broader odrl:purpose ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV TOMs - ODRL left operand mapping #
+
+dpv-odrl:TechnicalOrganisationalMeasure a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:TechnicalOrganisationalMeasure ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:TechnicalMeasure a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:TechnicalMeasure ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:OrganisationalMeasure a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:OrganisationalMeasure ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:LegalMeasure a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:LegalMeasure ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:PhysicalMeasure a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:PhysicalMeasure ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:RiskMitigationMeasure a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:RiskMitigationMeasure ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV location - ODRL left operand mapping #
+
+dpv-odrl:Location a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Location ;
+	skos:broader odrl:spatial ;
+	skos:note "Only the odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV law & legal basis - ODRL left operand mapping #
+
+dpv-odrl:Law a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Law ;
+	skos:note "Only the odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:LegalBasis a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:LegalBasis ;
+	skos:note "Only the odrl:isA, odrl:eq and odrl:neq operators MUST be used."@en .
+
+dpv-odrl:ConsentControl a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:ConsentControl ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:ContractControl a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:ContractControl ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV duration & frequency - ODRL left operand mapping #
+
+dpv-odrl:Duration a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Duration ;
+	skos:related odrl:elapsedTime, odrl:count ;
+	skos:note "Only the odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, and odrl:neq operators MUST be used."@en .
+
+dpv-odrl:Frequency a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Frequency ;
+	skos:related odrl:timeInterval ;
+	skos:note "Only the odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, and odrl:neq operators MUST be used."@en .
+
+# DPV rights and justifications - ODRL left operand mapping #
+
+dpv-odrl:Right a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Right ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Justification a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Justification ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV risk - ODRL left operand mapping #
+
+dpv-odrl:Risk a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Risk ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:RiskLevel a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:RiskLevel ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:RiskControl a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:RiskControl ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Likelihood a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Likelihood ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Severity a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Severity ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Consequence a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Consequence ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Impact a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Impact ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV sector - ODRL left operand mapping #
+
+dpv-odrl:Sector a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Sector ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV status & processing context - ODRL left operand mapping #
+
+dpv-odrl:Status a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Status ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:AutomationLevel a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:AutomationLevel ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:EntityInvolvement a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:EntityInvolvement ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:HumanInvolvement a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:HumanInvolvement ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:ProcessingLocation a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:ProcessingLocation ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+dpv-odrl:Scale a odrl:LeftOperand, skos:Concept ;
+	skos:exactMatch dpv:Scale ;
+	skos:note "Only the odrl:isA, odrl:eq, odrl:neq, odrl:isAnyOf, and odrl:isNoneOf operators MUST be used."@en .
+
+# DPV rules - ODRL mapping #
+
+dpv-odrl:Permission skos:exactMatch dpv:Permission ;
+	skos:closeMatch odrl:Permission .
+
+dpv-odrl:Prohibition skos:exactMatch dpv:Prohibition ;
+	skos:closeMatch odrl:Prohibition .
+
+dpv-odrl:Obligation skos:exactMatch dpv:Obligation ;
+	skos:closeMatch odrl:Duty .
+
+# DPV contractual clauses, legal agreements & policies - ODRL mapping #
+
+dpv-odrl:ContractAmendmentClause a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:ContractAmendmentClause ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractConfidentialityClause, dpv-odrl:ContractDisputeResolutionClause,
+	dpv-odrl:ContractJurisdictionClause, dpv-odrl:ContractTerminationClause,
+	dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:ContractConfidentialityClause a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:ContractConfidentialityClause ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractDisputeResolutionClause,
+	dpv-odrl:ContractJurisdictionClause, dpv-odrl:ContractTerminationClause,
+	dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:ContractDisputeResolutionClause a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:ContractDisputeResolutionClause ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractJurisdictionClause, dpv-odrl:ContractTerminationClause,
+	dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:ContractJurisdictionClause a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:ContractJurisdictionClause ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractTerminationClause,
+	dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:ContractTerminationClause a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:ContractTerminationClause ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:TermsOfService a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:TermsOfService ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:ContractTerminationClause, dpv-odrl:DataHandlingClause, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:DataHandlingClause a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:DataHandlingClause ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:ContractTerminationClause, dpv-odrl:TermsOfService, dpv-odrl:LegalAgreement,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:LegalAgreement a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:LegalAgreement ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:ContractTerminationClause, dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause,
+	dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:ConfidentialityAgreement a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:ConfidentialityAgreement ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:ContractTerminationClause, dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause,
+	dpv-odrl:LegalAgreement, dpv-odrl:NDA, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:NDA a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:NDA ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:ContractTerminationClause, dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause,
+	dpv-odrl:LegalAgreement, dpv-odrl:ConfidentialityAgreement, dpv-odrl:StatisticalConfidentialityAgreement .
+
+dpv-odrl:StatisticalConfidentialityAgreement a rdfs:Class , owl:Class, skos:Concept ;
+	skos:exactMatch dpv:StatisticalConfidentialityAgreement ;
+	rdfs:subClassOf odrl:Policy ;
+	owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion,
+	dpv-odrl:ContractAmendmentClause, dpv-odrl:ContractConfidentialityClause,
+	dpv-odrl:ContractDisputeResolutionClause, dpv-odrl:ContractJurisdictionClause,
+	dpv-odrl:ContractTerminationClause, dpv-odrl:TermsOfService, dpv-odrl:DataHandlingClause,
+	dpv-odrl:LegalAgreement, dpv-odrl:ConfidentialityAgreement, dpv-odrl:NDA .
