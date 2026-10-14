@@ -957,6 +957,15 @@
 
 # R53: odrl:delayPeriod is only compatible with odrl:eq, odrl:gt or odrl:gteq
 
+:DelayPeriodOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq ) ]
+    ) ;
+    sh:message "odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq." .
 
 
 # R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf
@@ -1017,6 +1026,16 @@
 
 
 # R54: the rightOperand of odrl:delayPeriod must be an xsd:duration
+
+:DelayPeriodRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+    ) ;
+    sh:message "The rightOperand of odrl:delayPeriod must be an xsd:duration." .
 
 
 # R56: the rightOperand of odrl:deliveryChannel must be an IRI, a string, or a list of these

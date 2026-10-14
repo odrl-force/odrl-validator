@@ -82,6 +82,15 @@
 
 # R53: odrl:delayPeriod is only compatible with odrl:eq, odrl:gt or odrl:gteq
 
+:DelayPeriodOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq ) ]
+    ) ;
+    sh:message "odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq." .
 
 
 # R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf

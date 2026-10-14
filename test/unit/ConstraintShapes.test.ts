@@ -11,6 +11,8 @@ const MESSAGES = {
     R50: 'The rightOperand of odrl:count should be an xsd:integer.',
     R51: 'odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R52: 'The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime.',
+    R53: 'odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq.',
+    R54: 'The rightOperand of odrl:delayPeriod must be an xsd:duration.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -56,6 +58,7 @@ describe('The constraint operator shapes', () => {
         [ 'R48', 'odrl:absoluteSize', '"1000"^^xsd:integer', 'odrl:lt', 'odrl:isA', 'Warning' ],
         [ 'R49', 'odrl:count', '"5"^^xsd:integer', 'odrl:lt', 'odrl:isA', 'Warning' ],
         [ 'R51', 'odrl:dateTime', '"2026-12-31"^^xsd:date', 'odrl:lt', 'odrl:isA', 'Violation' ],
+        [ 'R53', 'odrl:delayPeriod', '"PT60M"^^xsd:duration', 'odrl:gteq', 'odrl:lt', 'Violation' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -77,8 +80,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R50', 'odrl:count', '"5"^^xsd:integer' ],
         [ 'R52', 'odrl:dateTime', '"2026-12-31"^^xsd:date' ],
         [ 'R52', 'odrl:dateTime', '"2026-12-31T10:00:00Z"^^xsd:dateTime' ],
+        [ 'R54', 'odrl:delayPeriod', '"PT60M"^^xsd:duration' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
-        expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({ valid: true, messages: [] });
+        expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
 
     // [requirement, leftOperand, wrong rightOperand, severity]
@@ -88,10 +92,12 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R52', 'odrl:dateTime', '"tomorrow"', 'Violation' ],
         [ 'R52', 'odrl:dateTime', '"5"^^xsd:integer', 'Violation' ],
         [ 'R52', 'odrl:dateTime', '"2026-13-45"^^xsd:date', 'Violation' ],
+        [ 'R54', 'odrl:delayPeriod', '"60 minutes"', 'Violation' ],
+        [ 'R54', 'odrl:delayPeriod', '"60"^^xsd:integer', 'Violation' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
-        expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({
+        expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({
             valid: severity === 'Warning',
             messages: [ MESSAGES[requirement] ],
         });
