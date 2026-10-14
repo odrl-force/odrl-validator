@@ -15,6 +15,8 @@ const MESSAGES = {
     R54: 'The rightOperand of odrl:delayPeriod must be an xsd:duration.',
     R55: 'odrl:deliveryChannel should only be used with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf.',
     R56: 'The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these.',
+    R57: 'odrl:elapsedTime must only be used with odrl:eq, odrl:lt, odrl:lteq or odrl:neq.',
+    R58: 'The rightOperand of odrl:elapsedTime must be an xsd:duration.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -62,6 +64,7 @@ describe('The constraint operator shapes', () => {
         [ 'R51', 'odrl:dateTime', '"2026-12-31"^^xsd:date', 'odrl:lt', 'odrl:isA', 'Violation' ],
         [ 'R53', 'odrl:delayPeriod', '"PT60M"^^xsd:duration', 'odrl:gteq', 'odrl:lt', 'Violation' ],
         [ 'R55', 'odrl:deliveryChannel', ':mobile', 'odrl:isAnyOf', 'odrl:lt', 'Warning' ],
+        [ 'R57', 'odrl:elapsedTime', '"PT60M"^^xsd:duration', 'odrl:lteq', 'odrl:gt', 'Violation' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -87,6 +90,7 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R56', 'odrl:deliveryChannel', ':mobile' ],
         [ 'R56', 'odrl:deliveryChannel', '"mobile"' ],
         [ 'R56', 'odrl:deliveryChannel', '( :mobile "web" )' ],
+        [ 'R58', 'odrl:elapsedTime', '"PT60M"^^xsd:duration' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -102,6 +106,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R54', 'odrl:delayPeriod', '"60"^^xsd:integer', 'Violation' ],
         [ 'R56', 'odrl:deliveryChannel', '"5"^^xsd:integer', 'Warning' ],
         [ 'R56', 'odrl:deliveryChannel', '( :mobile "5"^^xsd:integer )', 'Warning' ],
+        [ 'R58', 'odrl:elapsedTime', '"60 minutes"', 'Violation' ],
+        [ 'R58', 'odrl:elapsedTime', '"60"^^xsd:integer', 'Violation' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
