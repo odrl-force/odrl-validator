@@ -1268,7 +1268,29 @@
 
 
 # R95: odrl:version is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:VersionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:version ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:version should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R97: odrl:virtualLocation is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:VirtualLocationOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:virtualLocation ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:virtualLocation should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
 
 
 #################################################
@@ -1536,8 +1558,29 @@
 
 
 # R96: the rightOperand of odrl:version must be a string
+
+:VersionRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:version ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:version should be a string or a list of strings." .
+
+
 # R98: the rightOperand of odrl:virtualLocation must be a string
 
+:VirtualLocationRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:virtualLocation ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:virtualLocation should be a string or a list of strings." .
 
 
 

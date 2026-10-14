@@ -53,6 +53,10 @@ const MESSAGES = {
     R92: 'The rightOperand of odrl:timeInterval must be an xsd:duration.',
     R93: 'odrl:unitOfCount should only be used with odrl:eq or odrl:neq.',
     R94: 'The rightOperand of odrl:unitOfCount should be a string.',
+    R95: 'odrl:version should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
+    R96: 'The rightOperand of odrl:version should be a string or a list of strings.',
+    R97: 'odrl:virtualLocation should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
+    R98: 'The rightOperand of odrl:virtualLocation should be a string or a list of strings.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -122,6 +126,8 @@ describe('The constraint operator shapes', () => {
         [ 'R89', 'odrl:systemDevice', '( :laptop42 "device-1234" )', 'odrl:isAnyOf', 'odrl:isA', 'Warning' ],
         [ 'R91', 'odrl:timeInterval', '"P7D"^^xsd:duration', 'odrl:eq', 'odrl:lt', 'Warning' ],
         [ 'R93', 'odrl:unitOfCount', '"perUser"', 'odrl:neq', 'odrl:isAnyOf', 'Warning' ],
+        [ 'R95', 'odrl:version', '"2.0"', 'odrl:eq', 'odrl:lt', 'Warning' ],
+        [ 'R97', 'odrl:virtualLocation', '( "intranet" "vpn" )', 'odrl:isNoneOf', 'odrl:isA', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -182,6 +188,10 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R90', 'odrl:systemDevice', '( :laptop42 "device-1234" )' ],
         [ 'R92', 'odrl:timeInterval', '"P7D"^^xsd:duration' ],
         [ 'R94', 'odrl:unitOfCount', '"perUser"' ],
+        [ 'R96', 'odrl:version', '"2.0"' ],
+        [ 'R96', 'odrl:version', '( "1.0" "2.0" )' ],
+        [ 'R98', 'odrl:virtualLocation', '"https://example.com/intranet"' ],
+        [ 'R98', 'odrl:virtualLocation', '( "intranet" "vpn" )' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -231,6 +241,10 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R92', 'odrl:timeInterval', '"7"^^xsd:integer', 'Violation' ],
         [ 'R94', 'odrl:unitOfCount', ':perUser', 'Warning' ],
         [ 'R94', 'odrl:unitOfCount', '( "perUser" "perDevice" )', 'Warning' ],
+        [ 'R96', 'odrl:version', '"2"^^xsd:integer', 'Warning' ],
+        [ 'R96', 'odrl:version', '( "1.0" :v2 )', 'Warning' ],
+        [ 'R98', 'odrl:virtualLocation', ':intranet', 'Warning' ],
+        [ 'R98', 'odrl:virtualLocation', '( "intranet" :vpn )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
