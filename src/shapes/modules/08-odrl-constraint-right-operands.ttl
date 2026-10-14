@@ -172,6 +172,18 @@
 
 
 # R76: the rightOperand of odrl:product must be an IRI or a string
+
+:ProductRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:product ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:product should be an IRI, a string, or a list of these." .
+
+
 # R78: the rightOperand of odrl:purpose must be an IRI or a string
 # R80: the rightOperand of odrl:recipient must be an IRI or a string
 # R87: the rightOperand of odrl:spatial must be an IRI

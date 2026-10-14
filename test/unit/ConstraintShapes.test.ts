@@ -33,6 +33,8 @@ const MESSAGES = {
     R72: 'The rightOperand of odrl:payAmount must be an xsd:decimal.',
     R73: 'odrl:percentage must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R74: 'The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100.',
+    R75: 'odrl:product should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
+    R76: 'The rightOperand of odrl:product should be an IRI, a string, or a list of these.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -89,6 +91,7 @@ describe('The constraint operator shapes', () => {
         [ 'R69', 'odrl:meteredTime', '"PT60M"^^xsd:duration', 'odrl:lteq', 'odrl:neq', 'Violation' ],
         [ 'R71', 'odrl:payAmount', '"10.50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Violation' ],
         [ 'R73', 'odrl:percentage', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Violation' ],
+        [ 'R75', 'odrl:product', ':Publication', 'odrl:isA', 'odrl:lt', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -134,6 +137,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R74', 'odrl:percentage', '"50"^^xsd:decimal' ],
         [ 'R74', 'odrl:percentage', '"0.0"^^xsd:decimal' ],
         [ 'R74', 'odrl:percentage', '"100.0"^^xsd:decimal' ],
+        [ 'R76', 'odrl:product', ':magazine' ],
+        [ 'R76', 'odrl:product', '"magazine"' ],
+        [ 'R76', 'odrl:product', '( :magazine "newspaper" )' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -168,6 +174,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R74', 'odrl:percentage', '"100.5"^^xsd:decimal', 'Violation' ],
         [ 'R74', 'odrl:percentage', '"-1"^^xsd:decimal', 'Violation' ],
         [ 'R74', 'odrl:percentage', '"50%"', 'Violation' ],
+        [ 'R76', 'odrl:product', '"5"^^xsd:integer', 'Warning' ],
+        [ 'R76', 'odrl:product', '( :magazine "5"^^xsd:integer )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
