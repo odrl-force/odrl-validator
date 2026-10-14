@@ -185,6 +185,18 @@
 
 
 # R69: odrl:meteredTime is only compatible with odrl:eq, odrl:lt or odrl:lteq
+
+:MeteredTimeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:meteredTime ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:lt odrl:lteq ) ]
+    ) ;
+    sh:message "odrl:meteredTime must only be used with odrl:eq, odrl:lt or odrl:lteq." .
+
+
 # R71: odrl:payAmount is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R73: odrl:percentage is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R75: odrl:product is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf

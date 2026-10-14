@@ -830,6 +830,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Warning ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/MeteredTimeOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:meteredTime must only be used with odrl:eq, odrl:lt or odrl:lteq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:meteredTime
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:lt odrl:lteq)
+  ]) ;
+  sh:severity sh:Violation ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
@@ -1034,5 +1049,20 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ])
   ]) ;
   sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/MeteredTimeRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:meteredTime must be an xsd:duration." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:meteredTime
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:datatype xsd:duration
+  ]) ;
+  sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 `

@@ -27,6 +27,8 @@ const MESSAGES = {
     R66: 'The rightOperand of odrl:language should be a string or a list of strings.',
     R67: 'odrl:media should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
     R68: 'The rightOperand of odrl:media should be a string or a list of strings.',
+    R69: 'odrl:meteredTime must only be used with odrl:eq, odrl:lt or odrl:lteq.',
+    R70: 'The rightOperand of odrl:meteredTime must be an xsd:duration.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -80,6 +82,7 @@ describe('The constraint operator shapes', () => {
         [ 'R63', 'odrl:industry', '( :publishing :financial )', 'odrl:isNoneOf', 'odrl:isAllOf', 'Warning' ],
         [ 'R65', 'odrl:language', '"en"', 'odrl:eq', 'odrl:isA', 'Warning' ],
         [ 'R67', 'odrl:media', '( "electronic" "print" )', 'odrl:isAnyOf', 'odrl:isAllOf', 'Warning' ],
+        [ 'R69', 'odrl:meteredTime', '"PT60M"^^xsd:duration', 'odrl:lteq', 'odrl:neq', 'Violation' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -119,6 +122,7 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R66', 'odrl:language', '( "en" "es" )' ],
         [ 'R68', 'odrl:media', '"print"' ],
         [ 'R68', 'odrl:media', '( "electronic" "print" )' ],
+        [ 'R70', 'odrl:meteredTime', '"PT60M"^^xsd:duration' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -146,6 +150,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R66', 'odrl:language', '( "en" :spanish )', 'Warning' ],
         [ 'R68', 'odrl:media', ':print', 'Warning' ],
         [ 'R68', 'odrl:media', '( "print" :advertising )', 'Warning' ],
+        [ 'R70', 'odrl:meteredTime', '"60 minutes"', 'Violation' ],
+        [ 'R70', 'odrl:meteredTime', '"60"^^xsd:integer', 'Violation' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
