@@ -725,6 +725,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/DeliveryChannelOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:deliveryChannel should only be used with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:deliveryChannel
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:neq odrl:isAllOf odrl:isAnyOf odrl:isNoneOf)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
@@ -773,4 +788,38 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ]) ;
   sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/DeliveryChannelRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:deliveryChannel
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:or ([
+      sh:nodeKind sh:IRI
+    ] [
+      sh:datatype xsd:string
+    ] [
+      sh:node <http://example.com/IriOrStringListShape>
+    ])
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/IriOrStringListShape> a sh:NodeShape ;
+  sh:property [
+    sh:path ([
+      sh:zeroOrMorePath rdf:rest
+    ] rdf:first) ;
+    sh:or ([
+      sh:nodeKind sh:IRI
+    ] [
+      sh:datatype xsd:string
+    ])
+  ] ;
+  sh:node <http://example.com/RdfListShape> .
 `

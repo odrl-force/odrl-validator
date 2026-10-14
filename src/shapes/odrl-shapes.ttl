@@ -969,6 +969,18 @@
 
 
 # R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf
+
+:DeliveryChannelOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:deliveryChannel ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAllOf odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:deliveryChannel should only be used with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R57: odrl:elapsedTime is only compatible with odrl:eq, odrl:lt, odrl:lteq or odrl:neq
 # R59: odrl:event is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R61: odrl:fileFormat is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
@@ -1039,6 +1051,24 @@
 
 
 # R56: the rightOperand of odrl:deliveryChannel must be an IRI, a string, or a list of these
+
+:DeliveryChannelRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:deliveryChannel ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these." .
+
+:IriOrStringListShape a sh:NodeShape ;
+    sh:node :RdfListShape ;
+    sh:property [
+        sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+        sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] ) ;
+    ] .
+
 # R58: the rightOperand of odrl:elapsedTime must be an xsd:duration
 # R60: the rightOperand of odrl:event must be an IRI or a string
 # R62: the rightOperand of odrl:fileFormat must be an IRI or a string
