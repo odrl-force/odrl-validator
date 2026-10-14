@@ -328,6 +328,18 @@
 
 
 # R86: odrl:spatial is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:SpatialOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R88: odrl:spatialCoordinates is only compatible with odrl:eq or odrl:neq
 # R89: odrl:systemDevice is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 # R91: odrl:timeInterval is only compatible with odrl:eq

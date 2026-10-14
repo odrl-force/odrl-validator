@@ -211,6 +211,18 @@
 
 
 # R87: the rightOperand of odrl:spatial must be an IRI
+
+:SpatialRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
+        [ sh:path odrl:rightOperand ; sh:nodeKind sh:IRI ]
+    ) ;
+    sh:message "The rightOperand of odrl:spatial must be an IRI." .
+
+
 # R90: the rightOperand of odrl:systemDevice must be an IRI or a string
 # R92: the rightOperand of odrl:timeInterval must be an xsd:duration
 # R94: the rightOperand of odrl:unitOfCount must be a string

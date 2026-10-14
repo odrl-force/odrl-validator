@@ -995,6 +995,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Warning ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/SpatialOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:spatial
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
+  ]) ;
+  sh:severity sh:Violation ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
@@ -1309,5 +1324,20 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ])
   ]) ;
   sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/SpatialRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:spatial must be an IRI." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:spatial
+    ]
+  ] [
+    sh:nodeKind sh:IRI ;
+    sh:path odrl:rightOperand
+  ]) ;
+  sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 `

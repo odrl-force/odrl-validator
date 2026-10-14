@@ -44,6 +44,8 @@ const MESSAGES = {
     R83: 'odrl:relativeTemporalPosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R84: 'odrl:relativeSize should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R85: 'odrl:resolution should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R86: 'odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
+    R87: 'The rightOperand of odrl:spatial must be an IRI.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -108,6 +110,7 @@ describe('The constraint operator shapes', () => {
         [ 'R83', 'odrl:relativeTemporalPosition', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
         [ 'R84', 'odrl:relativeSize', '"200"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
         [ 'R85', 'odrl:resolution', '"1200"^^xsd:integer', 'odrl:lteq', 'odrl:isA', 'Warning' ],
+        [ 'R86', 'odrl:spatial', '<https://www.wikidata.org/wiki/Q29>', 'odrl:eq', 'odrl:lt', 'Violation' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -162,6 +165,7 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R80', 'odrl:recipient', ':alice' ],
         [ 'R80', 'odrl:recipient', '"Bob"' ],
         [ 'R80', 'odrl:recipient', '( :alice "Bob" )' ],
+        [ 'R87', 'odrl:spatial', '<https://www.wikidata.org/wiki/Q29>' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -202,6 +206,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R78', 'odrl:purpose', '( :research "5"^^xsd:integer )', 'Warning' ],
         [ 'R80', 'odrl:recipient', '"5"^^xsd:integer', 'Warning' ],
         [ 'R80', 'odrl:recipient', '( :alice "5"^^xsd:integer )', 'Warning' ],
+        [ 'R87', 'odrl:spatial', '"ES"', 'Violation' ],
+        // Lists are blank nodes, so they are not allowed either (to be discussed for isAnyOf/isNoneOf).
+        [ 'R87', 'odrl:spatial', '( <https://www.wikidata.org/wiki/Q29> <https://www.wikidata.org/wiki/Q142> )', 'Violation' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
