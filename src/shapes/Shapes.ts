@@ -755,6 +755,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/EventOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:event should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:event
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
@@ -851,5 +866,24 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:datatype xsd:duration
   ]) ;
   sh:severity sh:Violation ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/EventRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:event should be an IRI or a string." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:event
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:or ([
+      sh:nodeKind sh:IRI
+    ] [
+      sh:datatype xsd:string
+    ])
+  ]) ;
+  sh:severity sh:Warning ;
   sh:targetSubjectsOf odrl:leftOperand .
 `

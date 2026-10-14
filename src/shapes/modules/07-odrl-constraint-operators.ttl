@@ -120,6 +120,18 @@
 
 
 # R59: odrl:event is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:EventOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:event ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:event should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
 # R61: odrl:fileFormat is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
 # R63: odrl:industry is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
 # R65: odrl:language is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf

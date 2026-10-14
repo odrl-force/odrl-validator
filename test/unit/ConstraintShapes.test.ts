@@ -17,6 +17,8 @@ const MESSAGES = {
     R56: 'The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these.',
     R57: 'odrl:elapsedTime must only be used with odrl:eq, odrl:lt, odrl:lteq or odrl:neq.',
     R58: 'The rightOperand of odrl:elapsedTime must be an xsd:duration.',
+    R59: 'odrl:event should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R60: 'The rightOperand of odrl:event should be an IRI or a string.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -65,6 +67,7 @@ describe('The constraint operator shapes', () => {
         [ 'R53', 'odrl:delayPeriod', '"PT60M"^^xsd:duration', 'odrl:gteq', 'odrl:lt', 'Violation' ],
         [ 'R55', 'odrl:deliveryChannel', ':mobile', 'odrl:isAnyOf', 'odrl:lt', 'Warning' ],
         [ 'R57', 'odrl:elapsedTime', '"PT60M"^^xsd:duration', 'odrl:lteq', 'odrl:gt', 'Violation' ],
+        [ 'R59', 'odrl:event', ':fifaWorldCup2020', 'odrl:gt', 'odrl:isA', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -91,6 +94,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R56', 'odrl:deliveryChannel', '"mobile"' ],
         [ 'R56', 'odrl:deliveryChannel', '( :mobile "web" )' ],
         [ 'R58', 'odrl:elapsedTime', '"PT60M"^^xsd:duration' ],
+        [ 'R60', 'odrl:event', ':fifaWorldCup2020' ],
+        [ 'R60', 'odrl:event', '"FIFA World Cup 2020"' ],
+        [ 'R60', 'odrl:event', 'odrl:policyUsage' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -108,6 +114,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R56', 'odrl:deliveryChannel', '( :mobile "5"^^xsd:integer )', 'Warning' ],
         [ 'R58', 'odrl:elapsedTime', '"60 minutes"', 'Violation' ],
         [ 'R58', 'odrl:elapsedTime', '"60"^^xsd:integer', 'Violation' ],
+        [ 'R60', 'odrl:event', '"2020"^^xsd:integer', 'Warning' ],
+        [ 'R60', 'odrl:event', '( :fifaWorldCup2020 :olympics2020 )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
