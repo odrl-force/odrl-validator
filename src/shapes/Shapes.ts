@@ -697,7 +697,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/DateTimeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
-  sh:message "odrl:dateTime is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:message "odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -707,7 +707,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning ;
+  sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
@@ -727,7 +727,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/DateTimeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
-  sh:message "The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime." ;
+  sh:message "The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime." ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -741,6 +741,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       sh:datatype xsd:dateTime
     ])
   ]) ;
-  sh:severity sh:Warning ;
+  sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 `

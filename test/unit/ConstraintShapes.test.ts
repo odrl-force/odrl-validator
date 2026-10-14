@@ -1,7 +1,20 @@
 import { Parser } from 'n3';
 import { ODRLValidator } from '../../src/Validator';
 
-const COMPARISON_MESSAGE = 'is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.';
+// Expected message of each shape, by requirement (see docs/Requirements.md).
+const MESSAGES = {
+    R45: 'odrl:absolutePosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R46: 'odrl:absoluteSpatialPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R47: 'odrl:absoluteTemporalPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R48: 'odrl:absoluteSize is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R49: 'odrl:count is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R50: 'The rightOperand of odrl:count should be an xsd:integer.',
+    R51: 'odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R52: 'The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime.',
+};
+
+// A Warning keeps the policy valid; a Violation makes it invalid.
+type Severity = 'Warning' | 'Violation';
 
 // Parametric test function for creating a valid policy with a single constraint.
 function policy(leftOperand: string, operator: string, rightOperand: string): string {
@@ -35,50 +48,53 @@ async function validate(leftOperand: string, operator: string, rightOperand: str
 
 describe('The constraint operator shapes', () => {
 
-    test.each([
-        ['R45', 'odrl:absolutePosition', '"100,200"'],
-        ['R46', 'odrl:absoluteSpatialPosition', '"xywh=160,120,320,240"'],
-        ['R47', 'odrl:absoluteTemporalPosition', '"192"^^xsd:decimal'],
-        ['R48', 'odrl:absoluteSize', '"1000"^^xsd:integer'],
-        ['R49', 'odrl:count', '"5"^^xsd:integer'],
-        ['R51', 'odrl:dateTime', '"2026-12-31"^^xsd:date'],
-    ])('%s: %s with a comparison operator gives no warning.', async (_, leftOperand, rightOperand) => {
-        expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({ valid: true, messages: [] });
+    // [requirement, leftOperand, rightOperand, allowed operator, not allowed operator, severity]
+    const cases: [keyof typeof MESSAGES, string, string, string, string, Severity][] = [
+        [ 'R45', 'odrl:absolutePosition', '"100,200"', 'odrl:lt', 'odrl:isA', 'Warning' ],
+        [ 'R46', 'odrl:absoluteSpatialPosition', '"xywh=160,120,320,240"', 'odrl:lt', 'odrl:isA', 'Warning' ],
+        [ 'R47', 'odrl:absoluteTemporalPosition', '"192"^^xsd:decimal', 'odrl:lt', 'odrl:isA', 'Warning' ],
+        [ 'R48', 'odrl:absoluteSize', '"1000"^^xsd:integer', 'odrl:lt', 'odrl:isA', 'Warning' ],
+        [ 'R49', 'odrl:count', '"5"^^xsd:integer', 'odrl:lt', 'odrl:isA', 'Warning' ],
+        [ 'R51', 'odrl:dateTime', '"2026-12-31"^^xsd:date', 'odrl:lt', 'odrl:isA', 'Violation' ],
+    ];
+
+    test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
+        expect(await validate(leftOperand, allowed, rightOperand)).toEqual({ valid: true, messages: [] });
     });
 
-    test.each([
-        ['R45', 'odrl:absolutePosition', '"100,200"'],
-        ['R46', 'odrl:absoluteSpatialPosition', '"xywh=160,120,320,240"'],
-        ['R47', 'odrl:absoluteTemporalPosition', '"192"^^xsd:decimal'],
-        ['R48', 'odrl:absoluteSize', '"1000"^^xsd:integer'],
-        ['R49', 'odrl:count', '"5"^^xsd:integer'],
-        ['R51', 'odrl:dateTime', '"2026-12-31"^^xsd:date'],
-    ])('%s: %s with a non-comparison operator gives a warning.', async (_, leftOperand, rightOperand) => {
-        expect(await validate(leftOperand, 'odrl:isA', rightOperand)).toEqual({
-            valid: true,
-            messages: [`${leftOperand} ${COMPARISON_MESSAGE}`],
+    test.each(cases)('%s: %s with a not allowed operator is reported.', async (requirement, leftOperand, rightOperand, _, notAllowed, severity) => {
+        expect(await validate(leftOperand, notAllowed, rightOperand)).toEqual({
+            valid: severity === 'Warning',
+            messages: [ MESSAGES[requirement] ],
         });
     });
 });
 
 describe('The constraint rightOperand shapes', () => {
 
+    // [requirement, leftOperand, rightOperand]
     test.each([
-        ['R50', 'odrl:count', '"5"^^xsd:integer'],
-        ['R52', 'odrl:dateTime', '"2026-12-31"^^xsd:date'],
-        ['R52', 'odrl:dateTime', '"2026-12-31T10:00:00Z"^^xsd:dateTime'],
-    ])('%s: %s with rightOperand %s gives no warning.', async (_, leftOperand, rightOperand) => {
+        [ 'R50', 'odrl:count', '"5"^^xsd:integer' ],
+        [ 'R52', 'odrl:dateTime', '"2026-12-31"^^xsd:date' ],
+        [ 'R52', 'odrl:dateTime', '"2026-12-31T10:00:00Z"^^xsd:dateTime' ],
+    ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({ valid: true, messages: [] });
     });
 
-    test.each([
-        ['R50', 'odrl:count', '"five"', 'The rightOperand of odrl:count should be an xsd:integer.'],
-        ['R50', 'odrl:count', '"5.5"^^xsd:decimal', 'The rightOperand of odrl:count should be an xsd:integer.'],
-        ['R52', 'odrl:dateTime', '"tomorrow"', 'The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime.'],
-        ['R52', 'odrl:dateTime', '"5"^^xsd:integer', 'The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime.'],
-        ['R52', 'odrl:dateTime', '"2026-13-45"^^xsd:date', 'The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime.'],
-    ])('%s: %s with rightOperand %s gives a warning.', async (_, leftOperand, rightOperand, message) => {
-        expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({ valid: true, messages: [message] });
+    // [requirement, leftOperand, wrong rightOperand, severity]
+    const wrongCases: [keyof typeof MESSAGES, string, string, Severity][] = [
+        [ 'R50', 'odrl:count', '"five"', 'Warning' ],
+        [ 'R50', 'odrl:count', '"5.5"^^xsd:decimal', 'Warning' ],
+        [ 'R52', 'odrl:dateTime', '"tomorrow"', 'Violation' ],
+        [ 'R52', 'odrl:dateTime', '"5"^^xsd:integer', 'Violation' ],
+        [ 'R52', 'odrl:dateTime', '"2026-13-45"^^xsd:date', 'Violation' ],
+    ];
+
+    test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
+        expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({
+            valid: severity === 'Warning',
+            messages: [ MESSAGES[requirement] ],
+        });
     });
 });
 
@@ -105,10 +121,7 @@ describe('The constraint shapes on constraints without an explicit type', () => 
         `;
         const result = await new ODRLValidator().validate(new Parser().parse(untypedPolicy));
 
-        expect(result.valid).toBe(true);
-        expect(result.validationResults.map(r => r.message).sort()).toEqual([
-            'The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime.',
-            `odrl:dateTime ${COMPARISON_MESSAGE}`,
-        ]);
+        expect(result.valid).toBe(false);
+        expect(result.validationResults.map(r => r.message).sort()).toEqual([ MESSAGES.R52, MESSAGES.R51 ].sort());
     });
 });

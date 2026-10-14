@@ -20,15 +20,17 @@
 :DateTimeRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ; 
-    sh:severity sh:Warning ;
+    sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
         [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:dateTime ] ) ]
     ) ;
-    sh:message "The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime." .
+    sh:message "The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime." .
 
 
 # R54: the rightOperand of odrl:delayPeriod must be an xsd:duration
+
+
 # R56: the rightOperand of odrl:deliveryChannel must be an IRI, a string, or a list of these
 # R58: the rightOperand of odrl:elapsedTime must be an xsd:duration
 # R60: the rightOperand of odrl:event must be an IRI or a string
