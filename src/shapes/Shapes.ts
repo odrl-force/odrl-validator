@@ -920,6 +920,81 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Warning ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/RelativePositionOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:relativePosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:relativePosition
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/RelativeSpatialPositionOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:relativeSpatialPosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:relativeSpatialPosition
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/RelativeTemporalPositionOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:relativeTemporalPosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:relativeTemporalPosition
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/RelativeSizeOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:relativeSize should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:relativeSize
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/ResolutionOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:resolution should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:resolution
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;

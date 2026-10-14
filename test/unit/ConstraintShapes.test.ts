@@ -39,6 +39,11 @@ const MESSAGES = {
     R78: 'The rightOperand of odrl:purpose should be an IRI, a string, or a list of these.',
     R79: 'odrl:recipient should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
     R80: 'The rightOperand of odrl:recipient should be an IRI, a string, or a list of these.',
+    R81: 'odrl:relativePosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R82: 'odrl:relativeSpatialPosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R83: 'odrl:relativeTemporalPosition should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R84: 'odrl:relativeSize should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R85: 'odrl:resolution should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -98,6 +103,11 @@ describe('The constraint operator shapes', () => {
         [ 'R75', 'odrl:product', ':Publication', 'odrl:isA', 'odrl:lt', 'Warning' ],
         [ 'R77', 'odrl:purpose', '<https://w3id.org/dpv#Marketing>', 'odrl:isA', 'odrl:gt', 'Warning' ],
         [ 'R79', 'odrl:recipient', ':alice', 'odrl:eq', 'odrl:lt', 'Warning' ],
+        [ 'R81', 'odrl:relativePosition', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
+        [ 'R82', 'odrl:relativeSpatialPosition', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
+        [ 'R83', 'odrl:relativeTemporalPosition', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
+        [ 'R84', 'odrl:relativeSize', '"200"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
+        [ 'R85', 'odrl:resolution', '"1200"^^xsd:integer', 'odrl:lteq', 'odrl:isA', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
