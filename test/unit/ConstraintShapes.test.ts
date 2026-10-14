@@ -47,6 +47,8 @@ const MESSAGES = {
     R86: 'odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
     R87: 'The rightOperand of odrl:spatial must be an IRI.',
     R88: 'odrl:spatialCoordinates should only be used with odrl:eq or odrl:neq.',
+    R89: 'odrl:systemDevice should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
+    R90: 'The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -113,6 +115,7 @@ describe('The constraint operator shapes', () => {
         [ 'R85', 'odrl:resolution', '"1200"^^xsd:integer', 'odrl:lteq', 'odrl:isA', 'Warning' ],
         [ 'R86', 'odrl:spatial', '<https://www.wikidata.org/wiki/Q29>', 'odrl:eq', 'odrl:lt', 'Violation' ],
         [ 'R88', 'odrl:spatialCoordinates', '"40.4168,-3.7038"', 'odrl:neq', 'odrl:isA', 'Warning' ],
+        [ 'R89', 'odrl:systemDevice', '( :laptop42 "device-1234" )', 'odrl:isAnyOf', 'odrl:isA', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -168,6 +171,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R80', 'odrl:recipient', '"Bob"' ],
         [ 'R80', 'odrl:recipient', '( :alice "Bob" )' ],
         [ 'R87', 'odrl:spatial', '<https://www.wikidata.org/wiki/Q29>' ],
+        [ 'R90', 'odrl:systemDevice', ':laptop42' ],
+        [ 'R90', 'odrl:systemDevice', '"device-1234"' ],
+        [ 'R90', 'odrl:systemDevice', '( :laptop42 "device-1234" )' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -211,6 +217,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R87', 'odrl:spatial', '"ES"', 'Violation' ],
         // Lists are blank nodes, so they are not allowed either (to be discussed for isAnyOf/isNoneOf).
         [ 'R87', 'odrl:spatial', '( <https://www.wikidata.org/wiki/Q29> <https://www.wikidata.org/wiki/Q142> )', 'Violation' ],
+        [ 'R90', 'odrl:systemDevice', '"5"^^xsd:integer', 'Warning' ],
+        [ 'R90', 'odrl:systemDevice', '( :laptop42 "5"^^xsd:integer )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {

@@ -224,6 +224,18 @@
 
 
 # R90: the rightOperand of odrl:systemDevice must be an IRI or a string
+
+:SystemDeviceRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:systemDevice ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these." .
+
+
 # R92: the rightOperand of odrl:timeInterval must be an xsd:duration
 # R94: the rightOperand of odrl:unitOfCount must be a string
 # R96: the rightOperand of odrl:version must be a string

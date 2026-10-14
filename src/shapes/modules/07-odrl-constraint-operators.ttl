@@ -354,6 +354,18 @@
 
 
 # R89: odrl:systemDevice is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:SystemDeviceOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:systemDevice ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:systemDevice should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R91: odrl:timeInterval is only compatible with odrl:eq
 # R93: odrl:unitOfCount is only compatible with odrl:eq or odrl:neq
 # R95: odrl:version is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
