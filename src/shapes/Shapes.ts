@@ -800,6 +800,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Warning ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/LanguageOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:language should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:language
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
@@ -958,4 +973,32 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ]) ;
   sh:severity sh:Warning ;
   sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/LanguageRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:language should be a string or a list of strings." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:language
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:or ([
+      sh:datatype xsd:string
+    ] [
+      sh:node <http://example.com/StringListShape>
+    ])
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/StringListShape> a sh:NodeShape ;
+  sh:property [
+    sh:path ([
+      sh:zeroOrMorePath rdf:rest
+    ] rdf:first) ;
+    sh:datatype xsd:string
+  ] ;
+  sh:node <http://example.com/RdfListShape> .
 `
