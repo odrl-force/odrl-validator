@@ -46,6 +46,7 @@ const MESSAGES = {
     R85: 'odrl:resolution should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R86: 'odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
     R87: 'The rightOperand of odrl:spatial must be an IRI.',
+    R88: 'odrl:spatialCoordinates should only be used with odrl:eq or odrl:neq.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -111,6 +112,7 @@ describe('The constraint operator shapes', () => {
         [ 'R84', 'odrl:relativeSize', '"200"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Warning' ],
         [ 'R85', 'odrl:resolution', '"1200"^^xsd:integer', 'odrl:lteq', 'odrl:isA', 'Warning' ],
         [ 'R86', 'odrl:spatial', '<https://www.wikidata.org/wiki/Q29>', 'odrl:eq', 'odrl:lt', 'Violation' ],
+        [ 'R88', 'odrl:spatialCoordinates', '"40.4168,-3.7038"', 'odrl:neq', 'odrl:isA', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {

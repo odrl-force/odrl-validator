@@ -1010,6 +1010,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/SpatialCoordinatesOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:spatialCoordinates should only be used with odrl:eq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:spatialCoordinates
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:neq)
+  ]) ;
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;

@@ -1216,6 +1216,18 @@
 
 
 # R88: odrl:spatialCoordinates is only compatible with odrl:eq or odrl:neq
+
+:SpatialCoordinatesOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatialCoordinates ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:spatialCoordinates should only be used with odrl:eq or odrl:neq." .
+
+
 # R89: odrl:systemDevice is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 # R91: odrl:timeInterval is only compatible with odrl:eq
 # R93: odrl:unitOfCount is only compatible with odrl:eq or odrl:neq
@@ -1449,6 +1461,7 @@
 
 
 # R90: the rightOperand of odrl:systemDevice must be an IRI or a string
+
 # R92: the rightOperand of odrl:timeInterval must be an xsd:duration
 # R94: the rightOperand of odrl:unitOfCount must be a string
 # R96: the rightOperand of odrl:version must be a string
