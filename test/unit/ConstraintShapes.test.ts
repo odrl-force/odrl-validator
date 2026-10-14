@@ -81,3 +81,34 @@ describe('The constraint rightOperand shapes', () => {
         expect(await validate(leftOperand, 'odrl:lt', rightOperand)).toEqual({ valid: true, messages: [message] });
     });
 });
+
+describe('The constraint shapes on constraints without an explicit type', () => {
+
+    test('R51 and R52: an untyped odrl:dateTime constraint is also checked.', async () => {
+        const untypedPolicy = `
+        @prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+        @prefix : <http://example.com/> .
+
+        :policy1 a odrl:Policy ;
+            odrl:permission :permission1 .
+
+        :permission1 a odrl:Permission ;
+            odrl:action odrl:use ;
+            odrl:target :resourceX ;
+            odrl:constraint [
+                odrl:leftOperand odrl:dateTime ;
+                odrl:operator odrl:isA ;
+                odrl:rightOperand "2018-01-01"
+            ] .
+
+        :resourceX a odrl:Asset .
+        `;
+        const result = await new ODRLValidator().validate(new Parser().parse(untypedPolicy));
+
+        expect(result.valid).toBe(true);
+        expect(result.validationResults.map(r => r.message).sort()).toEqual([
+            'The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime.',
+            `odrl:dateTime ${COMPARISON_MESSAGE}`,
+        ]);
+    });
+});

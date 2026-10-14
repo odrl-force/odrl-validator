@@ -6,6 +6,7 @@
 
 :AbsolutePositionOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absolutePosition ] ]
@@ -18,6 +19,7 @@
 
 :AbsoluteSpatialPositionOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSpatialPosition ] ]
@@ -30,6 +32,7 @@
 
 :AbsoluteTemporalPositionOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteTemporalPosition ] ]
@@ -42,6 +45,7 @@
 
 :AbsoluteSizeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSize ] ]
@@ -54,6 +58,7 @@
 
 :CountOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
@@ -66,6 +71,7 @@
 
 :DateTimeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]

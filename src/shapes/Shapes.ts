@@ -632,7 +632,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/AbsoluteSpatialPositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -646,7 +647,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/AbsoluteTemporalPositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -660,7 +662,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/AbsoluteSizeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -674,7 +677,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/CountOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -688,7 +692,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/DateTimeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -702,7 +707,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -716,7 +722,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:rightOperand ;
     sh:datatype xsd:integer
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 
 <http://example.com/DateTimeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -734,5 +741,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       sh:datatype xsd:dateTime
     ])
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Warning ;
+  sh:targetSubjectsOf odrl:leftOperand .
 `

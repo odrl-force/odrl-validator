@@ -881,6 +881,7 @@
 
 :AbsolutePositionOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absolutePosition ] ]
@@ -893,6 +894,7 @@
 
 :AbsoluteSpatialPositionOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSpatialPosition ] ]
@@ -905,6 +907,7 @@
 
 :AbsoluteTemporalPositionOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteTemporalPosition ] ]
@@ -917,6 +920,7 @@
 
 :AbsoluteSizeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSize ] ]
@@ -929,6 +933,7 @@
 
 :CountOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
@@ -941,12 +946,41 @@
 
 :DateTimeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
     ) ;
     sh:message "odrl:dateTime is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R53: odrl:delayPeriod is only compatible with odrl:eq, odrl:gt or odrl:gteq
+# R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf
+# R57: odrl:elapsedTime is only compatible with odrl:eq, odrl:lt, odrl:lteq or odrl:neq
+# R59: odrl:event is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R61: odrl:fileFormat is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R63: odrl:industry is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R65: odrl:language is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R67: odrl:media is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R69: odrl:meteredTime is only compatible with odrl:eq, odrl:lt or odrl:lteq
+# R71: odrl:payAmount is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R73: odrl:percentage is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R75: odrl:product is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R77: odrl:purpose is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R79: odrl:recipient is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+# R81: odrl:relativePosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R82: odrl:relativeSpatialPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R83: odrl:relativeTemporalPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R84: odrl:relativeSize is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R85: odrl:resolution is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+# R86: odrl:spatial is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R88: odrl:spatialCoordinates is only compatible with odrl:eq or odrl:neq
+# R89: odrl:systemDevice is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R91: odrl:timeInterval is only compatible with odrl:eq
+# R93: odrl:unitOfCount is only compatible with odrl:eq or odrl:neq
+# R95: odrl:version is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+# R97: odrl:virtualLocation is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 
 
 #################################################
@@ -957,6 +991,7 @@
 
 :CountRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
@@ -969,9 +1004,32 @@
 
 :DateTimeRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
         [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:dateTime ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:dateTime should be an xsd:date or xsd:dateTime." .
+
+
+# R54: the rightOperand of odrl:delayPeriod must be an xsd:duration
+# R56: the rightOperand of odrl:deliveryChannel must be an IRI, a string, or a list of these
+# R58: the rightOperand of odrl:elapsedTime must be an xsd:duration
+# R60: the rightOperand of odrl:event must be an IRI or a string
+# R62: the rightOperand of odrl:fileFormat must be an IRI or a string
+# R64: the rightOperand of odrl:industry must be an IRI or a string
+# R66: the rightOperand of odrl:language must be a string
+# R68: the rightOperand of odrl:media must be a string
+# R70: the rightOperand of odrl:meteredTime must be an xsd:duration
+# R72: the rightOperand of odrl:payAmount must be an xsd:decimal
+# R74: the rightOperand of odrl:percentage must be an xsd:decimal between 0 and 100
+# R76: the rightOperand of odrl:product must be an IRI or a string
+# R78: the rightOperand of odrl:purpose must be an IRI or a string
+# R80: the rightOperand of odrl:recipient must be an IRI or a string
+# R87: the rightOperand of odrl:spatial must be an IRI
+# R90: the rightOperand of odrl:systemDevice must be an IRI or a string
+# R92: the rightOperand of odrl:timeInterval must be an xsd:duration
+# R94: the rightOperand of odrl:unitOfCount must be a string
+# R96: the rightOperand of odrl:version must be a string
+# R98: the rightOperand of odrl:virtualLocation must be a string

@@ -6,6 +6,7 @@
 
 :CountRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
@@ -18,6 +19,7 @@
 
 :DateTimeRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
