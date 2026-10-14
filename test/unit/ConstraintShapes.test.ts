@@ -31,6 +31,8 @@ const MESSAGES = {
     R70: 'The rightOperand of odrl:meteredTime must be an xsd:duration.',
     R71: 'odrl:payAmount must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R72: 'The rightOperand of odrl:payAmount must be an xsd:decimal.',
+    R73: 'odrl:percentage must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
+    R74: 'The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -86,6 +88,7 @@ describe('The constraint operator shapes', () => {
         [ 'R67', 'odrl:media', '( "electronic" "print" )', 'odrl:isAnyOf', 'odrl:isAllOf', 'Warning' ],
         [ 'R69', 'odrl:meteredTime', '"PT60M"^^xsd:duration', 'odrl:lteq', 'odrl:neq', 'Violation' ],
         [ 'R71', 'odrl:payAmount', '"10.50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Violation' ],
+        [ 'R73', 'odrl:percentage', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Violation' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -128,6 +131,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R70', 'odrl:meteredTime', '"PT60M"^^xsd:duration' ],
         [ 'R72', 'odrl:payAmount', '"10.50"^^xsd:decimal' ],
         [ 'R72', 'odrl:payAmount', '10.5' ],
+        [ 'R74', 'odrl:percentage', '"50"^^xsd:decimal' ],
+        [ 'R74', 'odrl:percentage', '"0.0"^^xsd:decimal' ],
+        [ 'R74', 'odrl:percentage', '"100.0"^^xsd:decimal' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -159,6 +165,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R70', 'odrl:meteredTime', '"60"^^xsd:integer', 'Violation' ],
         [ 'R72', 'odrl:payAmount', '"10 EUR"', 'Violation' ],
         [ 'R72', 'odrl:payAmount', '"abc"^^xsd:decimal', 'Violation' ],
+        [ 'R74', 'odrl:percentage', '"100.5"^^xsd:decimal', 'Violation' ],
+        [ 'R74', 'odrl:percentage', '"-1"^^xsd:decimal', 'Violation' ],
+        [ 'R74', 'odrl:percentage', '"50%"', 'Violation' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
