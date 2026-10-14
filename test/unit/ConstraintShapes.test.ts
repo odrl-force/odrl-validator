@@ -49,6 +49,8 @@ const MESSAGES = {
     R88: 'odrl:spatialCoordinates should only be used with odrl:eq or odrl:neq.',
     R89: 'odrl:systemDevice should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
     R90: 'The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these.',
+    R91: 'odrl:timeInterval should only be used with odrl:eq.',
+    R92: 'The rightOperand of odrl:timeInterval must be an xsd:duration.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -116,6 +118,7 @@ describe('The constraint operator shapes', () => {
         [ 'R86', 'odrl:spatial', '<https://www.wikidata.org/wiki/Q29>', 'odrl:eq', 'odrl:lt', 'Violation' ],
         [ 'R88', 'odrl:spatialCoordinates', '"40.4168,-3.7038"', 'odrl:neq', 'odrl:isA', 'Warning' ],
         [ 'R89', 'odrl:systemDevice', '( :laptop42 "device-1234" )', 'odrl:isAnyOf', 'odrl:isA', 'Warning' ],
+        [ 'R91', 'odrl:timeInterval', '"P7D"^^xsd:duration', 'odrl:eq', 'odrl:lt', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -174,6 +177,7 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R90', 'odrl:systemDevice', ':laptop42' ],
         [ 'R90', 'odrl:systemDevice', '"device-1234"' ],
         [ 'R90', 'odrl:systemDevice', '( :laptop42 "device-1234" )' ],
+        [ 'R92', 'odrl:timeInterval', '"P7D"^^xsd:duration' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -219,6 +223,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R87', 'odrl:spatial', '( <https://www.wikidata.org/wiki/Q29> <https://www.wikidata.org/wiki/Q142> )', 'Violation' ],
         [ 'R90', 'odrl:systemDevice', '"5"^^xsd:integer', 'Warning' ],
         [ 'R90', 'odrl:systemDevice', '( :laptop42 "5"^^xsd:integer )', 'Warning' ],
+        [ 'R92', 'odrl:timeInterval', '"weekly"', 'Violation' ],
+        [ 'R92', 'odrl:timeInterval', '"7"^^xsd:integer', 'Violation' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {

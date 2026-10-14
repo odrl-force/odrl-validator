@@ -237,6 +237,18 @@
 
 
 # R92: the rightOperand of odrl:timeInterval must be an xsd:duration
+
+:TimeIntervalRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:timeInterval ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+    ) ;
+    sh:message "The rightOperand of odrl:timeInterval must be an xsd:duration." .
+
+
 # R94: the rightOperand of odrl:unitOfCount must be a string
 # R96: the rightOperand of odrl:version must be a string
 # R98: the rightOperand of odrl:virtualLocation must be a string
