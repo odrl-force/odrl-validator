@@ -237,7 +237,31 @@
 
 
 # R77: odrl:purpose is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:PurposeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:purpose ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:purpose should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R79: odrl:recipient is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:RecipientOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:recipient ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:recipient should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R81: odrl:relativePosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R82: odrl:relativeSpatialPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R83: odrl:relativeTemporalPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq

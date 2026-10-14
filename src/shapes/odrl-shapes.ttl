@@ -1112,7 +1112,31 @@
 
 
 # R77: odrl:purpose is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:PurposeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:purpose ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:purpose should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R79: odrl:recipient is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:RecipientOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:recipient ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:recipient should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R81: odrl:relativePosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R82: odrl:relativeSpatialPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
 # R83: odrl:relativeTemporalPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
@@ -1314,7 +1338,31 @@
 
 
 # R78: the rightOperand of odrl:purpose must be an IRI or a string
+
+:PurposeRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:purpose ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:purpose should be an IRI, a string, or a list of these." .
+
+
 # R80: the rightOperand of odrl:recipient must be an IRI or a string
+
+:RecipientRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:recipient ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:recipient should be an IRI, a string, or a list of these." .
+
+
 # R87: the rightOperand of odrl:spatial must be an IRI
 # R90: the rightOperand of odrl:systemDevice must be an IRI or a string
 # R92: the rightOperand of odrl:timeInterval must be an xsd:duration

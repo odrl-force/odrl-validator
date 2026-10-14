@@ -35,6 +35,10 @@ const MESSAGES = {
     R74: 'The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100.',
     R75: 'odrl:product should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
     R76: 'The rightOperand of odrl:product should be an IRI, a string, or a list of these.',
+    R77: 'odrl:purpose should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
+    R78: 'The rightOperand of odrl:purpose should be an IRI, a string, or a list of these.',
+    R79: 'odrl:recipient should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
+    R80: 'The rightOperand of odrl:recipient should be an IRI, a string, or a list of these.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -92,6 +96,8 @@ describe('The constraint operator shapes', () => {
         [ 'R71', 'odrl:payAmount', '"10.50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Violation' ],
         [ 'R73', 'odrl:percentage', '"50"^^xsd:decimal', 'odrl:lteq', 'odrl:isA', 'Violation' ],
         [ 'R75', 'odrl:product', ':Publication', 'odrl:isA', 'odrl:lt', 'Warning' ],
+        [ 'R77', 'odrl:purpose', '<https://w3id.org/dpv#Marketing>', 'odrl:isA', 'odrl:gt', 'Warning' ],
+        [ 'R79', 'odrl:recipient', ':alice', 'odrl:eq', 'odrl:lt', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -140,6 +146,12 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R76', 'odrl:product', ':magazine' ],
         [ 'R76', 'odrl:product', '"magazine"' ],
         [ 'R76', 'odrl:product', '( :magazine "newspaper" )' ],
+        [ 'R78', 'odrl:purpose', '<https://w3id.org/dpv#ResearchAndDevelopment>' ],
+        [ 'R78', 'odrl:purpose', '"research"' ],
+        [ 'R78', 'odrl:purpose', '( :research "education" )' ],
+        [ 'R80', 'odrl:recipient', ':alice' ],
+        [ 'R80', 'odrl:recipient', '"Bob"' ],
+        [ 'R80', 'odrl:recipient', '( :alice "Bob" )' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -176,6 +188,10 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R74', 'odrl:percentage', '"50%"', 'Violation' ],
         [ 'R76', 'odrl:product', '"5"^^xsd:integer', 'Warning' ],
         [ 'R76', 'odrl:product', '( :magazine "5"^^xsd:integer )', 'Warning' ],
+        [ 'R78', 'odrl:purpose', '"5"^^xsd:integer', 'Warning' ],
+        [ 'R78', 'odrl:purpose', '( :research "5"^^xsd:integer )', 'Warning' ],
+        [ 'R80', 'odrl:recipient', '"5"^^xsd:integer', 'Warning' ],
+        [ 'R80', 'odrl:recipient', '( :alice "5"^^xsd:integer )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {
