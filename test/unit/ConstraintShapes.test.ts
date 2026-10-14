@@ -25,6 +25,8 @@ const MESSAGES = {
     R64: 'The rightOperand of odrl:industry should be an IRI, a string, or a list of these.',
     R65: 'odrl:language should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
     R66: 'The rightOperand of odrl:language should be a string or a list of strings.',
+    R67: 'odrl:media should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf.',
+    R68: 'The rightOperand of odrl:media should be a string or a list of strings.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -77,6 +79,7 @@ describe('The constraint operator shapes', () => {
         [ 'R61', 'odrl:fileFormat', '( "image/jpeg" "image/png" )', 'odrl:isAnyOf', 'odrl:isAllOf', 'Warning' ],
         [ 'R63', 'odrl:industry', '( :publishing :financial )', 'odrl:isNoneOf', 'odrl:isAllOf', 'Warning' ],
         [ 'R65', 'odrl:language', '"en"', 'odrl:eq', 'odrl:isA', 'Warning' ],
+        [ 'R67', 'odrl:media', '( "electronic" "print" )', 'odrl:isAnyOf', 'odrl:isAllOf', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -114,6 +117,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R64', 'odrl:industry', '( :publishing "financial" )' ],
         [ 'R66', 'odrl:language', '"en"' ],
         [ 'R66', 'odrl:language', '( "en" "es" )' ],
+        [ 'R68', 'odrl:media', '"print"' ],
+        [ 'R68', 'odrl:media', '( "electronic" "print" )' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -139,6 +144,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R64', 'odrl:industry', '( :publishing "5"^^xsd:integer )', 'Warning' ],
         [ 'R66', 'odrl:language', ':english', 'Warning' ],
         [ 'R66', 'odrl:language', '( "en" :spanish )', 'Warning' ],
+        [ 'R68', 'odrl:media', ':print', 'Warning' ],
+        [ 'R68', 'odrl:media', '( "print" :advertising )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {

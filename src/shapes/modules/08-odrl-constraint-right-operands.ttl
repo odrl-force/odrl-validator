@@ -121,6 +121,16 @@
 
 # R68: the rightOperand of odrl:media must be a string
 
+:MediaRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:media ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:media should be a string or a list of strings." .
+
 
 # R70: the rightOperand of odrl:meteredTime must be an xsd:duration
 # R72: the rightOperand of odrl:payAmount must be an xsd:decimal
