@@ -21,6 +21,8 @@ const MESSAGES = {
     R60: 'The rightOperand of odrl:event should be an IRI or a string.',
     R61: 'odrl:fileFormat should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
     R62: 'The rightOperand of odrl:fileFormat should be an IRI, a string, or a list of these.',
+    R63: 'odrl:industry should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf.',
+    R64: 'The rightOperand of odrl:industry should be an IRI, a string, or a list of these.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -71,6 +73,7 @@ describe('The constraint operator shapes', () => {
         [ 'R57', 'odrl:elapsedTime', '"PT60M"^^xsd:duration', 'odrl:lteq', 'odrl:gt', 'Violation' ],
         [ 'R59', 'odrl:event', ':fifaWorldCup2020', 'odrl:gt', 'odrl:isA', 'Warning' ],
         [ 'R61', 'odrl:fileFormat', '( "image/jpeg" "image/png" )', 'odrl:isAnyOf', 'odrl:isAllOf', 'Warning' ],
+        [ 'R63', 'odrl:industry', '( :publishing :financial )', 'odrl:isNoneOf', 'odrl:isAllOf', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -103,6 +106,9 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R62', 'odrl:fileFormat', '"image/jpeg"' ],
         [ 'R62', 'odrl:fileFormat', '<http://www.iana.org/assignments/media-types/image/jpeg>' ],
         [ 'R62', 'odrl:fileFormat', '( "image/jpeg" "image/png" )' ],
+        [ 'R64', 'odrl:industry', ':publishing' ],
+        [ 'R64', 'odrl:industry', '"financial"' ],
+        [ 'R64', 'odrl:industry', '( :publishing "financial" )' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -124,6 +130,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R60', 'odrl:event', '( :fifaWorldCup2020 :olympics2020 )', 'Warning' ],
         [ 'R62', 'odrl:fileFormat', '"5"^^xsd:integer', 'Warning' ],
         [ 'R62', 'odrl:fileFormat', '( "image/gif" "5"^^xsd:integer )', 'Warning' ],
+        [ 'R64', 'odrl:industry', '"5"^^xsd:integer', 'Warning' ],
+        [ 'R64', 'odrl:industry', '( :publishing "5"^^xsd:integer )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {

@@ -1021,6 +1021,18 @@
 
 
 # R63: odrl:industry is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:IndustryOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:industry ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:industry should only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
 # R65: odrl:language is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 # R67: odrl:media is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 # R69: odrl:meteredTime is only compatible with odrl:eq, odrl:lt or odrl:lteq
@@ -1139,6 +1151,18 @@
 
 
 # R64: the rightOperand of odrl:industry must be an IRI or a string
+
+:IndustryRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:industry ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:industry should be an IRI, a string, or a list of these." .
+
+
 # R66: the rightOperand of odrl:language must be a string
 # R68: the rightOperand of odrl:media must be a string
 # R70: the rightOperand of odrl:meteredTime must be an xsd:duration
