@@ -146,6 +146,18 @@
 
 
 # R72: the rightOperand of odrl:payAmount must be an xsd:decimal
+
+:PayAmountRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:payAmount ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ]
+    ) ;
+    sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." .
+
+
 # R74: the rightOperand of odrl:percentage must be an xsd:decimal between 0 and 100
 # R76: the rightOperand of odrl:product must be an IRI or a string
 # R78: the rightOperand of odrl:purpose must be an IRI or a string

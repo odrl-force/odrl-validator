@@ -845,6 +845,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
 
+<http://example.com/PayAmountOperatorShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "odrl:payAmount must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:payAmount
+    ]
+  ] [
+    sh:path odrl:operator ;
+    sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
+  ]) ;
+  sh:severity sh:Violation ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:message "The rightOperand of odrl:count should be an xsd:integer." ;
@@ -1062,6 +1077,21 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:duration
+  ]) ;
+  sh:severity sh:Violation ;
+  sh:targetSubjectsOf odrl:leftOperand .
+
+<http://example.com/PayAmountRightOperandShape> a sh:NodeShape ;
+  sh:targetClass odrl:Constraint ;
+  sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." ;
+  sh:or ([
+    sh:not [
+      sh:path odrl:leftOperand ;
+      sh:hasValue odrl:payAmount
+    ]
+  ] [
+    sh:path odrl:rightOperand ;
+    sh:datatype xsd:decimal
   ]) ;
   sh:severity sh:Violation ;
   sh:targetSubjectsOf odrl:leftOperand .
