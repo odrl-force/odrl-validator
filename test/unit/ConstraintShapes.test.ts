@@ -51,6 +51,8 @@ const MESSAGES = {
     R90: 'The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these.',
     R91: 'odrl:timeInterval should only be used with odrl:eq.',
     R92: 'The rightOperand of odrl:timeInterval must be an xsd:duration.',
+    R93: 'odrl:unitOfCount should only be used with odrl:eq or odrl:neq.',
+    R94: 'The rightOperand of odrl:unitOfCount should be a string.',
 };
 
 // A Warning keeps the policy valid; a Violation makes it invalid.
@@ -119,6 +121,7 @@ describe('The constraint operator shapes', () => {
         [ 'R88', 'odrl:spatialCoordinates', '"40.4168,-3.7038"', 'odrl:neq', 'odrl:isA', 'Warning' ],
         [ 'R89', 'odrl:systemDevice', '( :laptop42 "device-1234" )', 'odrl:isAnyOf', 'odrl:isA', 'Warning' ],
         [ 'R91', 'odrl:timeInterval', '"P7D"^^xsd:duration', 'odrl:eq', 'odrl:lt', 'Warning' ],
+        [ 'R93', 'odrl:unitOfCount', '"perUser"', 'odrl:neq', 'odrl:isAnyOf', 'Warning' ],
     ];
 
     test.each(cases)('%s: %s with an allowed operator is accepted.', async (_, leftOperand, rightOperand, allowed) => {
@@ -178,6 +181,7 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R90', 'odrl:systemDevice', '"device-1234"' ],
         [ 'R90', 'odrl:systemDevice', '( :laptop42 "device-1234" )' ],
         [ 'R92', 'odrl:timeInterval', '"P7D"^^xsd:duration' ],
+        [ 'R94', 'odrl:unitOfCount', '"perUser"' ],
     ])('%s: %s with rightOperand %s is accepted.', async (_, leftOperand, rightOperand) => {
         expect(await validate(leftOperand, 'odrl:eq', rightOperand)).toEqual({ valid: true, messages: [] });
     });
@@ -225,6 +229,8 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R90', 'odrl:systemDevice', '( :laptop42 "5"^^xsd:integer )', 'Warning' ],
         [ 'R92', 'odrl:timeInterval', '"weekly"', 'Violation' ],
         [ 'R92', 'odrl:timeInterval', '"7"^^xsd:integer', 'Violation' ],
+        [ 'R94', 'odrl:unitOfCount', ':perUser', 'Warning' ],
+        [ 'R94', 'odrl:unitOfCount', '( "perUser" "perDevice" )', 'Warning' ],
     ];
 
     test.each(wrongCases)('%s: %s with rightOperand %s is reported.', async (requirement, leftOperand, rightOperand, severity) => {

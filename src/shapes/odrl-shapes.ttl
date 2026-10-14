@@ -1255,6 +1255,18 @@
 
 
 # R93: odrl:unitOfCount is only compatible with odrl:eq or odrl:neq
+
+:UnitOfCountOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:unitOfCount ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:unitOfCount should only be used with odrl:eq or odrl:neq." .
+
+
 # R95: odrl:version is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 # R97: odrl:virtualLocation is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
 
@@ -1511,6 +1523,18 @@
 
 
 # R94: the rightOperand of odrl:unitOfCount must be a string
+
+:UnitOfCountRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:unitOfCount ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:string ]
+    ) ;
+    sh:message "The rightOperand of odrl:unitOfCount should be a string." .
+
+
 # R96: the rightOperand of odrl:version must be a string
 # R98: the rightOperand of odrl:virtualLocation must be a string
 
