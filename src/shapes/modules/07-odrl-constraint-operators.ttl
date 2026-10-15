@@ -72,12 +72,12 @@
 :DateTimeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ; 
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
     ) ;
-    sh:message "odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+    sh:message "odrl:dateTime should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
 
 # R53: odrl:delayPeriod is only compatible with odrl:eq, odrl:gt or odrl:gteq
@@ -85,12 +85,12 @@
 :DelayPeriodOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ; 
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq ) ]
     ) ;
-    sh:message "odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq." .
+    sh:message "odrl:delayPeriod should only be used with odrl:eq, odrl:gt or odrl:gteq." .
 
 
 # R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf
@@ -111,12 +111,12 @@
 :ElapsedTimeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ;
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:elapsedTime ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:lt odrl:lteq odrl:neq ) ]
     ) ;
-    sh:message "odrl:elapsedTime must only be used with odrl:eq, odrl:lt, odrl:lteq or odrl:neq." .
+    sh:message "odrl:elapsedTime should only be used with odrl:eq, odrl:lt, odrl:lteq or odrl:neq." .
 
 
 # R59: odrl:event is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
@@ -189,12 +189,12 @@
 :MeteredTimeOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ;
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:meteredTime ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:lt odrl:lteq ) ]
     ) ;
-    sh:message "odrl:meteredTime must only be used with odrl:eq, odrl:lt or odrl:lteq." .
+    sh:message "odrl:meteredTime should only be used with odrl:eq, odrl:lt or odrl:lteq." .
 
 
 # R71: odrl:payAmount is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
@@ -202,12 +202,12 @@
 :PayAmountOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ;
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:payAmount ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
     ) ;
-    sh:message "odrl:payAmount must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+    sh:message "odrl:payAmount should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
 
 # R73: odrl:percentage is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
@@ -215,12 +215,12 @@
 :PercentageOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ;
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:percentage ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
     ) ;
-    sh:message "odrl:percentage must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+    sh:message "odrl:percentage should only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
 
 # R75: odrl:product is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
@@ -332,12 +332,12 @@
 :SpatialOperatorShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ;
-    sh:severity sh:Violation ;
+    sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
         [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
     ) ;
-    sh:message "odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+    sh:message "odrl:spatial should only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
 
 
 # R88: odrl:spatialCoordinates is only compatible with odrl:eq or odrl:neq
