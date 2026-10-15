@@ -1,0 +1,88 @@
+# Clause 3.2 of the Elsevier API Service Agreement 2017, modelled with the TOSL profile.
+# Source: https://github.com/isa-group/tosl/blob/main/examples/elsevier/API_Service_Agreement_2017.ttl
+
+@prefix : <http://example.com/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .    
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix tosl: <https://w3id.org/tosl/> .
+@base <http://example.com> .
+
+
+:agreement01 a odrl:Agreement, odrl:Asset ;
+    odrl:profile tosl: ;
+    dcterms:source <https://dev.elsevier.com/api_service_agreement.html> ;
+    dcterms:title "The Elsevier API Service Agreement 2017"^^xsd:string ;
+    dcterms:description "This Agreement governs the use of Elsevier's API services and replaces previous versions." ;
+    dcterms:creator "Elsevier B.V."^^xsd:string ;
+    dcterms:rightsHolder :elsevier ;
+    dcterms:issued "2016-07-05"^^xsd:date ;
+    dcterms:requires <https://dev.elsevier.com/policy.html> ;
+    odrl:permission :permission01 ;
+    odrl:assigner :elsevier .
+
+:elsevier a tosl:Provider ;
+    foaf:name "Elsevier B.V." ;
+    foaf:homepage <https://www.elsevier.com/>;
+    odrl:assignerOf :service01 .
+
+:customer01 a tosl:Customer;
+    dcterms:description "This party represents the customer in the context of the Elseviert API Service Agreement" .
+
+:businessCustomer a tosl:BusinessCustomer ;
+    dcterms:description "This party represents a business entity consuming the service in a commercial context" .
+
+:service01 a tosl:Service ;
+    dcterms:description "The Elsevier API Service" ;
+    dcterms:rightsHolder :elsevier ;
+    tosl:limitationOfLiability :liability01 .
+
+# Clause 3.2 has no rules of its own, so the base rule of the contract (clause 1.1) is included
+# to make this a valid ODRL policy.
+
+################################ TERM 1.1 ######################################
+# 1.1 The application programmable interfaces service (the API Service)        #
+# owned and operated by Elsevier B.V. (Elsevier) is provided to (You, Your or  #
+# the Developer) under the terms and conditions of this API Service Agreement. #
+# You confirm that You have the right and authority to enter into this         #
+# Agreement. You accept and agree to the terms and conditions of this          #
+# Agreement on Your own behalf and/or on behalf of Your company, institute or  #
+# organization as its authorized legal representative.                         #
+################################################################################
+
+:permission01 a odrl:Permission ;
+    dcterms:description "1.1 The application programmable interfaces service (the \"API Service\") owned and operated by Elsevier B.V. (\"Elsevier\") is provided to (\"You\", \"Your\" or \"the Developer\") under the terms and conditions of this API Service Agreement. You confirm that You have the right and authority to enter into this Agreement. You accept and agree to the terms and conditions of this Agreement on Your own behalf and/or on behalf of Your company, institute or organization as its authorized legal representative." ;
+    odrl:action odrl:use ;
+    odrl:target :service01 ;
+    odrl:assignee :customer01 ;
+    odrl:duty [
+        a odrl:Duty ;
+        dcterms:description "You accept and agree to the terms and conditions of this Agreement";
+        odrl:action tosl:consent ;
+        odrl:constraint [
+            a odrl:Constraint;
+            odrl:leftOperand tosl:consentType ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand tosl:explicitConsent
+        ] ;
+        odrl:target :agreement01 ;
+        odrl:assignee :customer01
+    ].
+
+################################ TERM 3.2 ######################################
+# 3.2 The Developer will be solely responsible and hold Elsevier harmless      #
+# for all costs, expenses, losses and liabilities incurred, and activities     #
+# undertaken by the Developer in connection with the API Service.              #
+################################################################################
+
+:liability01 a tosl:Liability ;
+		dcterms:description "3.2 The Developer will be solely responsible and hold Elsevier harmless for all costs, expenses, losses and liabilities incurred, and activities undertaken by the Developer in connection with the API Service." ;
+		rdf:value tosl:anyLiability ;
+		tosl:liableParty :elsevier ;
+        tosl:targetParty :customer01 .
