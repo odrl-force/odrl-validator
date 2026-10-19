@@ -1,4 +1,4 @@
-export const DPV_PROFILE: string = String.raw`@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+export const DPV_ODRL_PROFILE: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 @prefix dpv: <https://w3id.org/dpv#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

@@ -1,5 +1,5 @@
 import { Parser } from "n3";
-import { ODRLValidator, SHAPES,addProfileToShape, DPV_PROFILE, TOSL_PROFILE } from "./src"
+import { ODRLValidator, SHAPES,addProfileToShape, DPV_ODRL_PROFILE, TOSL_PROFILE } from "./src"
 import { Quad } from "@rdfjs/types";
 import { write } from "@jeswr/pretty-turtle/dist";
 
@@ -52,7 +52,7 @@ async function main() {
 
   // ODRL + profiles: the terms of both profiles are added to the shapes
   const shape : Quad[]= parser.parse(SHAPES)
-  const dpvProfileQuads = parser.parse(DPV_PROFILE)
+  const dpvProfileQuads = parser.parse(DPV_ODRL_PROFILE)
   const toslProfileQuads = parser.parse(TOSL_PROFILE)
 
   const dpvProfileShape = addProfileToShape(shape,dpvProfileQuads)

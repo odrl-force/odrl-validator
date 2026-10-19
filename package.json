@@ -40,6 +40,8 @@
     "n3-utility": "^0.1.0"
   },
   "devDependencies": {
+    "rdf-dereference": "^5.0.0",
+    "arrayify-stream": "^3.0.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.3.0",
     "jest-rdf": "^2.0.0",
