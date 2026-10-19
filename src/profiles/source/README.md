@@ -1,20 +1,21 @@
 # Current profiles supported
 
-## DPV - ODRL profile
+Currently the following profiles are supported:
+- [DPV-ODRL](https://w3id.org/dpv/mappings/odrl): https://github.com/w3c-cg/dpv/blob/master/mappings/odrl/dpv-odrl.ttl (NOTE: dev is used to retrieve it)
+- [TOSL](https://w3id.org/tosl/): https://github.com/isa-group/tosl/blob/main/tosl.ttl
 
-[DPV-ODRL](https://w3id.org/dpv/mappings/odrl): https://github.com/w3c-cg/dpv/blob/master/mappings/odrl/dpv-odrl.ttl (allthough as of 06/10/2026 dev is most recent)
+The most recent is automatically fetched using the [`FetchProfiles.ts`](../../../scripts/MakeProfiles.ts) script.
+The script fetches the most recent version of the ontology and stores them in this directory.
+Furthermore, the files are then prepared into a TS constant such that all profiles can be exported.
 
-```sh
-wget https://raw.githubusercontent.com/w3c-cg/dpv/refs/heads/dev/mappings/odrl/dpv-odrl.ttl
-mv dpv-odrl.ttl src/profiles/source/dpv-odrl.ttl
-```
 
-## Terms of Service Language Ontology
+## Adding new profiles
 
-[TOSL](https://w3id.org/tosl/): https://github.com/isa-group/tosl/blob/main/tosl.ttl
+Add an entry to the "profiles" config of the following format:
 
-get most recent version
-```sh
-wget https://raw.githubusercontent.com/isa-group/tosl/refs/heads/main/tosl.ttl
-mv tosl.ttl src/profiles/source/tosl.ttl
+```json
+{
+    "profile": "tosl", // the name of the profile (will be used as file name)
+    "source": "https://cdn.jsdelivr.net/gh/isa-group/tosl@main/tosl.ttl" // the link to an RDF source
+}
 ```

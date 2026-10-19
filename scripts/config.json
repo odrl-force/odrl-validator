@@ -2,7 +2,20 @@
     "shapes": [
         "odrl-shapes.ttl"
     ],
-    "rules":[
+    "rules": [
         "rules.n3"
+    ],
+    "profiles": [
+        {
+            "profile": "tosl",
+            "source": "https://cdn.jsdelivr.net/gh/isa-group/tosl@main/tosl.ttl",
+            "namespace": "https://w3id.org/tosl/"
+        },
+        {
+            "profile": "dpv-odrl",
+            "source": "https://cdn.jsdelivr.net/gh/w3c-cg/dpv@dev/mappings/odrl/dpv-odrl.ttl",
+            "namespace": "https://w3id.org/dpv/mappings/odrl#"
+        }
+
     ]
 }
