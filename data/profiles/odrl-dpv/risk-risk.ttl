@@ -1,0 +1,19 @@
+@prefix risk: <https://w3id.org/dpv/risk#>.
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-risk a odrl:Policy ;
+    odrl:uid ex:policy-risk ;
+    odrl:profile dpv-odrl: ;
+    odrl:prohibition [
+        odrl:assignee ex:user ;
+        odrl:target ex:service ;
+        odrl:action dpv-odrl:Use ;
+        odrl:constraint [
+            odrl:leftOperand dpv-odrl:Risk ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand risk:InstructionsInaccessible ] ] .

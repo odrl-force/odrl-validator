@@ -1,0 +1,22 @@
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix pd: <https://w3id.org/dpv/pd#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-age a odrl:Policy ;
+    odrl:uid ex:policy-age ;
+    odrl:profile dpv-odrl: ;
+    odrl:permission [
+        odrl:assigner ex:DataSubject ;
+        odrl:assignee [ 
+            a odrl:PartyCollection ;
+            odrl:source ex:entities ;
+            odrl:refinement [
+                odrl:leftOperand dpv-odrl:Age ;
+                odrl:operator odrl:gt ;
+                odrl:rightOperand "18"^^xsd:integer ] ] ;
+        odrl:target ex:asset ;
+        odrl:action dpv-odrl:Use ] .
