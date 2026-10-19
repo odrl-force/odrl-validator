@@ -1,0 +1,83 @@
+# Clause 3.4 of the Elsevier API Service Agreement 2017, modelled with the TOSL profile.
+# Source: https://github.com/isa-group/tosl/blob/main/examples/elsevier/API_Service_Agreement_2017.ttl
+
+@prefix : <http://example.com/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .    
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix tosl: <https://w3id.org/tosl/> .
+@base <http://example.com> .
+
+
+:agreement01 a odrl:Agreement, odrl:Asset ;
+    odrl:profile tosl: ;
+    dcterms:source <https://dev.elsevier.com/api_service_agreement.html> ;
+    dcterms:title "The Elsevier API Service Agreement 2017"^^xsd:string ;
+    dcterms:description "This Agreement governs the use of Elsevier's API services and replaces previous versions." ;
+    dcterms:creator "Elsevier B.V."^^xsd:string ;
+    dcterms:rightsHolder :elsevier ;
+    dcterms:issued "2016-07-05"^^xsd:date ;
+    dcterms:requires <https://dev.elsevier.com/policy.html> ;
+    odrl:permission :permission11 ;
+    odrl:assigner :elsevier .
+
+:elsevier a tosl:Provider ;
+    foaf:name "Elsevier B.V." ;
+    foaf:homepage <https://www.elsevier.com/>;
+    odrl:assignerOf :service01 .
+
+:customer01 a tosl:Customer;
+    dcterms:description "This party represents the customer in the context of the Elseviert API Service Agreement" .
+
+:businessCustomer a tosl:BusinessCustomer ;
+    dcterms:description "This party represents a business entity consuming the service in a commercial context" .
+
+:service01 a tosl:Service ;
+    dcterms:description "The Elsevier API Service" ;
+    dcterms:rightsHolder :elsevier .
+
+################################ TERM 3.4 ######################################
+# 3.4 The Developer shall not display any advertising inside the Application   #
+# or use any content as obtained via the API outside the Application, unless   #
+# permitted by Elsevier in writing.                                            #
+################################################################################
+
+:advertising a odrl:Asset;
+    dcterms:description "The asset refers to advertising materials, which cannot be displayed or used without a valid license agreement." .
+
+:permission11 a odrl:Permission ;
+    dcterms:description "3.4 The Developer shall not display any advertising inside the Application or use any content as obtained via the API outside the Application, unless permitted by Elsevier in writing.";
+    odrl:action [
+        a odrl:Action ;
+        rdf:value odrl:display ;
+        odrl:refinement [
+            a odrl:Constraint ;
+            odrl:leftOperand odrl:media ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand "advertising"^^xsd:string ;
+        ] ;
+    ] ;
+    odrl:target :advertising ;  
+    odrl:assignee :customer01 ;
+    odrl:duty [
+        a odrl:Duty ;
+        dcterms:description "Unless permitted by Elsevier in writing";
+        odrl:action [
+            a odrl:Action ;
+            rdf:value odrl:grantUse ;
+            odrl:refinement [
+                a odrl:Constraint ;
+                odrl:leftOperand tosl:licensingType ;
+                odrl:operator odrl:eq ;
+                odrl:rightOperand tosl:writtenPermission ;
+            ] ;
+        ] ;
+        odrl:target :advertising ;  
+        odrl:assignee :elsevier ;
+    ] .
