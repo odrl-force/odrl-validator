@@ -1,0 +1,19 @@
+@prefix eu-aiact: <https://w3id.org/dpv/legal/eu/aiact#>.
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-sector a odrl:Policy ;
+    odrl:uid ex:policy-sector ;
+    odrl:profile dpv-odrl: ;
+    odrl:permission [
+        odrl:assignee ex:AIuser ;
+        odrl:target ex:AIservice ;
+        odrl:action dpv-odrl:Use ;
+        odrl:constraint [
+            odrl:leftOperand dpv-odrl:Sector ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand eu-aiact:EducationSector ] ] .

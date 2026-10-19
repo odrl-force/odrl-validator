@@ -1,0 +1,23 @@
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix legal-eu: <https://w3id.org/dpv/legal/eu#> .
+@prefix eu-gdpr: <https://w3id.org/dpv/legal/eu/gdpr#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-legal a odrl:Policy ;
+    odrl:uid ex:policy-legal ;
+    odrl:profile dpv-odrl: ;
+    odrl:permission [
+        odrl:assigner ex:entity ;
+        odrl:target ex:asset ;
+        odrl:action dpv-odrl:Use ;
+        odrl:constraint [
+            odrl:leftOperand dpv-odrl:Law ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand legal-eu:law-GDPR ], [
+            odrl:leftOperand dpv-odrl:LegalBasis ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand eu-gdpr:A6-1-a ] ] .

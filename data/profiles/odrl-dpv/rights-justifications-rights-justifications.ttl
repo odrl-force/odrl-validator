@@ -1,0 +1,23 @@
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix eu-gdpr: <https://w3id.org/dpv/legal/eu/gdpr#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-right-erasure-justification a odrl:Agreement ;
+    odrl:uid ex:policy-right-erasure-justification ;
+    odrl:profile dpv-odrl: ;
+    odrl:obligation [
+        odrl:assigner ex:subject ;
+        odrl:assignee ex:controller ;
+        odrl:target ex:subject-data ;
+        odrl:action dpv-odrl:Delete ;
+        odrl:constraint [
+            odrl:leftOperand dpv-odrl:Right ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand eu-gdpr:A17 ], [
+            odrl:leftOperand dpv-odrl:Justification ;
+            odrl:operator odrl:eq ;
+            odrl:rightOperand eu-gdpr:JustificationA17NonNecessity ] ].

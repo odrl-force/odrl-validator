@@ -1,0 +1,20 @@
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix loc: <https://w3id.org/dpv/loc#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-actionrefinement a odrl:Policy ;
+    odrl:uid ex:policy-actionrefinement ;
+    odrl:profile dpv-odrl: ;
+    odrl:permission [
+        odrl:action [ 
+            rdf:value dpv-odrl:Use ;
+            odrl:refinement [
+                odrl:leftOperand dpv-odrl:Location ;
+                odrl:operator odrl:eq ;
+                odrl:rightOperand loc:BE ] ] ;
+        odrl:target dpv-odrl:BankAccount ;
+        odrl:assigner ex:entity ] .

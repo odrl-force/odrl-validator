@@ -1,0 +1,25 @@
+@prefix ex: <http://example.org/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix odrl: <http://www.w3.org/ns/odrl/2/>.
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix pd: <https://w3id.org/dpv/pd#> .
+@prefix dpv-odrl: <https://w3id.org/dpv/mappings/odrl#> .
+
+ex:policy-personaldata a odrl:Policy ;
+    odrl:uid ex:policy-personaldata ;
+    odrl:profile dpv-odrl: ;
+    odrl:permission [
+        odrl:target [ 
+            a odrl:AssetCollection ;
+            odrl:source ex:data-catalog ;
+            odrl:refinement [
+                odrl:leftOperand dpv-odrl:PersonalData ;
+                odrl:operator odrl:isA ;
+                odrl:rightOperand pd:HealthRecord ] ] ;
+        odrl:assigner ex:entity ;
+        odrl:action dpv-odrl:Use ;
+        odrl:constraint [
+            odrl:leftOperand dpv-odrl:Purpose ;
+            odrl:operator odrl:isA ;
+            odrl:rightOperand dpv:ResearchAndDevelopment ] ] .
