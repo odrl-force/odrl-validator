@@ -8,6 +8,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # Needed to publish the shape coverage badge to the badges branch.
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,3 +23,16 @@ jobs:
       # Fails if the generated shapes were not updated after changing a module.
       - run: git diff --exit-code src/shapes
       - run: npm test
+      # Only on main: saves coverage/shape-coverage.json in the badges branch, which the README badge reads.
+      - name: Publish shape coverage badge
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci/github-actions') # TODO: remove the ci/github-actions branch after testing
+        run: |
+          cp coverage/shape-coverage.json "$RUNNER_TEMP/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan badges
+          git rm -rf --quiet .
+          cp "$RUNNER_TEMP/shape-coverage.json" .
+          git add shape-coverage.json
+          git commit -m "Update shape coverage badge"
+          git push --force origin badges
