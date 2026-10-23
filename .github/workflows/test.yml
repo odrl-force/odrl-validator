@@ -23,16 +23,21 @@ jobs:
       # Fails if the generated shapes were not updated after changing a module.
       - run: git diff --exit-code src/shapes
       - run: npm test
-      # Only on main: saves coverage/shape-coverage.json in the badges branch, which the README badge reads.
-      - name: Publish shape coverage badge
+      # Only on main: saves the shape and code coverage in the badges branch, which the README badges read.
+      - name: Publish coverage badges
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci/github-actions') # TODO: remove the ci/github-actions branch after testing
         run: |
           cp coverage/shape-coverage.json "$RUNNER_TEMP/"
+          node -e "
+            const pct = Math.round(require('./coverage/coverage-summary.json').total.lines.pct);
+            const color = pct >= 80 ? 'brightgreen' : pct >= 50 ? 'yellow' : 'red';
+            console.log(JSON.stringify({ schemaVersion: 1, label: 'code coverage', message: pct + '%', color }));
+          " > "$RUNNER_TEMP/code-coverage.json"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout --orphan badges
           git rm -rf --quiet .
-          cp "$RUNNER_TEMP/shape-coverage.json" .
-          git add shape-coverage.json
-          git commit -m "Update shape coverage badge"
+          cp "$RUNNER_TEMP/shape-coverage.json" "$RUNNER_TEMP/code-coverage.json" .
+          git add shape-coverage.json code-coverage.json
+          git commit -m "Update coverage badges"
           git push --force origin badges

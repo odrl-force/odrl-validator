@@ -36,18 +36,19 @@ describe('The shape coverage', () => {
         const tests = testFiles(TEST_DIR).map((file): string => readFileSync(file, 'utf8')).join('\n');
         const untested = messages.filter((message): boolean => !tests.includes(message));
         const tested = messages.length - untested.length;
+        const percentage = Math.round(100 * tested / messages.length);
 
         // Badge in the format of https://shields.io/badges/endpoint-badge
         mkdirSync(join(OUTPUT_FILE, '..'), { recursive: true });
         writeFileSync(OUTPUT_FILE, JSON.stringify({
             schemaVersion: 1,
             label: 'shapes tested',
-            message: `${tested}/${messages.length}`,
-            color: badgeColor(100 * tested / messages.length),
+            message: `${percentage}% (${tested}/${messages.length})`,
+            color: badgeColor(percentage),
         }));
 
         if (untested.length > 0) {
-            console.log(`${tested}/${messages.length} shapes tested. Shapes without a test:\n${untested.map((message): string => `- ${message}`).join('\n')}`);
+            console.log(`${percentage}% of the shapes tested (${tested}/${messages.length}). Shapes without a test:\n${untested.map((message): string => `- ${message}`).join('\n')}`);
         }
         expect(messages.length).toBeGreaterThan(0);
     });
