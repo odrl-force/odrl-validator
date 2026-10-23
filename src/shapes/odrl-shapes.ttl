@@ -874,195 +874,728 @@
 
 
 #################################################
-# Shape for Constraint Validation
+# Operator compatibility per leftOperand
 #################################################
 
-:ConstraintValidationShape a sh:NodeShape ;
-    sh:targetClass odrl:Constraint ;
-    sh:severity sh:Warning ;
-
-    sh:node :AbsolutePositionOperatorShape ;
-    sh:node :AbsoluteSpatialPositionOperatorShape ;
-    sh:node :AbsoluteTemporalPositionOperatorShape ;
-    sh:node :AbsoluteSizeOperatorShape ;
-
-    sh:node :CountOperatorShape ;
-    sh:node :CountRightOperandShape ;
-
-    sh:node :DateTimeOperatorShape ;
-    sh:node :DateTimeRightOperandShape .
-
-
-# AbsolutePosition
+# R45: odrl:absolutePosition is only compatible with comparison operators
 
 :AbsolutePositionOperatorShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            sh:property [
-                sh:path odrl:leftOperand ;
-                sh:hasValue odrl:absolutePosition ;
-            ] 
-            sh:property [
-                sh:path odrl:operator ;
-                sh:not [
-                    sh:in (  odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ;
-                ] ;
-            ] 
-        )
-    ] ;
-    sh:message "Absolute Position is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." .
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absolutePosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absolutePosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
-# AbsoluteSpatialPosition
+
+# R46: odrl:absoluteSpatialPosition is only compatible with comparison operators
 
 :AbsoluteSpatialPositionOperatorShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            sh:property [
-                sh:path odrl:leftOperand ;
-                sh:hasValue odrl:AbsoluteSpatialPosition ;
-            ] 
-            sh:property [
-                sh:path odrl:operator ;
-                sh:not [
-                    sh:in (  odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ;
-                ] ;
-            ] 
-        )
-    ] ;
-    sh:message "Absolute Spatial Position is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." .
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSpatialPosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absoluteSpatialPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
-# AbsoluteTemporalPosition
+
+# R47: odrl:absoluteTemporalPosition is only compatible with comparison operators
 
 :AbsoluteTemporalPositionOperatorShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            sh:property [
-                sh:path odrl:leftOperand ;
-                sh:hasValue odrl:AbsoluteTemporalPosition ;
-            ] 
-            sh:property [
-                sh:path odrl:operator ;
-                sh:not [
-                    sh:in (  odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ;
-                ] ;
-            ] 
-        )
-    ] ;
-    sh:message "Absolute Temporal Position is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." .
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteTemporalPosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absoluteTemporalPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
-# AbsoluteSize
+
+# R48: odrl:absoluteSize is only compatible with comparison operators
 
 :AbsoluteSizeOperatorShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            sh:property [
-                sh:path odrl:leftOperand ;
-                sh:hasValue odrl:AbsoluteSize ;
-            ] 
-            sh:property [
-                sh:path odrl:operator ;
-                sh:not [
-                    sh:in (  odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ;
-                ] ;
-            ] 
-        )
-    ] ;
-    sh:message "Absolute Size is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." .
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:absoluteSize ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:absoluteSize is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
-# Count
+
+# R49: odrl:count is only compatible with comparison operators
 
 :CountOperatorShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            sh:property [
-                sh:path odrl:leftOperand ;
-                sh:hasValue odrl:count ;
-            ] 
-            sh:property [
-                sh:path odrl:operator ;
-                sh:not [
-                    sh:in (  odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ;
-                ] ;
-            ] 
-        )
-    ] ;
-    sh:message "Count is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." .
-
-:CountRightOperandShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            [
-                sh:property [
-                    sh:path odrl:leftOperand ;
-                    sh:hasValue odrl:count ;
-                ]
-            ]
-            [
-                sh:property [
-                    sh:path odrl:rightOperand ;
-                    sh:not [
-                        sh:datatype xsd:integer ;
-                    ] ;
-                ]
-            ]
-        )
-    ] ;
-    sh:message "The rightOperand for count should be an integer." .
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:count is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
 
-# DateTime
+# R51: odrl:dateTime is only compatible with comparison operators
 
 :DateTimeOperatorShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
 
-    sh:not [
-        sh:and (
-            [
-                sh:property [
-                    sh:path odrl:leftOperand ;
-                    sh:hasValue odrl:dateTime ;
-                ]
-            ]
-            [
-                sh:property [
-                    sh:path odrl:operator ;
-                    sh:minCount 1 ;
-                    sh:not [
-                        sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq )
-                    ] ;
-                ]
-            ]
-        )
-    ] ;
-    sh:message "DataTime is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq, or odrl:neq." .
 
-:DataTimeRightOperandShape a sh:NodeShape ;
+# R53: odrl:delayPeriod is only compatible with odrl:eq, odrl:gt or odrl:gteq
+
+:DelayPeriodOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq ) ]
+    ) ;
+    sh:message "odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq." .
+
+
+# R55: odrl:deliveryChannel is only compatible with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf
+
+:DeliveryChannelOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:deliveryChannel ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAllOf odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:deliveryChannel must only be used with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R57: odrl:elapsedTime is only compatible with odrl:eq, odrl:lt, odrl:lteq or odrl:neq
+
+:ElapsedTimeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:elapsedTime ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:elapsedTime must only be used with odrl:eq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R59: odrl:event is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:EventOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:event ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:event must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R61: odrl:fileFormat is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:FileFormatOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:fileFormat ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:fileFormat must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R63: odrl:industry is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:IndustryOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:industry ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:industry must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R65: odrl:language is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:LanguageOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:language ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:language must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R67: odrl:media is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:MediaOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:media ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:media must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R69: odrl:meteredTime is only compatible with odrl:eq, odrl:lt or odrl:lteq
+
+:MeteredTimeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:meteredTime ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:lt odrl:lteq ) ]
+    ) ;
+    sh:message "odrl:meteredTime must only be used with odrl:eq, odrl:lt or odrl:lteq." .
+
+
+# R71: odrl:payAmount is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:PayAmountOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:payAmount ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:payAmount must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R73: odrl:percentage is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:PercentageOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:percentage ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:percentage must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R75: odrl:product is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:ProductOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:product ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:product must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R77: odrl:purpose is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:PurposeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:purpose ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:purpose must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R79: odrl:recipient is only compatible with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf
+
+:RecipientOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:recipient ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:recipient must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R81: odrl:relativePosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:RelativePositionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:relativePosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:relativePosition must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R82: odrl:relativeSpatialPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:RelativeSpatialPositionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:relativeSpatialPosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:relativeSpatialPosition must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R83: odrl:relativeTemporalPosition is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:RelativeTemporalPositionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:relativeTemporalPosition ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:relativeTemporalPosition must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R84: odrl:relativeSize is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:RelativeSizeOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:relativeSize ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:relativeSize must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R85: odrl:resolution is only compatible with odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq
+
+:ResolutionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:resolution ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:resolution must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." .
+
+
+# R86: odrl:spatial is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:SpatialOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R88: odrl:spatialCoordinates is only compatible with odrl:eq or odrl:neq
+
+:SpatialCoordinatesOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatialCoordinates ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:spatialCoordinates must only be used with odrl:eq or odrl:neq." .
+
+
+# R89: odrl:systemDevice is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:SystemDeviceOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:systemDevice ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:systemDevice must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R91: odrl:timeInterval is only compatible with odrl:eq
+
+:TimeIntervalOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:timeInterval ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq ) ]
+    ) ;
+    sh:message "odrl:timeInterval must only be used with odrl:eq." .
+
+
+# R93: odrl:unitOfCount is only compatible with odrl:eq or odrl:neq
+
+:UnitOfCountOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:unitOfCount ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq ) ]
+    ) ;
+    sh:message "odrl:unitOfCount must only be used with odrl:eq or odrl:neq." .
+
+
+# R95: odrl:version is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:VersionOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:version ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:version must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+# R97: odrl:virtualLocation is only compatible with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf
+
+:VirtualLocationOperatorShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:virtualLocation ] ]
+        [ sh:path odrl:operator ; sh:in ( odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf ) ]
+    ) ;
+    sh:message "odrl:virtualLocation must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." .
+
+
+#################################################
+# RightOperand datatype per leftOperand
+#################################################
+
+# R50: the rightOperand of odrl:count must be an xsd:integer
+
+:CountRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:integer ]
+    ) ;
+    sh:message "The rightOperand of odrl:count must be an xsd:integer." .
+
+
+# R52: the rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime
+
+:DateTimeRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:dateTime ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime." .
+
+
+# R54: the rightOperand of odrl:delayPeriod must be an xsd:duration
+
+:DelayPeriodRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ; 
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+    ) ;
+    sh:message "The rightOperand of odrl:delayPeriod must be an xsd:duration." .
+
+
+# R56: the rightOperand of odrl:deliveryChannel must be an IRI, a string, or a list of these
+
+:DeliveryChannelRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
     sh:severity sh:Warning ;
-    sh:not [
-        sh:and (
-            [
-                sh:property [
-                    sh:path odrl:leftOperand ;
-                    sh:hasValue odrl:dateTime ;
-                ]
-            ]
-            [
-                sh:property [
-                    sh:path odrl:rightOperand ;
-                    sh:not [
-                        sh:or (
-                            [ sh:datatype xsd:date ]
-                            [ sh:datatype xsd:dateTime ]
-                        )
-                    ] ;
-                ]
-            ]
-        )
-    ] ;
-    sh:message "The rightOperand for dateTime should be a valid date or date time." .
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:deliveryChannel ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these." .
+
+
+# R58: the rightOperand of odrl:elapsedTime must be an xsd:duration
+
+:ElapsedTimeRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:elapsedTime ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+    ) ;
+    sh:message "The rightOperand of odrl:elapsedTime must be an xsd:duration." .
+
+
+# R60: the rightOperand of odrl:event must be an IRI or a string
+
+:EventRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:event ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:event should be an IRI or a string." .
+
+
+# R62: the rightOperand of odrl:fileFormat must be an IRI or a string
+
+:FileFormatRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:fileFormat ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:fileFormat should be an IRI, a string, or a list of these." .
+
+
+# R64: the rightOperand of odrl:industry must be an IRI or a string
+
+:IndustryRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:industry ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:industry should be an IRI, a string, or a list of these." .
+
+
+# R66: the rightOperand of odrl:language must be a string
+
+:LanguageRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:language ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:language should be a string or a list of strings." .
+
+
+# R68: the rightOperand of odrl:media must be a string
+
+:MediaRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:media ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:media should be a string or a list of strings." .
+
+
+# R70: the rightOperand of odrl:meteredTime must be an xsd:duration
+
+:MeteredTimeRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:meteredTime ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+    ) ;
+    sh:message "The rightOperand of odrl:meteredTime must be an xsd:duration." .
+
+
+# R72: the rightOperand of odrl:payAmount must be an xsd:decimal
+
+:PayAmountRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:payAmount ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ]
+    ) ;
+    sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." .
+
+
+# R74: the rightOperand of odrl:percentage must be an xsd:decimal between 0 and 100
+
+:PercentageRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:percentage ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 100 ]
+    ) ;
+    sh:message "The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100." .
+
+
+# R76: the rightOperand of odrl:product must be an IRI or a string
+
+:ProductRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:product ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:product should be an IRI, a string, or a list of these." .
+
+
+# R78: the rightOperand of odrl:purpose must be an IRI or a string
+
+:PurposeRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:purpose ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:purpose should be an IRI, a string, or a list of these." .
+
+
+# R80: the rightOperand of odrl:recipient must be an IRI or a string
+
+:RecipientRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:recipient ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:recipient should be an IRI, a string, or a list of these." .
+
+
+# R87: the rightOperand of odrl:spatial must be an IRI
+
+:SpatialRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
+        [ sh:path odrl:rightOperand ; sh:nodeKind sh:IRI ]
+    ) ;
+    sh:message "The rightOperand of odrl:spatial must be an IRI." .
+
+
+# R90: the rightOperand of odrl:systemDevice must be an IRI or a string
+
+:SystemDeviceRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:systemDevice ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these." .
+
+
+# R92: the rightOperand of odrl:timeInterval must be an xsd:duration
+
+:TimeIntervalRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Violation ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:timeInterval ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+    ) ;
+    sh:message "The rightOperand of odrl:timeInterval must be an xsd:duration." .
+
+
+# R94: the rightOperand of odrl:unitOfCount must be a string
+
+:UnitOfCountRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:unitOfCount ] ]
+        [ sh:path odrl:rightOperand ; sh:datatype xsd:string ]
+    ) ;
+    sh:message "The rightOperand of odrl:unitOfCount should be a string." .
+
+
+# R96: the rightOperand of odrl:version must be a string
+
+:VersionRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:version ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:version should be a string or a list of strings." .
+
+
+# R98: the rightOperand of odrl:virtualLocation must be a string
+
+:VirtualLocationRightOperandShape a sh:NodeShape ;
+    sh:targetClass odrl:Constraint ;
+    sh:targetSubjectsOf odrl:leftOperand ;
+    sh:severity sh:Warning ;
+    sh:or (
+        [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:virtualLocation ] ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+    ) ;
+    sh:message "The rightOperand of odrl:virtualLocation should be a string or a list of strings." .
+
+
+
+# An RDF list whose members are IRIs or strings
+:IriOrStringListShape a sh:NodeShape ;
+    sh:node :RdfListShape ;
+    sh:property [
+        sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+        sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] ) ;
+    ] .
+
+# An RDF list whose members are strings
+:StringListShape a sh:NodeShape ;
+    sh:node :RdfListShape ;
+    sh:property [
+        sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+        sh:datatype xsd:string ;
+    ] .

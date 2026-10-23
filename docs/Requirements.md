@@ -55,34 +55,80 @@ The extraction of these requirements is based on the [ODRL 2.2 information model
 - R43: A LogicalConstraint must contain exactly one of: odrl:and, odrl:or, odrl:xone, odrl:andSequence - Violation - [Wiki V15](https://www.w3.org/2016/poe/wiki/Validation#V15._In_absence_of_profile.2C_only_ODRL_logical_constraints_can_be_used)
 - R44: Each element of a LogicalConstraint must be a valid Constraint - Violation - [Wiki V19](https://www.w3.org/2016/poe/wiki/Validation#V19._The_values_of_every_logical_constraint_must_be_constraints)
 
-### Constraint operator compatibility (**IN PROGRESS**)
-- R45: odrl:absolutePosition is only compatible with eq, gt, gteq, lt, lteq, neq - Warning - **New**
-- R46: odrl:absoluteSpatialPosition is only compatible with comparison operators - Warning - **New**
-- R47: odrl:absoluteTemporalPosition is only compatible with comparison operators - Warning - **New**
-- R48: odrl:absoluteSize is only compatible with comparison operators - Warning - **New**
-- R49: odrl:count is only compatible with comparison operators - Warning - **New**
-- R50: The rightOperand for odrl:count must be an xsd:integer - Warning - **New**
-- R51: odrl:dateTime is only compatible with comparison operators - Warning - **New**
-- R52: The rightOperand for odrl:dateTime must be xsd:date or xsd:dateTime - Warning - **New**
+### Constraint operator compatibility
+- R45: odrl:absolutePosition is only compatible with eq, gt, gteq, lt, lteq, neq - Violation - **New**
+- R46: odrl:absoluteSpatialPosition is only compatible with comparison operators - Violation - **New**
+- R47: odrl:absoluteTemporalPosition is only compatible with comparison operators - Violation - **New**
+- R48: odrl:absoluteSize is only compatible with comparison operators - Violation - **New**
+- R49: odrl:count is only compatible with comparison operators - Violation - **New**
+- R50: The rightOperand for odrl:count must be an xsd:integer - Violation - **New**
+- R51: odrl:dateTime is only compatible with comparison operators - Violation - **New**
+- R52: The rightOperand for odrl:dateTime must be xsd:date or xsd:dateTime - Violation - **New**
+- R53: odrl:delayPeriod is only compatible with eq, gt, gteq - Violation - **New**
+- R54: The rightOperand for odrl:delayPeriod must be an xsd:duration - Violation - **New**
+- R55: odrl:deliveryChannel is only compatible with eq, neq, isAllOf, isAnyOf, isNoneOf - Violation - **New**
+- R56: The rightOperand for odrl:deliveryChannel must be an IRI, a string, or a list of these - Warning - **New**
+- R57: odrl:elapsedTime is only compatible with eq, lt, lteq, neq - Violation - **New**
+- R58: The rightOperand for odrl:elapsedTime must be an xsd:duration - Violation - **New**
+- R59: odrl:event is only compatible with comparison operators - Violation - **New**
+- R60: The rightOperand for odrl:event must be an IRI or a string - Warning - **New**
+- R61: odrl:fileFormat is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**
+- R62: The rightOperand for odrl:fileFormat must be an IRI or a string - Warning - **New**
+- R63: odrl:industry is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**
+- R64: The rightOperand for odrl:industry must be an IRI or a string - Warning - **New**
+- R65: odrl:language is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
+- R66: The rightOperand for odrl:language must be a string - Warning - **New**
+- R67: odrl:media is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
+- R68: The rightOperand for odrl:media must be a string - Warning - **New**
+- R69: odrl:meteredTime is only compatible with eq, lt, lteq - Violation - **New**
+- R70: The rightOperand for odrl:meteredTime must be an xsd:duration - Violation - **New**
+- R71: odrl:payAmount is only compatible with comparison operators - Violation - **New**
+- R72: The rightOperand for odrl:payAmount must be an xsd:decimal - Violation - **New**
+- R73: odrl:percentage is only compatible with comparison operators - Violation - **New**
+- R74: The rightOperand for odrl:percentage must be an xsd:decimal between 0 and 100 - Violation - **New**
+- R75: odrl:product is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**
+- R76: The rightOperand for odrl:product must be an IRI or a string - Warning - **New**
+- R77: odrl:purpose is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**
+- R78: The rightOperand for odrl:purpose must be an IRI or a string - Warning - **New**
+- R79: odrl:recipient is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**
+- R80: The rightOperand for odrl:recipient must be an IRI or a string - Warning - **New**
+- R81: odrl:relativePosition is only compatible with comparison operators - Violation - **New**
+- R82: odrl:relativeSpatialPosition is only compatible with comparison operators - Violation - **New**
+- R83: odrl:relativeTemporalPosition is only compatible with comparison operators - Violation - **New**
+- R84: odrl:relativeSize is only compatible with comparison operators - Violation - **New**
+- R85: odrl:resolution is only compatible with comparison operators - Violation - **New**
+- R86: odrl:spatial is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
+- R87: The rightOperand for odrl:spatial must be an IRI - Violation - **New**
+- R88: odrl:spatialCoordinates is only compatible with eq, neq - Violation - **New**
+- R89: odrl:systemDevice is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
+- R90: The rightOperand for odrl:systemDevice must be an IRI or a string - Warning - **New**
+- R91: odrl:timeInterval is only compatible with eq - Violation - **New**
+- R92: The rightOperand for odrl:timeInterval must be an xsd:duration - Violation - **New**
+- R93: odrl:unitOfCount is only compatible with eq, neq - Violation - **New**
+- R94: The rightOperand for odrl:unitOfCount must be a string - Warning - **New**
+- R95: odrl:version is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
+- R96: The rightOperand for odrl:version must be a string - Warning - **New**
+- R97: odrl:virtualLocation is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
+- R98: The rightOperand for odrl:virtualLocation must be a string - Warning - **New**
 
-**more requirements need to be included ([compatibility](https://docs.google.com/spreadsheets/d/1DTzZ7HJ0AdfZAZlDA73XC3kHF6jSCQxUuJO_-gCRC_Q/edit?usp=drive_link))**
+**See requirements included ([compatibility](https://docs.google.com/spreadsheets/d/1DTzZ7HJ0AdfZAZlDA73XC3kHF6jSCQxUuJO_-gCRC_Q/edit?usp=drive_link))**
 
 ### Party
-- R53: A party may have at most one uid, and it must be an IRI - Violation - **New**
-- R54: A party partOf must point to a PartyCollection - Violation - **New**
-- R55: A PartyCollection may have at most one source, and it must be an IRI - Violation - [Wiki V10](https://www.w3.org/2016/poe/wiki/Validation#V10._Every_PartyCollection_with_a_refinement_must_have_a_odrl:source)
-- R56: Each refinement of a PartyCollection must be a Constraint or LogicalConstraint - Violation - **New**
+- R99: A party may have at most one uid, and it must be an IRI - Violation - **New**
+- R100: A party partOf must point to a PartyCollection - Violation - **New**
+- R101: A PartyCollection may have at most one source, and it must be an IRI - Violation - [Wiki V10](https://www.w3.org/2016/poe/wiki/Validation#V10._Every_PartyCollection_with_a_refinement_must_have_a_odrl:source)
+- R102: Each refinement of a PartyCollection must be a Constraint or LogicalConstraint - Violation - **New**
 
 ### Asset
-- R57: An asset may have at most one uid, and it must be an IRI - Violation - **New**
-- R58: An asset partOf must point to an AssetCollection - Violation - **New**
-- R59: An AssetCollection may have at most one source, and it must be an IRI - Violation - [Wiki V9](https://www.w3.org/2016/poe/wiki/Validation#V9._Every_AssetCollection_with_a_refinement_must_have_a_source)
-- R60: Each refinement of an AssetCollection must be a Constraint or LogicalConstraint - Violation - **New**
+- R103: An asset may have at most one uid, and it must be an IRI - Violation - **New**
+- R104: An asset partOf must point to an AssetCollection - Violation - **New**
+- R105: An AssetCollection may have at most one source, and it must be an IRI - Violation - [Wiki V9](https://www.w3.org/2016/poe/wiki/Validation#V9._Every_AssetCollection_with_a_refinement_must_have_a_source)
+- R106: Each refinement of an AssetCollection must be a Constraint or LogicalConstraint - Violation - **New**
 
 ### Deontic conflicts 
-- R61: A duty and a prohibition with the same assignee, target and action constitute a conflict - Conflict - **New**
-- R62: A permission and a prohibition with the same assignee, target and action constitute a conflict - Conflict - **New**
-- R63: Two constraints in the same rule with the same left operand and the \texttt{eq} operator must not have different right operands, as the rule could never be satisfied - Conflict - **New**
+- R107: A duty and a prohibition with the same assignee, target and action constitute a conflict - Conflict - **New**
+- R108: A permission and a prohibition with the same assignee, target and action constitute a conflict - Conflict - **New**
+- R109: Two constraints in the same rule with the same left operand and the \texttt{eq} operator must not have different right operands, as the rule could never be satisfied - Conflict - **New**
 
 
 ## Cardinality ODRL model for atomic policies
