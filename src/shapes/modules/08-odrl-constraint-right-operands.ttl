@@ -7,12 +7,12 @@
 :CountRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
     sh:targetSubjectsOf odrl:leftOperand ; 
-    sh:severity sh:Warning ;
+    sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
         [ sh:path odrl:rightOperand ; sh:datatype xsd:integer ]
     ) ;
-    sh:message "The rightOperand of odrl:count should be an xsd:integer." .
+    sh:message "The rightOperand of odrl:count must be an xsd:integer." .
 
 
 # R52: the rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime
