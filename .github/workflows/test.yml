@@ -25,7 +25,7 @@ jobs:
       - run: npm test
       # Only on main: saves the shape and code coverage in the badges branch, which the README badges read.
       - name: Publish coverage badges
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/ci/github-actions') # TODO: remove the ci/github-actions branch after testing
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           cp coverage/shape-coverage.json "$RUNNER_TEMP/"
           node -e "
