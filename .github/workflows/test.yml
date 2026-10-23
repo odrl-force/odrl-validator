@@ -1,0 +1,22 @@
+name: Tests
+
+# Runs on every push to any branch and on every pull request.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx tsx src/shapes/scripts/build-shapes.ts
+      - run: npm run build
+      # Fails if the generated shapes were not updated after changing a module.
+      - run: git diff --exit-code src/shapes
+      - run: npm test
