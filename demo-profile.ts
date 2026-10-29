@@ -1,7 +1,5 @@
 import { Parser } from "n3";
-import { ODRLValidator, SHAPES,addProfileToShape, DPV_ODRL_PROFILE, TOSL_PROFILE } from "./src"
-import { Quad } from "@rdfjs/types";
-import { write } from "@jeswr/pretty-turtle/dist";
+import { ODRLValidator, DPV_ODRL_PROFILE, TOSL_PROFILE } from "./src"
 
 // Uses a DPV action, a DPV left operand and a DPV purpose, none of which are in the ODRL vocabulary.
 const DPV_Policy = `
@@ -50,21 +48,19 @@ async function main() {
   // plain ODRL: only the terms of the ODRL vocabulary are allowed
   const ODRLValidatorPlain = new ODRLValidator();
 
-  // ODRL + profiles: the terms of both profiles are added to the shapes
-  const shape : Quad[]= parser.parse(SHAPES)
-  const dpvProfileQuads = parser.parse(DPV_ODRL_PROFILE)
-  const toslProfileQuads = parser.parse(TOSL_PROFILE)
+  // ODRL + profiles: the terms of both profiles are added to the shapes.
+  // The uri of a profile is the IRI that a policy declares with odrl:profile.
+  const ODRLProfileValidator = new ODRLValidator({
+    profiles: [
+      { uri: "https://w3id.org/dpv/mappings/odrl#", quads: parser.parse(DPV_ODRL_PROFILE) },
+      { uri: "https://w3id.org/tosl/", quads: parser.parse(TOSL_PROFILE) },
+    ],
+  });
 
-  const dpvProfileShape = addProfileToShape(shape,dpvProfileQuads)
-  const dpvToslProfileShape =addProfileToShape(dpvProfileShape,toslProfileQuads)
-
-  // NOTE: because quads are the output of the function, it becomes cumbersome. Perhaps build a class around it to make it easier to add a profile?
-  // NOTE: For the results, it all turns to true. Though, if the odrl profile is not known by the validator, we should let throw violations and state that the profile is unknown + show a link to documentation
+  // NOTE: for the results, it all turns to true. Though, if the odrl profile is not known by the validator,
+  // we should throw violations, state that the profile is unknown and show a link to documentation.
   // IDEA: maybe make it possible for ODRL validators to also run on the fly?
 
-
-  const ODRLProfileValidator = new ODRLValidator({shape:dpvToslProfileShape})
-//  console.log(await write(dpvToslProfileShape, {}))
   for (const [name, policy] of [["DPV", DPV_Policy], ["TOSL", TOSL_Policy]]) {
     console.log(`${name} policy: plain ODRL validation`);
     console.log(await ODRLValidatorPlain.validate(parser.parse(policy)));

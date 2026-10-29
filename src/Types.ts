@@ -78,6 +78,10 @@ export interface IODRLValidator {
   validate(testCase: Quad[]): Promise<ValidatorResult>;
 }
 
+export interface ODRLProfile {
+    uri: string;
+    quads: Quad[];
+}
 
 export interface IODRLTestCaseValidator {
   /**

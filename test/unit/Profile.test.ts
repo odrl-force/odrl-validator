@@ -235,6 +235,7 @@ ex:MyPolicy rdfs:subClassOf odrl:Policy .
 ex:DeeperPolicy rdfs:subClassOf ex:MyPolicy .
 ex:MyOffer rdfs:subClassOf odrl:Offer .
 ex:MyRule rdfs:subClassOf odrl:Rule .
+ex:myLogicalOp rdfs:subPropertyOf odrl:operand .
 ex:MyPermission rdfs:subClassOf odrl:Permission .
 `;
   /** @returns A fresh copy of the full SHACL file as quads. */
