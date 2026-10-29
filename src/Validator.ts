@@ -1,6 +1,6 @@
 import { Quad } from "@rdfjs/types";
 import { Parser, Store, Writer } from 'n3';
-import { IODRLValidator, ValidatorResult } from "./Types";
+import { IODRLValidator, ODRLProfile, ValidatorResult } from "./Types";
 import { DataFactory } from 'rdf-data-factory';
 import { Validator } from "shacl-engine"
 import { EyelingReasoner } from 'n3-utility'
@@ -9,6 +9,7 @@ import { RULES } from "./rules/Rules";
 import { SHAPES } from "./shapes/Shapes";
 import { DETECTION } from "./util/Vocabulary";
 import { Normalizer } from "./Normalisation";
+import { addProfileToShape } from "./profiles/Profile";
 
 const POLICY_TYPES = [
     "http://www.w3.org/ns/odrl/2/Policy",
@@ -19,25 +20,38 @@ const POLICY_TYPES = [
 
 export class ODRLValidator implements IODRLValidator {
     private normalizer: Normalizer;
-
-    protected shaclStore: Store;
     private shaclValidator: Validator;
-
+    private readonly profiles: ODRLProfile[];
     private n3Rules: string;
 
-    public constructor(config?: { shape?: Quad[], n3Rules?: string }) {
+    protected shaclStore: Store;
+
+    public constructor(config?: {
+        shape?: Quad[],
+        n3Rules?: string,
+        profiles?: ODRLProfile[];
+    }) {
         let shape: Quad[] = new Parser().parse(SHAPES);
         let n3Rules: string = RULES;
-
+        let profiles: ODRLProfile[] = []
         if (config) {
             shape = config.shape ?? shape;
             n3Rules = config.n3Rules ?? n3Rules;
+            profiles = config.profiles ?? profiles;
         }
-        this.normalizer = new Normalizer();
-        this.shaclStore = new Store(shape);
+        
+        for (const profile of profiles) {
+            // Constantly update the shape with the profiles
+            shape = addProfileToShape(shape, profile.quads)
+        }
+        const shapeStore = new Store(shape);
 
-        this.shaclValidator = new Validator(this.shaclStore, { factory: new DataFactory() });
+        this.profiles = profiles;
+        this.shaclValidator = new Validator(shapeStore, { factory: new DataFactory() });
         this.n3Rules = n3Rules;
+
+        this.normalizer = new Normalizer();
+        this.shaclStore = shapeStore;
     }
 
     public async validate(policies: Quad[]): Promise<ValidatorResult> {
