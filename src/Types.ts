@@ -10,9 +10,12 @@ export type Severity = 'error' | 'warning' | 'info'
 /**
  * Generic validation issue (syntacic + semantics)
  */
-export interface ValidationResult{
-  message: string;
-}
+export interface ValidationResult {
+     message: string;
+     focusNode?: string;
+     valueNode?: string;
+     severity?: string;
+   }
 
 /**
  * Description of a conflict between two rules

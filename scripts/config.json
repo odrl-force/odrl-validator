@@ -15,7 +15,11 @@
             "profile": "dpv-odrl",
             "source": "https://cdn.jsdelivr.net/gh/w3c-cg/dpv@dev/mappings/odrl/dpv-odrl.ttl",
             "namespace": "https://w3id.org/dpv/mappings/odrl#"
+        },
+        {
+            "profile": "odrl-comm",
+            "source": "https://cdn.jsdelivr.net/gh/w3c/odrl@master/community-vocab/community.ttl",
+            "namespace": "http://www.w3.org/ns/odrl/2/"
         }
-
     ]
 }

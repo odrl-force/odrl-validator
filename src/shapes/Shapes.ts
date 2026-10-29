@@ -290,13 +290,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] .
 
 <http://example.com/AllowedActionValueShape> a sh:NodeShape ;
-  sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." ;
+  sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action in a profile." ;
   sh:or ([
     sh:in (odrl:acceptTracking odrl:aggregate odrl:anonymize odrl:annotate odrl:archive odrl:attribute odrl:compensate odrl:concurrentUse odrl:delete odrl:derive odrl:digitize odrl:display odrl:distribute odrl:ensureExclusivity odrl:execute odrl:extract odrl:give odrl:grantUse odrl:include odrl:index odrl:inform odrl:install odrl:modify odrl:move odrl:nextPolicy odrl:obtainConsent odrl:play odrl:present odrl:print odrl:read odrl:reproduce odrl:reviewPolicy odrl:sell odrl:stream odrl:synchronize odrl:textToSpeech odrl:transfer odrl:transform odrl:translate odrl:uninstall odrl:use odrl:watermark <http://creativecommons.org/ns#Attribution> <http://creativecommons.org/ns#CommercialUse> <http://creativecommons.org/ns#DerivativeWorks> <http://creativecommons.org/ns#Distribution> <http://creativecommons.org/ns#Notice> <http://creativecommons.org/ns#Reproduction> <http://creativecommons.org/ns#ShareAlike> <http://creativecommons.org/ns#Sharing> <http://creativecommons.org/ns#SourceCode> odrl:append odrl:appendTo odrl:copy odrl:export odrl:lease odrl:license odrl:lend odrl:pay odrl:preview odrl:secondaryUse odrl:share odrl:write odrl:writeTo odrl:adHocShare odrl:extractChar odrl:extractPage odrl:extractWord odrl:timedCount)
   ] [
     sh:class odrl:Action
   ]) ;
-  sh:severity sh:Warning .
+  sh:severity sh:Violation .
 
 <http://example.com/AssetShape> a sh:NodeShape ;
   sh:property [
@@ -451,14 +451,14 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/AllowedConstraintValueShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:property [
-    sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand." ;
+    sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand in a profile." ;
     sh:path odrl:leftOperand ;
     sh:or ([
       sh:in (odrl:absolutePosition odrl:absoluteSpatialPosition odrl:absoluteTemporalPosition odrl:absoluteSize odrl:count odrl:dateTime odrl:delayPeriod odrl:deliveryChannel odrl:elapsedTime odrl:event odrl:fileFormat odrl:industry odrl:language odrl:media odrl:meteredTime odrl:payAmount odrl:percentage odrl:product odrl:purpose odrl:recipient odrl:relativePosition odrl:relativeSpatialPosition odrl:relativeTemporalPosition odrl:relativeSize odrl:resolution odrl:spatial odrl:spatialCoordinates odrl:systemDevice odrl:timeInterval odrl:unitOfCount odrl:version odrl:virtualLocation)
     ] [
       sh:class odrl:LeftOperand
     ]) ;
-    sh:severity sh:Warning
+    sh:severity sh:Violation
   ], [
     sh:message "The operator should be a standard ODRL operators." ;
     sh:path odrl:operator ;

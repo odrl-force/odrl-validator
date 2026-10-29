@@ -7,21 +7,26 @@ import { EyelingReasoner } from 'n3-utility'
 import { RDF } from "odrl-atomization";
 import { RULES } from "./rules/Rules";
 import { SHAPES } from "./shapes/Shapes";
-import { DETECTION } from "./util/Vocabulary";
+import { DETECTION, ODRL } from "./util/Vocabulary";
 import { Normalizer } from "./Normalisation";
-import { addProfileToShape } from "./profiles/Profile";
+import { addProfileToShape, subclassesOf } from "./profiles/Profile";
 
-const POLICY_TYPES = [
-    "http://www.w3.org/ns/odrl/2/Policy",
-    "http://www.w3.org/ns/odrl/2/Set",
-    "http://www.w3.org/ns/odrl/2/Offer",
-    "http://www.w3.org/ns/odrl/2/Agreement",
+const POLICY_TYPES: string[] = [
+    ODRL.Policy,
+    ODRL.Agreement,
+    ODRL.Assertion,
+    ODRL.Offer,
+    ODRL.Privacy,
+    ODRL.Request,
+    ODRL.Set,
+    ODRL.Ticket
 ];
 
 export class ODRLValidator implements IODRLValidator {
     private normalizer: Normalizer;
     private shaclValidator: Validator;
     private readonly profiles: ODRLProfile[];
+    private policyTypes: string[]
     private n3Rules: string;
 
     protected shaclStore: Store;
@@ -39,10 +44,12 @@ export class ODRLValidator implements IODRLValidator {
             n3Rules = config.n3Rules ?? n3Rules;
             profiles = config.profiles ?? profiles;
         }
-        
+        this.policyTypes = POLICY_TYPES
         for (const profile of profiles) {
             // Constantly update the shape with the profiles
             shape = addProfileToShape(shape, profile.quads)
+            // Add the policy types defined by the profile (rdfs:subClassOf odrl:Policy)
+            this.policyTypes.push(...subclassesOf(new Store(profile.quads), ODRL.terms.Policy).map(type => type.value));
         }
         const shapeStore = new Store(shape);
 
@@ -63,7 +70,7 @@ export class ODRLValidator implements IODRLValidator {
 
         // No valid RDF or No ODRL policies provided
         if (!policies || policies.length === 0 ||
-            !policies.some(q => q.predicate.value === RDF.type && POLICY_TYPES.includes(q.object.value))) {
+            !policies.some(q => q.predicate.value === RDF.type && this.policyTypes.includes(q.object.value))) {
             output.valid = false;
             output.validationResults.push({
                 message: "No valid policy provided"
@@ -83,8 +90,22 @@ export class ODRLValidator implements IODRLValidator {
             return output;
         }
 
+        const normalizedPolicyStore = new Store(normalizedPolicies)
+
+        // Warn about profiles that the policies use, but that the validator does not support
+        const supportedProfiles = this.profiles.map(profile => profile.uri);
+        for (const quad of normalizedPolicyStore.getQuads(null, ODRL.terms.profile, null, null)) {                   
+            if (!supportedProfiles.includes(quad.object.value)) {
+                output.validationResults.push({
+                    message: `Profile ${quad.object.value} is not supported: terms from this profile are not validated.`,
+                    focusNode: quad.subject.value,
+                    severity: "http://www.w3.org/ns/shacl#Warning"
+                });
+            }
+        }
+
         // SHACL Validation
-        const report = await this.shaclValidator.validate({ dataset: new Store(normalizedPolicies) });
+        const report = await this.shaclValidator.validate({ dataset: normalizedPolicyStore });
         if (report.conforms === false) {
 
             const getResults = (result: any): any[] => {
@@ -105,9 +126,9 @@ export class ODRLValidator implements IODRLValidator {
                 }));
             };
 
-            output.validationResults = report.results.flatMap((result: any) =>
+            output.validationResults.push(...report.results.flatMap((result: any) =>
                 getResults(result)
-            );
+            ));
 
             const duplicatedErrorResults = new Set<string>();
 
