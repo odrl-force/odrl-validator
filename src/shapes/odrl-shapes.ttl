@@ -67,19 +67,12 @@
 
 :ConflictStrategyShape a sh:NodeShape ;
     sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
-    sh:message "An unknown odrl:conflict strategy requires a declared odrl:profile." ;
-    sh:or (
-        [ sh:property [ 
-            sh:path odrl:conflict ; 
-            sh:in ( odrl:perm odrl:prohibit odrl:invalid ) 
-            ] 
-        ]
-        [ sh:property [ 
-            sh:path odrl:profile ; 
-            sh:minCount 1 
-            ] 
-        ]
-    ) .
+    sh:property [
+        sh:severity sh:Violation ;
+        sh:path odrl:conflict ;
+        sh:in ( odrl:perm odrl:prohibit odrl:invalid ) ;
+        sh:message "The conflict strategy must be odrl:perm, odrl:prohibit or odrl:invalid, or a conflict term defined in a loaded profile." ;
+    ] .
 
 # Set = Policy
 
@@ -645,7 +638,7 @@
     ] ;
     
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:operator ;
         sh:or ([
             sh:in (
@@ -665,7 +658,7 @@
             [ 
                 sh:class odrl:Operator;
             ]) ;
-        sh:message "The operator should be a standard ODRL operators." ;
+        sh:message "The operator should be a standard ODRL operators or typed as odrl:Operator in a profile." ;
     ] .
 
 

@@ -240,7 +240,7 @@
     ] ;
     
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:operator ;
         sh:or ([
             sh:in (
@@ -260,7 +260,7 @@
             [ 
                 sh:class odrl:Operator;
             ]) ;
-        sh:message "The operator should be a standard ODRL operators." ;
+        sh:message "The operator should be a standard ODRL operators or typed as odrl:Operator in a profile." ;
     ] .
 
     
