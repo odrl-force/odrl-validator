@@ -114,7 +114,7 @@ function addToShapeList(shape: Quad[], concept: AllowedValueList, values: NamedN
  * @returns The named subclasses, direct and indirect.
  */
 
-function subclassesOf(profile: Store, superClass: Term): NamedNode[] {
+export function subclassesOf(profile: Store, superClass: Term): NamedNode[] {
   const found = new Map<string, NamedNode>();
   const queue: Term[] = [ superClass ];
   while (queue.length > 0) {

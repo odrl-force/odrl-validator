@@ -601,7 +601,7 @@
     sh:targetClass odrl:Constraint ; 
 
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:leftOperand ;
         sh:or ([
             sh:in (
@@ -641,7 +641,7 @@
             [ 
                 sh:class odrl:LeftOperand;
             ]) ;
-        sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand." ;
+        sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand in a profile." ;
     ] ;
     
     sh:property [
@@ -747,7 +747,7 @@
     ] .
 
 :AllowedActionValueShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
+    sh:severity sh:Violation ;
     sh:or ([
         sh:in (
             odrl:acceptTracking
@@ -824,7 +824,7 @@
     ][ 
         sh:class odrl:Action 
     ]) ;
-    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." .
+    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action in a profile." .
 
 
 #################################################
