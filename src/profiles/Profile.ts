@@ -9,7 +9,13 @@ const SHAPE = createVocabulary('http://example.com/',
   'AllowedActionValueShape',
   'AllowedConstraintValueShape',
   'ConflictStrategyShape',
+  'LogicalConstraintShape',
   'RuleShape');
+
+// SHACL terms only needed here, kept out of the shared vocabulary.
+const SH_EXTRA = createVocabulary('http://www.w3.org/ns/shacl#',
+  'alternativePath',
+  'targetSubjectsOf');
 
 /**
  * Describes one `sh:in` list in our SHACL file that holds the allowed ODRL terms of one kind,
@@ -106,26 +112,66 @@ function addToShapeList(shape: Quad[], concept: AllowedValueList, values: NamedN
 }
 
 
-/** All named classes below `root` in the profile, transitively. 
- * 
- * @param profile - The profile.
- * @param superClass - The class to find the subclasses of.
+/**
+ * All named subjects below `root` in the profile via `predicate`, transitively,
+ * e.g. all subclasses (`rdfs:subClassOf`) or all subproperties (`rdfs:subPropertyOf`).
  *
- * @returns The named subclasses, direct and indirect.
+ * @param profile - The profile.
+ * @param root - The term to find the descendants of.
+ * @param predicate - The hierarchy predicate to follow.
+ *
+ * @returns The named descendants, direct and indirect, without `root` itself.
  */
-
-export function subclassesOf(profile: Store, superClass: Term): NamedNode[] {
+function descendantsOf(profile: Store, root: Term, predicate: NamedNode): NamedNode[] {
   const found = new Map<string, NamedNode>();
-  const queue: Term[] = [ superClass ];
+  const queue: Term[] = [ root ];
   while (queue.length > 0) {
-    for (const sub of profile.getSubjects(RDFS.terms.subClassOf, queue.shift()!, null)) {
-      if (sub.termType === 'NamedNode' && !found.has(sub.value) && !sub.equals(superClass)) {
+    for (const sub of profile.getSubjects(predicate, queue.shift()!, null)) {
+      if (sub.termType === 'NamedNode' && !found.has(sub.value) && !sub.equals(root)) {
         found.set(sub.value, sub);
         queue.push(sub);
       }
     }
   }
   return [ ...found.values() ];
+}
+
+/** All named classes below `superClass` in the profile, transitively.
+ *
+ * @param profile - The profile.
+ * @param superClass - The class to find the subclasses of.
+ *
+ * @returns The named subclasses, direct and indirect.
+ */
+export function subclassesOf(profile: Store, superClass: Term): NamedNode[] {
+  return descendantsOf(profile, superClass, RDFS.terms.subClassOf);
+}
+
+/**
+ * Makes `:LogicalConstraintShape` accept the profile's subproperties of `odrl:operand`
+ * like `odrl:and`, `odrl:or`, `odrl:xone` and `odrl:andSequence`. For each subproperty `p`:
+ *
+ * - `:LogicalConstraintShape sh:targetSubjectsOf p` is added;
+ * - `p` is appended to the `sh:alternativePath` list of the shape.
+ *
+ * @param shape - The SHACL shapes as quads. They are not modified.
+ * @param profile - The profile, containing the `rdfs:subPropertyOf` statements.
+ *
+ * @returns A new array with the shapes extended. It holds the same quads as `shape` if the profile adds nothing.
+ *
+ * @throws Error - If the profile has operand subproperties and the shape has no `sh:alternativePath` list.
+ */
+function addOperandSubproperties(shape: Quad[], profile: Quad[]): Quad[] {
+  const operands = descendantsOf(new Store(profile), ODRL.terms.operand, RDFS.terms.subPropertyOf);
+  if (operands.length === 0) {
+    return [ ...shape ];
+  }
+  const target = SHAPE.terms.LogicalConstraintShape;
+  const list = findInList(shape, target, undefined, SH_EXTRA.terms.alternativePath);
+  const withPaths = operands.reduce((quads, op): Quad[] => appendToList(quads, list, op), shape);
+  const targets = operands.map((op): Quad => quad(target, SH_EXTRA.terms.targetSubjectsOf, op));
+  // A store is a set: this drops targets that are already there.
+  return new Store([ ...withPaths, ...targets ]).getQuads(null, null, null, null);
 }
 
 /**
@@ -161,7 +207,8 @@ function addSubclassTargets(shape: Quad[], profile: Quad[]): Quad[] {
  *
  * - instances of `odrl:Action`, `odrl:LeftOperand`, `odrl:Operator` and `odrl:ConflictTerm`
  *   are added to the matching `sh:in` list in our SHACL file (see {@link ALLOWED_VALUE_LISTS});
- * - subclasses of the classes the shapes target (policies, rules, ...) are added as extra targets.
+ * - subclasses of the classes the shapes target (policies, rules, ...) are added as extra targets;
+ * - subproperties of `odrl:operand` are accepted as logical constraint operands (see {@link addOperandSubproperties}).
  *
  * @param shape - The SHACL shapes as quads. They are not modified.
  * @param profile - The profile as quads, e.g. the DPV ODRL mapping.
@@ -174,5 +221,5 @@ function addSubclassTargets(shape: Quad[], profile: Quad[]): Quad[] {
 export function addProfileToShape(shape: Quad[], profile: Quad[]): Quad[] {
   const withLists = Object.values(ALLOWED_VALUE_LISTS).reduce((quads, concept): Quad[] =>
     addToShapeList(quads, concept, typedNamedNodes(profile, concept.type)), shape);
-  return addSubclassTargets(withLists, profile);
+  return addOperandSubproperties(addSubclassTargets(withLists, profile), profile);
 }

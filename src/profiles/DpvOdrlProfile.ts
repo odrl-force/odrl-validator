@@ -150,10 +150,16 @@ dpv-odrl:DataSource a odrl:LeftOperand, skos:Concept ;
 dpv-odrl:techAssetConcepts a skos:Collection ;
   skos:prefLabel "DPV technology mapping terms"@en ;
   skos:scopeNote "Mapping from DPV to ODRL terms"@en ;
-  skos:member dpv-odrl:Technology .
+  skos:member dpv-odrl:Technology, dpv-odrl:AISystem, dpv-odrl:AIModel .
 
 dpv-odrl:Technology a odrl:LeftOperand, skos:Concept, odrl:Asset ;
   skos:exactMatch dpv:Technology .
+
+dpv-odrl:AISystem a odrl:LeftOperand, skos:Concept, odrl:Asset ;
+  skos:exactMatch <https://w3id.org/dpv/ai#AISystem> .
+
+dpv-odrl:AIModel a odrl:LeftOperand, skos:Concept, odrl:Asset ;
+  skos:exactMatch <https://w3id.org/dpv/ai#Model> .
 
 dpv-odrl:Purpose a odrl:LeftOperand, skos:Concept ;
   skos:exactMatch dpv:Purpose ;

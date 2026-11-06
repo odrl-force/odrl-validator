@@ -32,20 +32,21 @@ function* walkBlankNodes(store: Store, start: Term): Generator<Term> {
 }
 
 /**
- * Finds the head of the `sh:in` list reachable from `start`,
+ * Finds the head of the `sh:in` list (or the list of another predicate, e.g. `sh:alternativePath`) reachable from `start`,
  * only walking through blank nodes (so other named shapes are never entered).
  *
  * @param quads - The SHACL shapes. They are not modified.
  * @param start - The node to start searching from, typically a named shape.
  * @param path - Restricts the search to the property shape with this `sh:path`.
  *               Needed when one shape holds several lists, e.g. for `odrl:leftOperand` and `odrl:operator`.
+ * @param listPredicate - The predicate whose object is the list. Defaults to `sh:in`.
  *
- * @returns The first node of the `sh:in` list.
+ * @returns The first node of the list.
  *
  * @throws Error
- * If no `sh:in` list is found, or if `path` is given and no property shape with that `sh:path` is found.
+ * If no list is found, or if `path` is given and no property shape with that `sh:path` is found.
  */
-export function findInList(quads: Quad[], start: Term, path?: NamedNode): Term {
+export function findInList(quads: Quad[], start: Term, path?: NamedNode, listPredicate: NamedNode = SH.terms.in): Term {
   const store = new Store(quads);
   let scope: Term | undefined = start;
   if (path) {
@@ -54,13 +55,14 @@ export function findInList(quads: Quad[], start: Term, path?: NamedNode): Term {
   }
   if (scope) {
     for (const node of walkBlankNodes(store, scope)) {
-      const list = store.getObjects(node as Quad_Subject, SH.terms.in, null)[0];
+      const list = store.getObjects(node as Quad_Subject, listPredicate, null)[0];
       if (list) {
         return list;
       }
     }
   }
-  throw new Error(`No sh:in list found for ${start.value}${path ? ` with sh:path ${path.value}` : ''}.`);
+  const listName = listPredicate.value.replace('http://www.w3.org/ns/shacl#', 'sh:');
+  throw new Error(`No ${listName} list found for ${start.value}${path ? ` with sh:path ${path.value}` : ''}.`);
 }
 
 /**
