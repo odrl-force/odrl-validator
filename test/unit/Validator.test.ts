@@ -1,7 +1,7 @@
 import type { NamedNode, Quad } from '@rdfjs/types';
 import { ODRLProfile } from "../../src/Types";
 import { DataFactory } from 'n3';
-import { ODRL, RDF, RDFS, XSD } from '../../src/util/Vocabulary';
+import { ODRL, OWL, RDF, RDFS, SKOS, XSD } from '../../src/util/Vocabulary';
 import { ODRLValidator } from '../../src/Validator';
 const {quad, namedNode, blankNode, literal} = DataFactory;
 
@@ -34,6 +34,7 @@ describe('The ODRL Validator', (): void => {
         let profileConflictTerm: NamedNode;
         let profilePolicy: NamedNode;
         let profileRule: NamedNode;
+        let profileRuleRelation: NamedNode;
         let profileLogicalOp: NamedNode;
         // The policy declares that it uses the profile
         let profileDeclaration: Quad;
@@ -70,6 +71,7 @@ describe('The ODRL Validator', (): void => {
             profileConflictTerm = namedNode(profileURI + "Conf");
             profilePolicy = namedNode(profileURI + "MyPolicy");
             profileRule = namedNode(profileURI + "MyRule");
+            profileRuleRelation = namedNode(profileURI + "myRuleRelation")
             profileLogicalOp = namedNode(profileURI + "myLogicalOp");
             profileQuads = [
                 quad(profileAction, RDF.terms.type, ODRL.terms.Action),
@@ -78,6 +80,11 @@ describe('The ODRL Validator', (): void => {
                 quad(profileConflictTerm, RDF.terms.type, ODRL.terms.ConflictTerm),
                 quad(profilePolicy, RDFS.terms.subClassOf, ODRL.terms.Policy),
                 quad(profileRule, RDFS.terms.subClassOf, ODRL.terms.Rule),
+                quad(profileRuleRelation, RDF.terms.type, RDF.terms.Property),
+                quad(profileRuleRelation, RDF.terms.type, SKOS.terms.Concept),
+                quad(profileRuleRelation, RDF.terms.type, SKOS.terms.Concept),
+                quad(profileRuleRelation, RDFS.terms.domain, ODRL.terms.Policy),
+                quad(profileRuleRelation, RDFS.terms.range, profileRule),
                 quad(profileLogicalOp, RDFS.terms.subPropertyOf, ODRL.terms.operand),
             ]
             profile = {
@@ -218,7 +225,7 @@ describe('The ODRL Validator', (): void => {
         describe('with a rule subclass', (): void => {
             // A rule of the subclass with an action, an assignee and a target
             const profileRuleQuads = (): Quad[] => [
-                quad(namedNode(policyIRI), ODRL.terms.permission, newRuleNode),
+                quad(namedNode(policyIRI), profileRuleRelation, newRuleNode),
                 quad(newRuleNode, RDF.terms.type, profileRule),
                 quad(newRuleNode, ODRL.terms.action, ODRL.terms.read),
                 quad(newRuleNode, ODRL.terms.assignee, namedNode("https://example.org/Alice")),

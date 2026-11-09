@@ -6,7 +6,10 @@
     "ignoreDeprecations": "6.0",
     "allowJs": true,
     "rootDir": ".",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "typeRoots":[
+        "node_modules/@types"
+    ]
   },
   "include": ["src", "test", "types/**/*"]
 }

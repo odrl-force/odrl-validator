@@ -16,17 +16,28 @@ export const SH = createVocabulary('http://www.w3.org/ns/shacl#',
     'targetClass');
  
 export const RDF = createVocabulary('http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'Property',
     'first',
     'rest',
     'nil',
     'type');
  
 export const RDFS = createVocabulary('http://www.w3.org/2000/01/rdf-schema#',
+    'domain',
+    'range',
     'subClassOf',
     'subPropertyOf');
  
+
+export const SKOS = createVocabulary('http://www.w3.org/2004/02/skos/core#',
+    'Concept'
+)
 export const XSD = createVocabulary('http://www.w3.org/2001/XMLSchema#',
     'integer'
+)
+
+export const OWL = createVocabulary('http://www.w3.org/2002/07/owl#',
+    'ObjectProperty'
 )
 export const ODRL = createVocabulary(
     'http://www.w3.org/ns/odrl/2/',
