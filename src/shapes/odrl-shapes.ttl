@@ -14,8 +14,19 @@
 
 :PolicyShape a sh:NodeShape ;
     sh:targetClass odrl:Policy ;
+    # Only policies have rules: this also finds policies whose class is unknown (e.g. from a profile that is not loaded).
+    sh:targetSubjectsOf odrl:permission, odrl:prohibition, odrl:obligation ;
     sh:nodeKind sh:IRI ;
     sh:message "Policies must be identified by an IRI." ;
+
+    sh:property [
+        sh:path rdf:type ;
+        sh:qualifiedValueShape [
+            sh:in ( odrl:Policy odrl:Agreement odrl:Assertion odrl:Offer odrl:Privacy odrl:Request odrl:Set odrl:Ticket ) ;
+        ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
+    ] ;
 
     sh:property [
         sh:path odrl:uid ;

@@ -6,9 +6,17 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/PolicyShape> a sh:NodeShape ;
   sh:targetClass odrl:Policy ;
+  sh:targetSubjectsOf odrl:permission, odrl:prohibition, odrl:obligation ;
   sh:nodeKind sh:IRI ;
   sh:message "Policies must be identified by an IRI." ;
   sh:property [
+    sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
+    sh:path rdf:type ;
+    sh:qualifiedValueShape [
+      sh:in (odrl:Policy odrl:Agreement odrl:Assertion odrl:Offer odrl:Privacy odrl:Request odrl:Set odrl:Ticket)
+    ] ;
+    sh:qualifiedMinCount 1
+  ], [
     sh:nodeKind sh:IRI ;
     sh:message "A Policy may have one uid, and it must be an IRI." ;
     sh:path odrl:uid ;
@@ -89,12 +97,12 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:node <http://example.com/RuleShape> .
 
 <http://example.com/ConflictStrategyShape> a sh:NodeShape ;
-  sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
+  sh:targetClass odrl:Policy, odrl:Agreement, odrl:Offer, odrl:Set ;
   sh:property [
     sh:message "The conflict strategy must be odrl:perm, odrl:prohibit or odrl:invalid, or a conflict term defined in a loaded profile." ;
     sh:path odrl:conflict ;
-    sh:severity sh:Violation ;
-    sh:in (odrl:perm odrl:prohibit odrl:invalid)
+    sh:in (odrl:perm odrl:prohibit odrl:invalid) ;
+    sh:severity sh:Violation
   ] .
 
 <http://example.com/SetPolicyShape> a sh:NodeShape ;
@@ -258,8 +266,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:property [
     sh:message "The value of odrl:includedIn should be either odrl:use or odrl:transfer." ;
     sh:path odrl:includedIn ;
-    sh:maxCount 1 ;
-    sh:in (odrl:use odrl:transfer)
+    sh:in (odrl:use odrl:transfer) ;
+    sh:maxCount 1
   ], [
     sh:message "Each implies value should be an Action." ;
     sh:path odrl:implies ;
@@ -426,6 +434,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/LogicalConstraintShape> a sh:NodeShape ;
   sh:targetClass odrl:LogicalConstraint ;
+  sh:targetSubjectsOf odrl:or, odrl:xone, odrl:and, odrl:andSequence ;
   sh:property [
     sh:nodeKind sh:IRI ;
     sh:message "A Logical Constraint may have one uid, and it must be an IRI." ;
@@ -439,8 +448,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:maxCount 1 ;
     sh:minCount 1 ;
     sh:node <http://example.com/ConstraintListShape>
-  ] ;
-  sh:targetSubjectsOf odrl:or, odrl:xone, odrl:and, odrl:andSequence .
+  ] .
 
 <http://example.com/AllowedConstraintValueShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -465,6 +473,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] .
 
 <http://example.com/RefinementNeedsSourceShape> a sh:NodeShape ;
+  sh:targetSubjectsOf odrl:refinement ;
   sh:message "A collection with refinement must have one source." ;
   sh:or ([
     sh:property [
@@ -476,11 +485,10 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       sh:path rdf:value ;
       sh:minCount 1
     ]
-  ]) ;
-  sh:targetSubjectsOf odrl:refinement .
+  ]) .
 
 <http://example.com/ActionRequiresProfileShape> a sh:NodeShape ;
-  sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
+  sh:targetClass odrl:Policy, odrl:Agreement, odrl:Offer, odrl:Set ;
   sh:message "An action outside the ODRL vocabulary requires a declared odrl:profile." ;
   sh:or ([
     sh:property [
@@ -501,7 +509,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ]) .
 
 <http://example.com/ConstraintVocabRequiresProfileShape> a sh:NodeShape ;
-  sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
+  sh:targetClass odrl:Policy, odrl:Agreement, odrl:Offer, odrl:Set ;
   sh:message "A constraint term (leftOperand/operator) outside the ODRL vocabulary requires a declared odrl:profile." ;
   sh:or ([
     sh:property [
@@ -574,8 +582,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] .
 
 <http://example.com/AnyConstraintShape> a sh:NodeShape ;
-  sh:node <http://example.com/ConstraintShape> ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  sh:targetSubjectsOf odrl:leftOperand ;
+  sh:node <http://example.com/ConstraintShape> .
 
 <http://example.com/ConstraintListShape> a sh:NodeShape ;
   sh:property [

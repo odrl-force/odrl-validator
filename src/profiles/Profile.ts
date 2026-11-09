@@ -10,6 +10,7 @@ const SHAPE = createVocabulary('http://example.com/',
   'AllowedConstraintValueShape',
   'ConflictStrategyShape',
   'LogicalConstraintShape',
+  'PolicyShape',
   'RuleShape');
 
 // SHACL terms only needed here, kept out of the shared vocabulary.
@@ -34,6 +35,11 @@ export interface AllowedValueList {
    * Only needed when the shape contains several lists, e.g. one for `odrl:leftOperand` and one for `odrl:operator`.
    */
   path?: NamedNode;
+  /**
+   * How profile terms relate to {@link AllowedValueList.type}:
+   * `instance` (default) for `ex:term a type`, `subClassOf` for `ex:term rdfs:subClassOf type` (transitively).
+   */
+  relation?: 'instance' | 'subClassOf';
 }
  
 /**
@@ -42,7 +48,7 @@ export interface AllowedValueList {
  *
  * Right operands are absent on purpose: the shapes accept any literal, IRI or `odrl:RightOperand`.
  */
-export const ALLOWED_VALUE_LISTS: Record<'action' | 'leftOperand' | 'operator' | 'conflictTerm', AllowedValueList> = {
+export const ALLOWED_VALUE_LISTS: Record<'action' | 'leftOperand' | 'operator' | 'conflictTerm' | 'policyType', AllowedValueList> = {
   action: {
     type: ODRL.terms.Action,
     shape: SHAPE.terms.AllowedActionValueShape,
@@ -61,6 +67,12 @@ export const ALLOWED_VALUE_LISTS: Record<'action' | 'leftOperand' | 'operator' |
     type: ODRL.terms.ConflictTerm,
     shape: SHAPE.terms.ConflictStrategyShape,
     path: ODRL.terms.conflict,
+  },
+  policyType: {
+    type: ODRL.terms.Policy,
+    shape: SHAPE.terms.PolicyShape,
+    path: RDF.terms.type,
+    relation: 'subClassOf',
   },
 };
 
@@ -220,6 +232,8 @@ function addSubclassTargets(shape: Quad[], profile: Quad[]): Quad[] {
  */
 export function addProfileToShape(shape: Quad[], profile: Quad[]): Quad[] {
   const withLists = Object.values(ALLOWED_VALUE_LISTS).reduce((quads, concept): Quad[] =>
-    addToShapeList(quads, concept, typedNamedNodes(profile, concept.type)), shape);
+    addToShapeList(quads, concept, concept.relation === 'subClassOf' ?
+      subclassesOf(new Store(profile), concept.type) :
+      typedNamedNodes(profile, concept.type)), shape);
   return addOperandSubproperties(addSubclassTargets(withLists, profile), profile);
 }
