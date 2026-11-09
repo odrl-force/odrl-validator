@@ -51,6 +51,7 @@ export class ODRLValidator implements IODRLValidator {
             // Add the policy types defined by the profile (rdfs:subClassOf odrl:Policy)
             this.policyTypes.push(...subclassesOf(new Store(profile.quads), ODRL.terms.Policy).map(type => type.value));
         }
+        console.log("This ODRL Validator supports the following profiles:", profiles.map(profile => profile.uri))
         const shapeStore = new Store(shape);
 
         this.profiles = profiles;
