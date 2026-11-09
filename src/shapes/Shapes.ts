@@ -622,7 +622,9 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/AbsolutePositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:absolutePosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -631,13 +633,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/AbsoluteSpatialPositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:absoluteSpatialPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -646,13 +648,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/AbsoluteTemporalPositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:absoluteTemporalPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -661,13 +663,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/AbsoluteSizeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:absoluteSize is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -676,13 +678,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/CountOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:count is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -691,13 +693,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/DateTimeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -706,13 +708,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/DelayPeriodOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -721,13 +723,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/DeliveryChannelOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:deliveryChannel must only be used with odrl:eq, odrl:neq, odrl:isAllOf, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -736,13 +738,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAllOf odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/ElapsedTimeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:elapsedTime must only be used with odrl:eq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -751,13 +753,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/EventOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:event must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -766,13 +768,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/FileFormatOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:fileFormat must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -781,13 +783,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/IndustryOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:industry must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -796,13 +798,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/LanguageOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:language must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -811,13 +813,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/MediaOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:media must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -826,13 +828,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/MeteredTimeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:meteredTime must only be used with odrl:eq, odrl:lt or odrl:lteq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -841,13 +843,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:lt odrl:lteq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/PayAmountOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:payAmount must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -856,13 +858,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/PercentageOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:percentage must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -871,13 +873,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/ProductOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:product must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -886,13 +888,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/PurposeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:purpose must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -901,13 +903,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/RecipientOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:recipient must only be used with odrl:eq, odrl:neq, odrl:isA, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -916,13 +918,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isA odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/RelativePositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:relativePosition must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -931,13 +933,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/RelativeSpatialPositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:relativeSpatialPosition must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -946,13 +948,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/RelativeTemporalPositionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:relativeTemporalPosition must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -961,13 +963,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/RelativeSizeOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:relativeSize must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -976,13 +978,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/ResolutionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:resolution must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -991,13 +993,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:gt odrl:gteq odrl:lt odrl:lteq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/SpatialOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:spatial must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1006,13 +1008,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/SpatialCoordinatesOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:spatialCoordinates must only be used with odrl:eq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1021,13 +1023,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/SystemDeviceOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:systemDevice must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1036,13 +1038,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/TimeIntervalOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:timeInterval must only be used with odrl:eq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1051,13 +1053,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/UnitOfCountOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:unitOfCount must only be used with odrl:eq or odrl:neq." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1066,13 +1068,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/VersionOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:version must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1081,13 +1083,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/VirtualLocationOperatorShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "odrl:virtualLocation must only be used with odrl:eq, odrl:neq, odrl:isAnyOf or odrl:isNoneOf." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1096,13 +1098,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:operator ;
     sh:in (odrl:eq odrl:neq odrl:isAnyOf odrl:isNoneOf)
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:count must be an xsd:integer." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1111,13 +1113,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:integer
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/DateTimeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1130,13 +1132,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:datatype xsd:dateTime
     ])
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/DelayPeriodRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:delayPeriod must be an xsd:duration." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1145,13 +1147,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:duration
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/DeliveryChannelRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1166,9 +1168,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/IriOrStringListShape> a sh:NodeShape ;
   sh:property [
@@ -1185,7 +1185,9 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/ElapsedTimeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:elapsedTime must be an xsd:duration." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1194,13 +1196,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:duration
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/EventRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:event should be an IRI or a string." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1213,13 +1215,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:datatype xsd:string
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/FileFormatRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:fileFormat should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1234,13 +1236,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/IndustryRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:industry should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1255,13 +1257,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/LanguageRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:language should be a string or a list of strings." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1274,9 +1276,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/StringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/StringListShape> a sh:NodeShape ;
   sh:property [
@@ -1289,7 +1289,9 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
 <http://example.com/MediaRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:media should be a string or a list of strings." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1302,13 +1304,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/StringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/MeteredTimeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:meteredTime must be an xsd:duration." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1317,13 +1319,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:duration
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/PayAmountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1332,13 +1334,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:decimal
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/PercentageRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1349,13 +1351,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:datatype xsd:decimal ;
     sh:minInclusive 0 ;
     sh:maxInclusive 100
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/ProductRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:product should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1370,13 +1372,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/PurposeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:purpose should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1391,13 +1393,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/RecipientRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:recipient should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1412,13 +1414,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/SpatialRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:spatial must be an IRI." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1427,13 +1429,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:nodeKind sh:IRI ;
     sh:path odrl:rightOperand
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/SystemDeviceRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1448,13 +1450,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/TimeIntervalRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:timeInterval must be an xsd:duration." ;
+  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1463,13 +1465,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:duration
-  ]) ;
-  sh:severity sh:Violation ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/UnitOfCountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:unitOfCount should be a string." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1478,13 +1480,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:datatype xsd:string
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/VersionRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:version should be a string or a list of strings." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1497,13 +1499,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/StringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 
 <http://example.com/VirtualLocationRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:virtualLocation should be a string or a list of strings." ;
+  sh:severity sh:Warning ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1516,7 +1518,5 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/StringListShape>
     ])
-  ]) ;
-  sh:severity sh:Warning ;
-  sh:targetSubjectsOf odrl:leftOperand .
+  ]) .
 `

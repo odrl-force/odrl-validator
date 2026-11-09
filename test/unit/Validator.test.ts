@@ -1,6 +1,6 @@
 import type { NamedNode, Quad } from '@rdfjs/types';
 import { ODRLProfile } from "../../src/Types";
-import { DataFactory } from 'n3';
+import { DataFactory, Writer } from 'n3';
 import { ODRL, OWL, RDF, RDFS, SKOS, XSD } from '../../src/util/Vocabulary';
 import { ODRLValidator } from '../../src/Validator';
 const {quad, namedNode, blankNode, literal} = DataFactory;
@@ -146,7 +146,7 @@ describe('The ODRL Validator', (): void => {
                 const validator = new ODRLValidator({profiles:[profile]});
                 policyQuads.push(
                     profileDeclaration,
-                    ...permissionQuads(ODRL.terms.read, constraintQuads(ODRL.terms.count, profileOperator)),
+                    ...permissionQuads(ODRL.terms.read, constraintQuads(profileLeftOperand, profileOperator)),
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
@@ -156,7 +156,7 @@ describe('The ODRL Validator', (): void => {
  
             it("fails when a profile operator is part of a rule without a profile", async ()=> {
                 policyQuads.push(
-                    ...permissionQuads(ODRL.terms.read, constraintQuads(ODRL.terms.count, profileOperator)),
+                    ...permissionQuads(ODRL.terms.read, constraintQuads(profileLeftOperand, profileOperator)),
                 )
                 expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
