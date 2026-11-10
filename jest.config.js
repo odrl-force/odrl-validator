@@ -16,7 +16,7 @@ module.exports = {
     ],
     testEnvironment: 'node',
     collectCoverage: true,
-    coverageReporters: [ 'text', 'lcov' ],
+    coverageReporters: [ 'text', 'lcov', 'json-summary' ],
     coveragePathIgnorePatterns: [
       '/dist/',
       '/node_modules/',
