@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "6.0",
+    "allowJs": true,
+    "rootDir": ".",
+    "isolatedModules": true,
+    "typeRoots":[
+        "node_modules/@types"
+    ]
+  },
+  "include": ["src", "test", "types/**/*"]
+}

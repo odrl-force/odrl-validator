@@ -14,8 +14,19 @@
 
 :PolicyShape a sh:NodeShape ;
     sh:targetClass odrl:Policy ;
+    # Only policies have rules: this also finds policies whose class is unknown (e.g. from a profile that is not loaded).
+    sh:targetSubjectsOf odrl:permission, odrl:prohibition, odrl:obligation ;
     sh:nodeKind sh:IRI ;
     sh:message "Policies must be identified by an IRI." ;
+
+    sh:property [
+        sh:path rdf:type ;
+        sh:qualifiedValueShape [
+            sh:in ( odrl:Policy odrl:Agreement odrl:Assertion odrl:Offer odrl:Privacy odrl:Request odrl:Set odrl:Ticket ) ;
+        ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
+    ] ;
 
     sh:property [
         sh:path odrl:uid ;
@@ -67,19 +78,12 @@
 
 :ConflictStrategyShape a sh:NodeShape ;
     sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
-    sh:message "An unknown odrl:conflict strategy requires a declared odrl:profile." ;
-    sh:or (
-        [ sh:property [ 
-            sh:path odrl:conflict ; 
-            sh:in ( odrl:perm odrl:prohibit odrl:invalid ) 
-            ] 
-        ]
-        [ sh:property [ 
-            sh:path odrl:profile ; 
-            sh:minCount 1 
-            ] 
-        ]
-    ) .
+    sh:property [
+        sh:severity sh:Violation ;
+        sh:path odrl:conflict ;
+        sh:in ( odrl:perm odrl:prohibit odrl:invalid ) ;
+        sh:message "The conflict strategy must be odrl:perm, odrl:prohibit or odrl:invalid, or a conflict term defined in a loaded profile." ;
+    ] .
 
 # Set = Policy
 
@@ -601,7 +605,7 @@
     sh:targetClass odrl:Constraint ; 
 
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:leftOperand ;
         sh:or ([
             sh:in (
@@ -641,11 +645,11 @@
             [ 
                 sh:class odrl:LeftOperand;
             ]) ;
-        sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand." ;
+        sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand in a profile." ;
     ] ;
     
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:operator ;
         sh:or ([
             sh:in (
@@ -665,7 +669,7 @@
             [ 
                 sh:class odrl:Operator;
             ]) ;
-        sh:message "The operator should be a standard ODRL operators." ;
+        sh:message "The operator should be a standard ODRL operators or typed as odrl:Operator in a profile." ;
     ] .
 
 
@@ -747,7 +751,7 @@
     ] .
 
 :AllowedActionValueShape a sh:NodeShape ;
-    sh:severity sh:Warning ;
+    sh:severity sh:Violation ;
     sh:or ([
         sh:in (
             odrl:acceptTracking
@@ -823,10 +827,8 @@
             ) 
     ][ 
         sh:class odrl:Action 
-    ][ 
-        sh:nodeKind sh:BlankNode 
     ]) ;
-    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." .
+    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action in a profile." .
 
 
 #################################################

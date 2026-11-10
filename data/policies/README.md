@@ -1,0 +1,1 @@
+All the policies from the ODRL Evaluator test suite: https://w3id.org/force/test-suite/repo

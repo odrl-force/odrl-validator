@@ -12,9 +12,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run makeRules && npm run makeShapes && tsc",
+    "build": "npm run clean && npm run buildShapes && npm run makeRules && npm run makeShapes && npm run makeProfiles && tsc",
+    "buildShapes": "tsx src/shapes/scripts/build-shapes.ts",
     "makeRules": "tsx scripts/MakeRules.ts ",
     "makeShapes": "tsx scripts/MakeShapes.ts ",
+    "makeProfiles": "tsx scripts/MakeProfiles.ts",
     "clean": "rm -rf ./dist",
     "test": "jest",
     "demo": "tsx demo.ts",
@@ -38,6 +40,8 @@
     "n3-utility": "^0.1.0"
   },
   "devDependencies": {
+    "rdf-dereference": "^5.0.0",
+    "arrayify-stream": "^3.0.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.3.0",
     "jest-rdf": "^2.0.0",
