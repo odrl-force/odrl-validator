@@ -1,9 +1,10 @@
 name: Tests
 
-# Runs on every push to any branch and on every pull request.
+# Runs on every pull request, and on main after a merge (to update the badges).
 on:
-  push:
   pull_request:
+  push:
+    branches: [ main ]
 
 jobs:
   test:
