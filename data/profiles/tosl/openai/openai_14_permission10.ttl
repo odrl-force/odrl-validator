@@ -1,0 +1,156 @@
+# Rule permission10 (Paid accounts) of the OpenAI Europe Terms of Use 2024, modelled with the TOSL profile.
+# Source: https://github.com/isa-group/tosl/ (OpenAI Europe Terms of Use 2024 example)
+
+@prefix : <http://example.com/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .    
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .  
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix tosl: <https://w3id.org/tosl/> .
+@base <http://example.com> .
+
+:agreement01 a odrl:Agreement, odrl:Asset ;
+    odrl:profile tosl: ;
+    dcterms:source <https://openai.com/policies/eu-terms-of-use/> ;
+    odrl:hasPolicy <https://openai.com/policies/eu-terms-of-use/> ;
+    dcterms:title "The OpenAI Europe Terms of Use 2024"^^xsd:string ;
+    dcterms:description "These Terms of Use govern the use of OpenAI's services, including ChatGPT and DALL·E."^^xsd:string;
+    dcterms:creator "OpenAI"^^xsd:string ;
+    dcterms:rightsHolder :OpenAI ;
+    dcterms:issued "2024-12-11"^^xsd:date ;
+    dcterms:requires <https://openai.com/policies/usage-policies/>,
+    <https://openai.com/policies/service-terms/>,
+    <https://openai.com/policies/sharing-publication-policy/>,
+    <https://openai.com/policies/service-credit-terms/>,
+    <https://openai.com/brand/> ;
+    odrl:permission :permission10 ;
+    odrl:assigner :OpenAI .
+
+### odrl:Party
+
+:OpenAI a tosl:Provider ;
+    dcterms:description "OpenAI is an AI research and deployment company committed to ensuring that artificial general intelligence (AGI) benefits all of humanity."^^xsd:string ;
+    foaf:name "Open AI";
+    foaf:homepage <https://openai.com/>;
+    odrl:assignerOf :services .
+
+:OpenAI_Ireland a foaf:Organization ;
+    foaf:name "OpenAI Ireland Ltd"^^xsd:string ;
+    dcterms:identifier "Company Number: 737350"^^xsd:string ;
+    vcard:hasAddress [
+        vcard:street-address "1st Floor, The Liffey Trust Centre, 117-126 Sheriff Street Upper";
+        vcard:locality "Dublin 1";
+        vcard:postal-code "D01 YC43";
+        vcard:country-name "Ireland"
+    ] ;
+    dcterms:coverage "EEA", "Switzerland" .
+
+:OpenAI_LLC a foaf:Organization ;
+    foaf:name "OpenAI, L.L.C."^^xsd:string ;
+    dcterms:identifier "Company Number: 7063675"^^xsd:string ;
+    vcard:hasAddress [
+        vcard:street-address "1455 3rd Street";
+        vcard:locality "San Francisco";
+        vcard:region "California";
+        vcard:postal-code "94158";
+        vcard:country-name "United States"
+    ] ;
+    dcterms:coverage "United Kingdom"^^xsd:string .
+
+:OpenAI foaf:subOrganizationOf :OpenAI_Ireland, :OpenAI_LLC .
+
+:customer a tosl:Customer ;
+    dcterms:description "This party represents the consumer in the context of the OpenAI services Terms of Use".
+
+:businessCustomer a tosl:BusinessCustomer ;
+    dcterms:description "This party represents a business entity consuming the service in a commercial context, under the OpenAI Terms of Use.".
+
+### odrl:Asset
+
+:services a tosl:Service ;
+    dcterms:description "OpenAI’s services";
+    dcterms:rightsHolder :OpenAI .
+
+:paidFeatures a tosl:Service ;
+    dcterms:rightsHolder :OpenAI ;
+    dcterms:description "Premium features available only to paying subscribers.".
+
+:billingData a tosl:UserContent ;
+    dcterms:description "Billing information provided by the customer, including valid payment method.";
+    dcterms:rightsHolder :customer .
+
+################################  Paid accounts  ###############################
+# Paid subscriptions. Some of our Services allow you to purchase paid          # 
+# subscriptions to benefit from enhanced features and functionalities          # 
+# (the “Benefits”). The exact nature of the Benefits differs between Services  #  
+# and will be made clear to you before purchase. You can manage your paid      # 
+# subscription from your account settings.                                     # 
+#                                                                              #
+# Fees: All charges, including subscription fees, will be made clear to you    # 
+# before purchase.                                                             # 
+#                                                                              #
+# Billing. If you sign-up for paid subscription or purchase any Services, you  #  
+# will provide complete and accurate billing information, including a valid    # 
+# payment method. For paid subscriptions, we will automatically charge your    # 
+# payment method on each agreed-upon periodic renewal until you cancel. If     # 
+# your payment cannot be completed, we may downgrade your account or suspend   # 
+# your access to our Services until payment is received.                       # 
+#                                                                              #
+# Service credits. You can pay for some Services in advance by purchasing      # 
+# service credits. All service credits are subject to our Service credit terms⁠ # 
+#                                                                              #
+# Cooling off period. You are entitled to cancel your purchase and request a   # 
+# refund without stating the reason during the 14 days following the date of   # 
+# your purchase (the “Cooling Off Period”). The refund will cover the relevant # 
+# subscription fee prorated from the date you request cancellation to the end  # 
+# of the relevant subscription period you have paid for. To cancel and request #  
+# a refund please contact Support⁠(opens in a new window) or fill out and send  # 
+# us the model withdrawal form⁠, or alternatively you may complete the model    # 
+# withdrawal form as described under Termination and Suspension below.         # 
+#                                                                              #
+# Cancellation. Following the Cooling Off Period, you can cancel⁠(opens in new  #  
+# window) your paid subscription at any time by updating your account settings # 
+# You will not be charged after you cancel your paid subscription. You will    # 
+# continue to have access to the Benefits until the end of the subscription    # 
+# period you have paid for, at which point your cancellation will become       # 
+# effective. Unless we specify otherwise, you will not receive a refund or     # 
+# service credit for any days between the day you cancel and the last day of   # 
+# the subscription period you have paid for.                                   # 
+#                                                                              #
+# Changes. We may change our prices from time to time. If we increase our      # 
+# subscription prices, we will give you at least 30 days’ notice and any price # 
+# increase will take effect on your next renewal so that you can cancel if you # 
+# do not agree to the price increase.                                          #
+################################################################################
+
+:permission10 a odrl:Permission ;
+    dcterms:description "Access paid features, subject to payment and valid billing information.";
+    odrl:action odrl:use;
+    odrl:target :paidFeatures ;
+    odrl:assignee :customer ;
+    odrl:duty [
+        a odrl:Duty ;
+        dcterms:description "All charges, including subscription fees, will be made clear to you before purchase.";
+        odrl:action odrl:compensate ;
+        odrl:target :paidFeatures ;
+        odrl:assignee :customer ;
+        odrl:constraint [
+            a odrl:Constraint;
+            odrl:leftOperand odrl:event ;
+            odrl:operator odrl:lt ;
+            odrl:rightOperand odrl:policyUsage
+        ] ;
+    ] ;
+    odrl:duty [
+        a odrl:Duty ;
+        dcterms:description "Customer must provide valid billing information, including a payment method.";
+        odrl:action odrl:inform ;
+        odrl:target :billingData ;
+        odrl:assignee :customer ;
+    ] .

@@ -1,0 +1,141 @@
+# Rule permission05 (Using our Services) of the OpenAI Europe Terms of Use 2024, modelled with the TOSL profile.
+# Source: https://github.com/isa-group/tosl/ (OpenAI Europe Terms of Use 2024 example)
+
+@prefix : <http://example.com/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .    
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .  
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix tosl: <https://w3id.org/tosl/> .
+@base <http://example.com> .
+
+:agreement01 a odrl:Agreement, odrl:Asset ;
+    odrl:profile tosl: ;
+    dcterms:source <https://openai.com/policies/eu-terms-of-use/> ;
+    odrl:hasPolicy <https://openai.com/policies/eu-terms-of-use/> ;
+    dcterms:title "The OpenAI Europe Terms of Use 2024"^^xsd:string ;
+    dcterms:description "These Terms of Use govern the use of OpenAI's services, including ChatGPT and DALL·E."^^xsd:string;
+    dcterms:creator "OpenAI"^^xsd:string ;
+    dcterms:rightsHolder :OpenAI ;
+    dcterms:issued "2024-12-11"^^xsd:date ;
+    dcterms:requires <https://openai.com/policies/usage-policies/>,
+    <https://openai.com/policies/service-terms/>,
+    <https://openai.com/policies/sharing-publication-policy/>,
+    <https://openai.com/policies/service-credit-terms/>,
+    <https://openai.com/brand/> ;
+    odrl:permission :permission05 ;
+    odrl:assigner :OpenAI .
+
+### odrl:Party
+
+:OpenAI a tosl:Provider ;
+    dcterms:description "OpenAI is an AI research and deployment company committed to ensuring that artificial general intelligence (AGI) benefits all of humanity."^^xsd:string ;
+    foaf:name "Open AI";
+    foaf:homepage <https://openai.com/>;
+    odrl:assignerOf :services .
+
+:OpenAI_Ireland a foaf:Organization ;
+    foaf:name "OpenAI Ireland Ltd"^^xsd:string ;
+    dcterms:identifier "Company Number: 737350"^^xsd:string ;
+    vcard:hasAddress [
+        vcard:street-address "1st Floor, The Liffey Trust Centre, 117-126 Sheriff Street Upper";
+        vcard:locality "Dublin 1";
+        vcard:postal-code "D01 YC43";
+        vcard:country-name "Ireland"
+    ] ;
+    dcterms:coverage "EEA", "Switzerland" .
+
+:OpenAI_LLC a foaf:Organization ;
+    foaf:name "OpenAI, L.L.C."^^xsd:string ;
+    dcterms:identifier "Company Number: 7063675"^^xsd:string ;
+    vcard:hasAddress [
+        vcard:street-address "1455 3rd Street";
+        vcard:locality "San Francisco";
+        vcard:region "California";
+        vcard:postal-code "94158";
+        vcard:country-name "United States"
+    ] ;
+    dcterms:coverage "United Kingdom"^^xsd:string .
+
+:OpenAI foaf:subOrganizationOf :OpenAI_Ireland, :OpenAI_LLC .
+
+:customer a tosl:Customer ;
+    dcterms:description "This party represents the consumer in the context of the OpenAI services Terms of Use".
+
+:businessCustomer a tosl:BusinessCustomer ;
+    dcterms:description "This party represents a business entity consuming the service in a commercial context, under the OpenAI Terms of Use.".
+
+### odrl:Asset
+
+:services a tosl:Service ;
+    dcterms:description "OpenAI’s services";
+    dcterms:rightsHolder :OpenAI .
+
+:userFeedback a tosl:UserContent ;
+    dcterms:description "Content submitted by a user, typically including feedback, comments, or other forms of input relevant to the application." .
+
+##########################  Using our Services #################################
+#                                                                              #
+# What you cannot do. You may not use our Services for any illegal, harmful,   #
+# or abusive activity. For example, you are prohibited from:                   #
+#                                                                              #
+# - Using our Services in a way that infringes, misappropriates or violates    # 
+# anyone’s rights.                                                             # 
+# - Modifying, copying, leasing, selling or distributing any of our Services.  #
+# - Attempting to or assisting anyone to reverse engineer, decompile or        #
+# discover the source code or underlying components of our Services, including #
+# our models, algorithms, or systems (except to the extent this restriction is #
+# prohibited by applicable law).                                               #
+# - Automatically or programmatically extracting data or Output (defined below)#
+# - Representing that Output was human-generated when it was not.              # 
+# - Interfering with or disrupting our Services, including circumventing any   #  
+# rate limits or restrictions or bypassing any protective measures or safety   # 
+# mitigations we put on our Services.                                          #
+# - Using Output to develop models that compete with OpenAI.                   #
+#                                                                              # 
+# Software. Our Services may allow you to download software, such as mobile    # 
+# applications, which may update automatically to ensure you’re using the      # 
+# latest version. Our software may include open source software that is        # 
+# governed by its own licences that we’ve made available to you.               # 
+#                                                                              # 
+# Corporate domains. If you create an account using an email address owned by  # 
+# an organisation (for example, your employer), that account may be added to   # 
+# the organisation's business account with us, in which case we will provide   # 
+# notice to you so that you can help facilitate the transfer of your account   # 
+# (unless your organisation has already provided notice to you that it may     # 
+# monitor and control your account). Once your account is transferred, the     # 
+# organisation’s administrator will be able to control your account, including # 
+# being able to access Content (defined below) and restrict or remove your     # 
+# access to the account.                                                       # 
+#                                                                              # 
+# Third party Services. Our services may include third party software, products#  
+# or services, (“Third Party Services”) and some parts of our Services, like   # 
+# our browse feature, may include output from those services                   # 
+# (“Third Party Output”). Third Party Services and Third Party Output are      # 
+# subject to their own terms, and we are not responsible for them.             # 
+#                                                                              # 
+# Feedback. We appreciate your feedback about our Services, but you agree that # 
+# we may use it to provide, maintain, develop, and improve our Services,       #
+# without compensation to you.                                                 #
+################################################################################
+
+:permission05 a odrl:Permission;
+    dcterms:description "We appreciate your feedback about our Services, but you agree that we may use it to provide, maintain, develop, and improve our Services, without compensation to you.";
+    odrl:action [
+        a odrl:Action ;
+        rdf:value odrl:use;
+        odrl:refinement [
+            a odrl:Constraint ;
+            odrl:leftOperand odrl:payAmount;
+            odrl:operator odrl:eq;
+            odrl:rightOperand "0.0"^^xsd:decimal;
+        ]
+    ];
+    odrl:target :userFeedback ;
+    odrl:assignee :OpenAI .
