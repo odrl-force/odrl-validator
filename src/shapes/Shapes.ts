@@ -361,6 +361,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:severity sh:Violation .
 
 <http://example.com/AssetShape> a sh:NodeShape ;
+  sh:targetClass odrl:Asset ;
   sh:property [
     sh:nodeKind sh:IRI ;
     sh:message "An Asset may have one uid, and it must be an IRI." ;
@@ -370,6 +371,16 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:message "partOf should point to an AssetCollection." ;
     sh:path odrl:partOf ;
     sh:node <http://example.com/AssetCollectionShape>
+  ], [
+    sh:message "An Asset must be partOf an AssetCollection, not a Party or PartyCollection." ;
+    sh:path odrl:partOf ;
+    sh:not [
+      sh:or ([
+        sh:class odrl:Party
+      ] [
+        sh:class odrl:PartyCollection
+      ])
+    ]
   ], [
     sh:nodeKind sh:IRI ;
     sh:message "hasPolicy must point to a Policy IRI." ;
@@ -393,6 +404,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] .
 
 <http://example.com/PartyShape> a sh:NodeShape ;
+  sh:targetClass odrl:Party ;
   sh:property [
     sh:nodeKind sh:IRI ;
     sh:message "A Party may have one uid, and it must be an IRI." ;
@@ -402,6 +414,16 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:message "partOf should point to an PartyCollection." ;
     sh:path odrl:partOf ;
     sh:node <http://example.com/PartyCollectionShape>
+  ], [
+    sh:message "A Party must be partOf a PartyCollection, not an Asset or AssetCollection." ;
+    sh:path odrl:partOf ;
+    sh:not [
+      sh:or ([
+        sh:class odrl:Asset
+      ] [
+        sh:class odrl:AssetCollection
+      ])
+    ]
   ] .
 
 <http://example.com/PartyCollectionShape> a sh:NodeShape ;
