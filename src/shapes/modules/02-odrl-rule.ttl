@@ -176,6 +176,11 @@
         sh:path odrl:duty ;  
         sh:node :DutyShape ;  
         sh:message "Each Permission duty must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:duty ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A duty must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
 # Prohibition = must have one target
@@ -203,6 +208,11 @@
             ]
         ] ;
         sh:message "Each Prohibition remedy must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:remedy ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
 # Duty = Rule
@@ -215,6 +225,11 @@
         sh:path odrl:consequence ;  
         sh:node :DutyShape ;  
         sh:message "Each Duty consequence must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:consequence ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A consequence must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
 # Rules for offer
