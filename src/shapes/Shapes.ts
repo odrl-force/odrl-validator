@@ -55,6 +55,12 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/PermissionShape> a sh:NodeShape ;
   sh:targetClass odrl:Permission ;
   sh:property [
+    sh:message "A Permission must be referenced by a Policy through odrl:permission." ;
+    sh:path [
+      sh:inversePath odrl:permission
+    ] ;
+    sh:minCount 1
+  ], [
     sh:message "A Permission must have one odrl:target." ;
     sh:path odrl:target ;
     sh:maxCount 1 ;

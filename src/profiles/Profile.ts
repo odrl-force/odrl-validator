@@ -1,11 +1,15 @@
 import type { NamedNode, Quad, Term } from '@rdfjs/types';
 import { DataFactory, Store } from 'n3';
 import { createVocabulary } from 'rdf-vocabulary';
-import { ODRL, RDF, RDFS, SH } from '../util/Vocabulary';
+import { ODRL, RDF, RDFS, SH, XSD } from '../util/Vocabulary';
 import { appendToList, findInList } from './ListUtil';
-const { quad } = DataFactory;
+const { literal, quad, blankNode, namedNode } = DataFactory;
 
-const SHAPE = createVocabulary('http://example.com/',
+const SHAPE_NAMESPACE = 'http://example.com/';
+/** Namespace of the shapes generated from a profile, kept apart from the handcrafted ones. */
+const GENERATED_SHAPE_NAMESPACE = `${SHAPE_NAMESPACE}profile-shape/`;
+
+const SHAPE = createVocabulary(SHAPE_NAMESPACE,
   'AllowedActionValueShape',
   'AllowedConstraintValueShape',
   'ConflictStrategyShape',
@@ -13,20 +17,12 @@ const SHAPE = createVocabulary('http://example.com/',
   'PolicyShape',
   'RuleShape');
 
-// SHACL terms only needed here, kept out of the shared vocabulary.
-const SH_EXTRA = createVocabulary('http://www.w3.org/ns/shacl#',
-  'alternativePath',
-  'targetSubjectsOf');
-
 /**
  * Describes one `sh:in` list in our SHACL file that holds the allowed ODRL terms of one kind,
  * e.g. the allowed actions, or the allowed left operands.
- *
- * A profile extends such a list by declaring instances of {@link AllowedValueList.type},
- * e.g. `ex:term a odrl:LeftOperand`.
  */
 export interface AllowedValueList {
-  /** The ODRL class that profile terms are typed with, e.g. `odrl:LeftOperand`. */
+  /** The ODRL class that profile terms relate to, e.g. `odrl:LeftOperand`. */
   type: NamedNode;
   /** The named shape in our SHACL file that contains the list. */
   shape: NamedNode;
@@ -41,7 +37,7 @@ export interface AllowedValueList {
    */
   relation?: 'instance' | 'subClassOf';
 }
- 
+
 /**
  * All `sh:in` lists of our SHACL file that a profile can extend.
  * This is the single place to register another one.
@@ -76,70 +72,31 @@ export const ALLOWED_VALUE_LISTS: Record<'action' | 'leftOperand' | 'operator' |
   },
 };
 
+// ---------------------------------------------------------------------------
+// Reading the profile
+// ---------------------------------------------------------------------------
 
-/**
- * Classes that no shape targets yet, paired with the shape that should validate their (profile) subclasses.
- * A profile's `rdfs:subClassOf odrl:Rule` is validated like any other rule.
- */
-const EXTRA_TARGETS: [NamedNode, NamedNode][] = [[ ODRL.terms.Rule, SHAPE.terms.RuleShape ]];
-
-
-/**
- * Finds the named subjects in a profile that are typed with a class.
- * Blank nodes are skipped, since they cannot be listed as allowed values.
- *
- * @param profile - The profile.
- * @param type - The class the subjects must be typed with, e.g. `odrl:LeftOperand`.
- *
- * @returns The matching named subjects.
- */
-function typedNamedNodes(profile: Quad[], type: NamedNode): NamedNode[] {
-  return new Store(profile).getSubjects(RDF.terms.type, type, null)
-    .filter((subject): boolean => subject.termType === 'NamedNode') as NamedNode[];
+/** Keeps the named nodes. Blank nodes are dropped, since our shapes cannot reference them. */
+function namedNodes(terms: Term[]): NamedNode[] {
+  return terms.filter((term): boolean => term.termType === 'NamedNode') as NamedNode[];
 }
 
-
-
-/**
- * Adds each of `values` to the end of the `sh:in` list described by `list`, skipping values already in it.
- * This changes `store` in place.
- * 
- * @param store - The store containing the SHACL shapes. It is modified.
- * @param list - Which `sh:in` list to extend.
- * @param values - The terms to add to the list.
- *
- * @returns True if at least one value was added.
- *
- * @returns A new array with the shapes extended. It holds the same quads as `shape` if nothing needed adding.
- *
- * @throws Error - If `values` is not empty and the list cannot be found in `shape`.
- */
-function addToShapeList(shape: Quad[], concept: AllowedValueList, values: NamedNode[]): Quad[] {
-  // Nothing to add: don't look the list up, so shapes without this list don't cause an error.
-  if (values.length === 0) {
-    return [ ...shape ];
-  }
-  const list = findInList(shape, concept.shape, concept.path);
-  return values.reduce((quads, value): Quad[] => appendToList(quads, list, value), shape);
+/** The named subjects in the profile typed with `type`, e.g. `ex:term a odrl:LeftOperand`. */
+function instancesOf(profile: Store, type: NamedNode): NamedNode[] {
+  return namedNodes(profile.getSubjects(RDF.terms.type, type, null));
 }
-
 
 /**
  * All named subjects below `root` in the profile via `predicate`, transitively,
  * e.g. all subclasses (`rdfs:subClassOf`) or all subproperties (`rdfs:subPropertyOf`).
- *
- * @param profile - The profile.
- * @param root - The term to find the descendants of.
- * @param predicate - The hierarchy predicate to follow.
- *
- * @returns The named descendants, direct and indirect, without `root` itself.
+ * `root` itself is not included.
  */
 function descendantsOf(profile: Store, root: Term, predicate: NamedNode): NamedNode[] {
   const found = new Map<string, NamedNode>();
   const queue: Term[] = [ root ];
   while (queue.length > 0) {
-    for (const sub of profile.getSubjects(predicate, queue.shift()!, null)) {
-      if (sub.termType === 'NamedNode' && !found.has(sub.value) && !sub.equals(root)) {
+    for (const sub of namedNodes(profile.getSubjects(predicate, queue.shift()!, null))) {
+      if (!found.has(sub.value) && !sub.equals(root)) {
         found.set(sub.value, sub);
         queue.push(sub);
       }
@@ -148,92 +105,211 @@ function descendantsOf(profile: Store, root: Term, predicate: NamedNode): NamedN
   return [ ...found.values() ];
 }
 
-/** All named classes below `superClass` in the profile, transitively.
- *
- * @param profile - The profile.
- * @param superClass - The class to find the subclasses of.
- *
- * @returns The named subclasses, direct and indirect.
- */
+/** All named classes below `superClass` in the profile, direct and indirect. */
 export function subclassesOf(profile: Store, superClass: Term): NamedNode[] {
   return descendantsOf(profile, superClass, RDFS.terms.subClassOf);
 }
 
 /**
- * Makes `:LogicalConstraintShape` accept the profile's subproperties of `odrl:operand`
+ * The profile properties that relate a policy to `ruleClass`:
+ * `rdfs:range ruleClass` and `rdfs:domain` either `odrl:Policy` or a profile subclass of it.
+ */
+function policyPropertiesFor(profile: Store, ruleClass: NamedNode): NamedNode[] {
+  const policyClasses = [ ODRL.terms.Policy, ...subclassesOf(profile, ODRL.terms.Policy) ];
+  return namedNodes(profile.getSubjects(RDFS.terms.range, ruleClass, null))
+    .filter((property): boolean =>
+      policyClasses.some((cls): boolean => profile.countQuads(property, RDFS.terms.domain, cls, null) > 0));
+}
+
+// ---------------------------------------------------------------------------
+// Extending the shapes: one function per profile feature.
+// Each takes the shapes and returns a new, extended array. None modifies its input.
+// ---------------------------------------------------------------------------
+
+/**
+ * Adds the profile's actions, left operands, operators, conflict terms and policy types
+ * to the matching `sh:in` list (see {@link ALLOWED_VALUE_LISTS}).
+ *
+ * @throws Error - If the profile has terms for a list that `shape` does not contain.
+ */
+function addAllowedValues(shape: Quad[], profile: Store): Quad[] {
+  let result = shape;
+  for (const list of Object.values(ALLOWED_VALUE_LISTS)) {
+    const terms = list.relation === 'subClassOf' ?
+      subclassesOf(profile, list.type) :
+      instancesOf(profile, list.type);
+    // Only look the list up when there is something to add, so shapes without this list don't cause an error.
+    if (terms.length === 0) {
+      continue;
+    }
+    const head = findInList(result, list.shape, list.path);
+    for (const term of terms) {
+      result = appendToList(result, head, term);
+    }
+  }
+  return result;
+}
+
+/**
+ * Makes every shape that targets a class also target that class's profile subclasses,
+ * e.g. `ex:MyOffer rdfs:subClassOf odrl:Offer` is validated by all shapes that target `odrl:Offer`.
+ */
+function addSubclassTargets(shape: Quad[], profile: Store): Quad[] {
+  const added: Quad[] = [];
+  for (const target of shape.filter((q): boolean => q.predicate.equals(SH.terms.targetClass))) {
+    for (const subclass of subclassesOf(profile, target.object)) {
+      added.push(quad(target.subject, SH.terms.targetClass, subclass));
+    }
+  }
+  return [ ...shape, ...added ];
+}
+
+/**
+ * Makes `:LogicalConstraintShape` accept the profile's subproperties of `odrl:operand`,
  * like `odrl:and`, `odrl:or`, `odrl:xone` and `odrl:andSequence`. For each subproperty `p`:
  *
  * - `:LogicalConstraintShape sh:targetSubjectsOf p` is added;
  * - `p` is appended to the `sh:alternativePath` list of the shape.
  *
- * @param shape - The SHACL shapes as quads. They are not modified.
- * @param profile - The profile, containing the `rdfs:subPropertyOf` statements.
- *
- * @returns A new array with the shapes extended. It holds the same quads as `shape` if the profile adds nothing.
- *
  * @throws Error - If the profile has operand subproperties and the shape has no `sh:alternativePath` list.
  */
-function addOperandSubproperties(shape: Quad[], profile: Quad[]): Quad[] {
-  const operands = descendantsOf(new Store(profile), ODRL.terms.operand, RDFS.terms.subPropertyOf);
+function addOperandSubproperties(shape: Quad[], profile: Store): Quad[] {
+  const operands = descendantsOf(profile, ODRL.terms.operand, RDFS.terms.subPropertyOf);
   if (operands.length === 0) {
-    return [ ...shape ];
+    return shape;
   }
-  const target = SHAPE.terms.LogicalConstraintShape;
-  const list = findInList(shape, target, undefined, SH_EXTRA.terms.alternativePath);
-  const withPaths = operands.reduce((quads, op): Quad[] => appendToList(quads, list, op), shape);
-  const targets = operands.map((op): Quad => quad(target, SH_EXTRA.terms.targetSubjectsOf, op));
-  // A store is a set: this drops targets that are already there.
-  return new Store([ ...withPaths, ...targets ]).getQuads(null, null, null, null);
+  const logicalShape = SHAPE.terms.LogicalConstraintShape;
+  const head = findInList(shape, logicalShape, undefined, SH.terms.alternativePath);
+  let result = shape;
+  for (const operand of operands) {
+    result = appendToList(result, head, operand);
+    result = [ ...result, quad(logicalShape, SH.terms.targetSubjectsOf, operand) ];
+  }
+  return result;
 }
 
 /**
- * Makes every shape that targets a class also target that class's profile subclasses.
- * This changes `store` in place.
- * Covers subclasses of Policy (incl. Set, Offer, Agreement), Permission, Prohibition, Duty, Rule and Constraint.
- *
- * @param store - The store containing the SHACL shapes. It is modified.
- * @param profile - The profile, containing the `rdfs:subClassOf` statements.
- *
- * @returns A new array with the extra `sh:targetClass` quads added.
+ * The shape generated for a profile rule class.
+ * It lives in its own namespace and contains the full IRI of the class, so it can never overlap
+ * with a handcrafted shape or with the shape of a same-named class from another profile.
  */
-function addSubclassTargets(shape: Quad[], profile: Quad[]): Quad[] {
-  const profileStore = new Store(profile);
-  const targets: [Term, Term][] = [
-    ...shape.filter((q): boolean => q.predicate.equals(SH.terms.targetClass))
-      .map((q): [Term, Term] => [ q.object, q.subject ]),
-    ...EXTRA_TARGETS,
-  ];
-  const added = targets.flatMap(([ cls, targetShape ]): Quad[] =>
-    subclassesOf(profileStore, cls).map((sub): Quad => quad(targetShape as NamedNode, SH.terms.targetClass, sub)));
-  // A store is a set: this drops targets that are already there or were found twice.
-  return new Store([ ...shape, ...added ]).getQuads(null, null, null, null);
+function ruleShapeFor(ruleClass: NamedNode): NamedNode {
+  return namedNode(`${GENERATED_SHAPE_NAMESPACE}${encodeURIComponent(ruleClass.value)}`);
 }
 
 
+/**
+ * A shape of its own that checks that a rule is referenced through at least one of `properties`:
+ *
+ * ```ttl
+ * <myRuleShape/referenced> a sh:NodeShape ;
+ *     sh:targetClass p:MyRule ;
+ *     sh:or (
+ *         [ sh:path [ sh:inversePath p:a ] ; sh:minCount 1 ]
+ *         [ sh:path [ sh:inversePath p:b ] ; sh:minCount 1 ]
+ *     ) ;
+ *     sh:message "..." .
+ * ```
+ *
+ * It is `sh:or` over single inverse paths because SHACL engines disagree on inverse and alternative paths combined:
+ * rdf-validate-shacl throws on the inverse of an alternative, and shacl-engine gives wrong results for both nestings.
+ * It is a separate shape so the message only belongs to this check.
+ *
+ * @param ruleClass - The rule class to check.
+ * @param properties - The properties that may reference the rule. At least one.
+ */
+function referencedCheck(ruleClass: NamedNode, properties: NamedNode[]): Quad[] {
+  const checkShape = namedNode(`${ruleShapeFor(ruleClass).value}/referenced`);
+  const names = properties.map((property): string => property.value).join(' or ');
+  const listNodes = properties.map(() => blankNode());
+  const quads = [
+    quad(checkShape, RDF.terms.type, SH.terms.NodeShape),
+    quad(checkShape, SH.terms.targetClass, ruleClass),
+    quad(checkShape, SH.terms.or, listNodes[0]),
+    quad(checkShape, SH.terms.message, literal(`A ${ruleClass.value} must be referenced through ${names}.`)),
+  ];
+  properties.forEach((property, i): void => {
+    const option = blankNode();
+    const path = blankNode();
+    quads.push(
+      quad(listNodes[i], RDF.terms.first, option),
+      quad(listNodes[i], RDF.terms.rest, listNodes[i + 1] ?? RDF.terms.nil),
+      quad(option, SH.terms.path, path),
+      quad(option, SH.terms.minCount, literal('1', XSD.terms.integer)),
+      quad(path, SH.terms.inversePath, property),
+    );
+  });
+  return quads;
+}
 
-
+/**
+ * Supports the profile's own rule types. For each subclass `p:MyRule` of `odrl:Rule` (transitively):
+ *
+ * 1. `:RuleShape sh:targetClass p:MyRule`, so its instances are validated like any other rule;
+ * 2. a new shape `<myRuleShape> a sh:NodeShape ; sh:targetClass p:MyRule ; sh:node :RuleShape`
+ *    (see {@link ruleShapeFor} for its IRI);
+ * 3. for each property `p:myRule` relating a policy to it (see {@link policyPropertiesFor}),
+ *    `:PolicyShape sh:targetSubjectsOf p:myRule ; sh:property [ sh:path p:myRule ; sh:node <myRuleShape> ]`;
+ * 4. if there is such a property, `<myRuleShape>` requires that at least one node references the rule
+ *    through it (see {@link incomingReferenceCheck}).
+ */
+function addRuleTypes(shape: Quad[], profile: Store): Quad[] {
+  const added: Quad[] = [];
+  for (const ruleClass of subclassesOf(profile, ODRL.terms.Rule)) {
+    const ruleShape = ruleShapeFor(ruleClass);
+    const properties = policyPropertiesFor(profile, ruleClass);
+ 
+    added.push(
+      quad(SHAPE.terms.RuleShape, SH.terms.targetClass, ruleClass),
+      quad(ruleShape, RDF.terms.type, SH.terms.NodeShape),
+      quad(ruleShape, SH.terms.targetClass, ruleClass),
+      quad(ruleShape, SH.terms.node, SHAPE.terms.RuleShape),
+    );
+ 
+    for (const property of properties) {
+      const propertyShape = blankNode();
+      added.push(
+        quad(SHAPE.terms.PolicyShape, SH.terms.targetSubjectsOf, property),
+        quad(SHAPE.terms.PolicyShape, SH.terms.property, propertyShape),
+        quad(propertyShape, SH.terms.path, property),
+        quad(propertyShape, SH.terms.node, ruleShape),
+      );
+    }
+ 
+    if (properties.length > 0) {
+      added.push(...referencedCheck(ruleClass, properties));
+    }
+  }
+  return [ ...shape, ...added ];
+}
 
 /**
  * Extends the shapes with everything an {@link https://www.w3.org/TR/odrl-model/#profile-mechanism ODRL profile}
  * defines:
  *
- * - instances of `odrl:Action`, `odrl:LeftOperand`, `odrl:Operator` and `odrl:ConflictTerm`
- *   are added to the matching `sh:in` list in our SHACL file (see {@link ALLOWED_VALUE_LISTS});
- * - subclasses of the classes the shapes target (policies, rules, ...) are added as extra targets;
- * - subproperties of `odrl:operand` are accepted as logical constraint operands (see {@link addOperandSubproperties}).
+ * - instances of `odrl:Action`, `odrl:LeftOperand`, `odrl:Operator` and `odrl:ConflictTerm`, and subclasses of
+ *   `odrl:Policy`, are added to the matching `sh:in` list (see {@link addAllowedValues});
+ * - subclasses of the classes the shapes target are added as extra targets (see {@link addSubclassTargets});
+ * - subproperties of `odrl:operand` are accepted as logical constraint operands (see {@link addOperandSubproperties});
+ * - subclasses of `odrl:Rule` get their own shape, linked from the policy (see {@link addRuleTypes}).
  *
  * @param shape - The SHACL shapes as quads. They are not modified.
  * @param profile - The profile as quads, e.g. the DPV ODRL mapping.
  *
- * @returns A new array with the shapes extended. It holds the same quads as `shape` if the profile adds nothing.
+ * @returns A new array with the shapes extended, without duplicate quads.
  *
  * @throws Error
  * If the profile has terms for a list that `shape` does not contain.
  */
 export function addProfileToShape(shape: Quad[], profile: Quad[]): Quad[] {
-  const withLists = Object.values(ALLOWED_VALUE_LISTS).reduce((quads, concept): Quad[] =>
-    addToShapeList(quads, concept, concept.relation === 'subClassOf' ?
-      subclassesOf(new Store(profile), concept.type) :
-      typedNamedNodes(profile, concept.type)), shape);
-  return addOperandSubproperties(addSubclassTargets(withLists, profile), profile);
+  const profileStore = new Store(profile);
+
+  let result = shape;
+  result = addAllowedValues(result, profileStore);
+  result = addSubclassTargets(result, profileStore);
+  result = addOperandSubproperties(result, profileStore);
+  result = addRuleTypes(result, profileStore);
+
+  // A store is a set: this drops quads that were already there or were added twice.
+  return new Store(result).getQuads(null, null, null, null);
 }

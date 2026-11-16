@@ -109,8 +109,6 @@ describe('The ODRL Validator', (): void => {
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
             it("fails when a profile action is part of a rule without a profile", async ()=> {
@@ -129,8 +127,6 @@ describe('The ODRL Validator', (): void => {
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
             it("fails when a profile left operand is part of a rule without a profile", async ()=> {
@@ -150,8 +146,6 @@ describe('The ODRL Validator', (): void => {
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
             it("fails when a profile operator is part of a rule without a profile", async ()=> {
@@ -171,8 +165,6 @@ describe('The ODRL Validator', (): void => {
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
             it("fails when a profile conflict term is part of a policy without a profile", async ()=> {
@@ -201,8 +193,6 @@ describe('The ODRL Validator', (): void => {
                 policyQuads.push(...profilePolicyQuads(true))
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
             it("fails when a profile policy subclass is used without a profile", async ()=> {
@@ -240,15 +230,48 @@ describe('The ODRL Validator', (): void => {
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
+            })
+
+            it("validates policies that use a profile rule subclass.", async ()=> {
+                const validator = new ODRLValidator({profiles:[profile]});
+                policyQuads.push(quad(namedNode(policyIRI), ODRL.terms.permission, newRuleNode),
+                quad(newRuleNode, RDF.terms.type, profileRule),
+                quad(newRuleNode, ODRL.terms.action, ODRL.terms.read),
+                quad(newRuleNode, ODRL.terms.assignee, namedNode("https://example.org/Alice")),
+                quad(newRuleNode, ODRL.terms.target, namedNode("https://example.org/x")))   
+                const result = await validator.validate(policyQuads);
+                expect(result.valid).toBe(false);
             })
  
             it("fails when a profile rule subclass is used without a profile", async ()=> {
+                // NOTE: I cannot enforce this because it would define the new rule class and its relation.
+                // The only thing I can think of that fixes this is by closing the policy, but than other relations in a Policy would fail
+                // Perhaps if we are deliberatily strict, this is possible? But then we need to ensure to add all allowed metadata properties in our shape: https://www.w3.org/TR/odrl-model/#metadata
                 policyQuads.push(...profileRuleQuads())
                 expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
+            it("fails when a profile rule subclass is used without a profile and a wrong relation is used", async ()=> {
+                // NOTE: also will wrongly be categorized as Permission due to the normalization. 
+                // The rule this has two types where one of them is not recognized as ODRL.
+                // This could potentially be resolved by mandating an odrl:Rule can only have one type.
+                policyQuads.push(quad(namedNode(policyIRI), ODRL.terms.permission, newRuleNode),
+                quad(newRuleNode, RDF.terms.type, profileRule),
+                quad(newRuleNode, ODRL.terms.action, ODRL.terms.read),
+                quad(newRuleNode, ODRL.terms.assignee, namedNode("https://example.org/Alice")),
+                quad(newRuleNode, ODRL.terms.target, namedNode("https://example.org/x")))   
+                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
+            })
+
+            it("fails when a profile rule subclass is used without a profile and a wrong type is used", async ()=> {
+                policyQuads.push(quad(namedNode(policyIRI), profileRuleRelation, newRuleNode),
+                quad(newRuleNode, RDF.terms.type, ODRL.terms.Permission),
+                quad(newRuleNode, ODRL.terms.action, ODRL.terms.read),
+                quad(newRuleNode, ODRL.terms.assignee, namedNode("https://example.org/Alice")),
+                quad(newRuleNode, ODRL.terms.target, namedNode("https://example.org/x")))   
+                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
+            })
+
             it("validates instances of a profile rule subclass like rules.", async ()=> {
                 const validator = new ODRLValidator({profiles:[profile]});
                 // This rule is invalid: it has no action and no target.
@@ -294,8 +317,6 @@ describe('The ODRL Validator', (): void => {
                 )
                 const result = await validator.validate(policyQuads);
                 expect(result.valid).toBe(true);
-                // A profile present, but the profile not loaded in the validator must also throw a violation
-                expect((await new ODRLValidator().validate(policyQuads)).valid).toBe(false);
             })
  
             it("fails when a profile subproperty of odrl:operand is part of a rule without a profile", async ()=> {
