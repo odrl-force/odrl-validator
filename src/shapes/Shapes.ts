@@ -1324,7 +1324,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/PayAmountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." ;
+  sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal or xsd:integer, not negative." ;
   sh:severity sh:Violation ;
   sh:or ([
     sh:not [
@@ -1333,13 +1333,18 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:datatype xsd:decimal
+    sh:or ([
+      sh:datatype xsd:decimal
+    ] [
+      sh:datatype xsd:integer
+    ]) ;
+    sh:minInclusive 0
   ]) .
 
 <http://example.com/PercentageRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100." ;
+  sh:message "The rightOperand of odrl:percentage must be an xsd:decimal or xsd:integer from 0 to 100." ;
   sh:severity sh:Violation ;
   sh:or ([
     sh:not [
@@ -1348,7 +1353,11 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:datatype xsd:decimal ;
+    sh:or ([
+      sh:datatype xsd:decimal
+    ] [
+      sh:datatype xsd:integer
+    ]) ;
     sh:minInclusive 0 ;
     sh:maxInclusive 100
   ]) .

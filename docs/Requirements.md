@@ -83,9 +83,9 @@ The extraction of these requirements is based on the [ODRL 2.2 information model
 - R69: odrl:meteredTime is only compatible with eq, lt, lteq - Violation - **New**
 - R70: The rightOperand for odrl:meteredTime must be an xsd:duration - Violation - **New**
 - R71: odrl:payAmount is only compatible with comparison operators - Violation - **New**
-- R72: The rightOperand for odrl:payAmount must be an xsd:decimal - Violation - **New**
+- R72: The rightOperand for odrl:payAmount must be an xsd:decimal or xsd:integer, not negative - Violation - **New**
 - R73: odrl:percentage is only compatible with comparison operators - Violation - **New**
-- R74: The rightOperand for odrl:percentage must be an xsd:decimal between 0 and 100 - Violation - **New**
+- R74: The rightOperand for odrl:percentage must be an xsd:decimal or xsd:integer between 0 and 100 - Violation - **New**
 - R75: odrl:product is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**
 - R76: The rightOperand for odrl:product must be an IRI or a string - Warning - **New**
 - R77: odrl:purpose is only compatible with eq, neq, isA, isAnyOf, isNoneOf - Violation - **New**

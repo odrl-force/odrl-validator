@@ -1442,7 +1442,7 @@
     sh:message "The rightOperand of odrl:meteredTime must be an xsd:duration." .
 
 
-# R72: the rightOperand of odrl:payAmount must be an xsd:decimal
+# R72: the rightOperand of odrl:payAmount must be an xsd:decimal or xsd:integer, not negative
 
 :PayAmountRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
@@ -1450,12 +1450,12 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:payAmount ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:decimal ] [ sh:datatype xsd:integer ] ) ; sh:minInclusive 0 ]
     ) ;
-    sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." .
+    sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal or xsd:integer, not negative." .
 
 
-# R74: the rightOperand of odrl:percentage must be an xsd:decimal between 0 and 100
+# R74: the rightOperand of odrl:percentage must be an xsd:decimal or xsd:integer between 0 and 100
 
 :PercentageRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
@@ -1463,9 +1463,9 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:percentage ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 100 ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:decimal ] [ sh:datatype xsd:integer ] ) ; sh:minInclusive 0 ; sh:maxInclusive 100 ]
     ) ;
-    sh:message "The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100." .
+    sh:message "The rightOperand of odrl:percentage must be an xsd:decimal or xsd:integer from 0 to 100." .
 
 
 # R76: the rightOperand of odrl:product must be an IRI or a string
