@@ -1103,7 +1103,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:count must be an xsd:integer." ;
+  sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative." ;
   sh:severity sh:Violation ;
   sh:or ([
     sh:not [
@@ -1112,7 +1112,37 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
+    sh:node <http://example.com/IntegerShape> ;
+    sh:minInclusive 0
+  ]) .
+
+<http://example.com/IntegerShape> a sh:NodeShape ;
+  sh:or ([
     sh:datatype xsd:integer
+  ] [
+    sh:datatype xsd:long
+  ] [
+    sh:datatype xsd:int
+  ] [
+    sh:datatype xsd:short
+  ] [
+    sh:datatype xsd:byte
+  ] [
+    sh:datatype xsd:nonNegativeInteger
+  ] [
+    sh:datatype xsd:positiveInteger
+  ] [
+    sh:datatype xsd:unsignedLong
+  ] [
+    sh:datatype xsd:unsignedInt
+  ] [
+    sh:datatype xsd:unsignedShort
+  ] [
+    sh:datatype xsd:unsignedByte
+  ] [
+    sh:datatype xsd:nonPositiveInteger
+  ] [
+    sh:datatype xsd:negativeInteger
   ]) .
 
 <http://example.com/DateTimeRightOperandShape> a sh:NodeShape ;
@@ -1127,11 +1157,16 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:or ([
-      sh:datatype xsd:date
-    ] [
-      sh:datatype xsd:dateTime
-    ])
+    sh:node <http://example.com/DateTimeShape>
+  ]) .
+
+<http://example.com/DateTimeShape> a sh:NodeShape ;
+  sh:or ([
+    sh:datatype xsd:date
+  ] [
+    sh:datatype xsd:dateTime
+  ] [
+    sh:datatype xsd:dateTimeStamp
   ]) .
 
 <http://example.com/DelayPeriodRightOperandShape> a sh:NodeShape ;
@@ -1146,7 +1181,16 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
+    sh:node <http://example.com/DurationShape>
+  ]) .
+
+<http://example.com/DurationShape> a sh:NodeShape ;
+  sh:or ([
     sh:datatype xsd:duration
+  ] [
+    sh:datatype xsd:dayTimeDuration
+  ] [
+    sh:datatype xsd:yearMonthDuration
   ]) .
 
 <http://example.com/DeliveryChannelRightOperandShape> a sh:NodeShape ;
@@ -1164,10 +1208,33 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
+  ]) .
+
+<http://example.com/StringShape> a sh:NodeShape ;
+  sh:or ([
+    sh:datatype xsd:string
+  ] [
+    sh:datatype xsd:normalizedString
+  ] [
+    sh:datatype xsd:token
+  ] [
+    sh:datatype xsd:language
+  ] [
+    sh:datatype xsd:Name
+  ] [
+    sh:datatype xsd:NCName
+  ] [
+    sh:datatype xsd:ENTITY
+  ] [
+    sh:datatype xsd:ID
+  ] [
+    sh:datatype xsd:IDREF
+  ] [
+    sh:datatype xsd:NMTOKEN
   ]) .
 
 <http://example.com/IriOrStringListShape> a sh:NodeShape ;
@@ -1178,7 +1245,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ])
   ] ;
   sh:node <http://example.com/RdfListShape> .
@@ -1195,7 +1262,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:datatype xsd:duration
+    sh:node <http://example.com/DurationShape>
   ]) .
 
 <http://example.com/EventRightOperandShape> a sh:NodeShape ;
@@ -1213,7 +1280,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ])
   ]) .
 
@@ -1232,7 +1299,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
@@ -1253,7 +1320,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
@@ -1272,7 +1339,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:or ([
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/StringListShape>
     ])
@@ -1283,7 +1350,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path ([
       sh:zeroOrMorePath rdf:rest
     ] rdf:first) ;
-    sh:datatype xsd:string
+    sh:node <http://example.com/StringShape>
   ] ;
   sh:node <http://example.com/RdfListShape> .
 
@@ -1300,7 +1367,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:or ([
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/StringListShape>
     ])
@@ -1318,13 +1385,13 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:datatype xsd:duration
+    sh:node <http://example.com/DurationShape>
   ]) .
 
 <http://example.com/PayAmountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal or xsd:integer, not negative." ;
+  sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." ;
   sh:severity sh:Violation ;
   sh:or ([
     sh:not [
@@ -1333,18 +1400,20 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:or ([
-      sh:datatype xsd:decimal
-    ] [
-      sh:datatype xsd:integer
-    ]) ;
-    sh:minInclusive 0
+    sh:node <http://example.com/DecimalShape>
+  ]) .
+
+<http://example.com/DecimalShape> a sh:NodeShape ;
+  sh:or ([
+    sh:datatype xsd:decimal
+  ] [
+    sh:node <http://example.com/IntegerShape>
   ]) .
 
 <http://example.com/PercentageRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:percentage must be an xsd:decimal or xsd:integer from 0 to 100." ;
+  sh:message "The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100." ;
   sh:severity sh:Violation ;
   sh:or ([
     sh:not [
@@ -1353,11 +1422,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:or ([
-      sh:datatype xsd:decimal
-    ] [
-      sh:datatype xsd:integer
-    ]) ;
+    sh:node <http://example.com/DecimalShape> ;
     sh:minInclusive 0 ;
     sh:maxInclusive 100
   ]) .
@@ -1377,7 +1442,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
@@ -1398,7 +1463,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
@@ -1419,7 +1484,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
@@ -1455,7 +1520,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:or ([
       sh:nodeKind sh:IRI
     ] [
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/IriOrStringListShape>
     ])
@@ -1473,7 +1538,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:datatype xsd:duration
+    sh:node <http://example.com/DurationShape>
   ]) .
 
 <http://example.com/UnitOfCountRightOperandShape> a sh:NodeShape ;
@@ -1488,7 +1553,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ]
   ] [
     sh:path odrl:rightOperand ;
-    sh:datatype xsd:string
+    sh:node <http://example.com/StringShape>
   ]) .
 
 <http://example.com/VersionRightOperandShape> a sh:NodeShape ;
@@ -1504,7 +1569,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:or ([
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/StringListShape>
     ])
@@ -1523,7 +1588,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:or ([
-      sh:datatype xsd:string
+      sh:node <http://example.com/StringShape>
     ] [
       sh:node <http://example.com/StringListShape>
     ])
