@@ -232,7 +232,10 @@ describe('The ODRL Validator', (): void => {
                 expect(result.valid).toBe(true);
             })
 
-            it("validates policies that use a profile rule subclass.", async ()=> {
+            it("validates policies that use a profile rule subclass and where the wrong relation is used.", async ()=> {
+                // NOTE: will wrongly be categorized as Permission due to the normalization. 
+                // The rule has two types where one of them is not recognized as ODRL.
+                // This could potentially be resolved by mandating an odrl:Rule can only have one type.
                 const validator = new ODRLValidator({profiles:[profile]});
                 policyQuads.push(quad(namedNode(policyIRI), ODRL.terms.permission, newRuleNode),
                 quad(newRuleNode, RDF.terms.type, profileRule),
@@ -252,8 +255,8 @@ describe('The ODRL Validator', (): void => {
             })
  
             it("fails when a profile rule subclass is used without a profile and a wrong relation is used", async ()=> {
-                // NOTE: also will wrongly be categorized as Permission due to the normalization. 
-                // The rule this has two types where one of them is not recognized as ODRL.
+                // NOTE: will wrongly be categorized as Permission due to the normalization. 
+                // The rule has two types where one of them is not recognized as ODRL.
                 // This could potentially be resolved by mandating an odrl:Rule can only have one type.
                 policyQuads.push(quad(namedNode(policyIRI), ODRL.terms.permission, newRuleNode),
                 quad(newRuleNode, RDF.terms.type, profileRule),
@@ -287,7 +290,7 @@ describe('The ODRL Validator', (): void => {
         describe('with a subproperty of odrl:operand', (): void => {
             // A logical constraint on newRuleNode: ex:myLogicalOp ( constraint1 constraint2 )
             const logicalConstraintQuads = (): Quad[] => {
-                const logicalConstraint = namedNode("https://example.org/logicalconstraint")
+                const logicalConstraint = namedNode("https://example.org/logicalconstraint").
                 const constraint1 = namedNode("https://example.org/constraint1")
                 const constraint2 = namedNode("https://example.org/constraint2")
                 const list1 = blankNode()

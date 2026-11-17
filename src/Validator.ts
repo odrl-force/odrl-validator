@@ -68,8 +68,6 @@ export class ODRLValidator implements IODRLValidator {
             }
         }
         this.policyTypes = [...policyTypes];
-        console.log("This ODRL Validator supports the following profiles:", [...this.profiles.keys()])
-
         this.normalizer = new Normalizer();
     }
 
