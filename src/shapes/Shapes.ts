@@ -1493,7 +1493,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/SpatialRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:spatial must be an IRI." ;
+  sh:message "The rightOperand of odrl:spatial must be an IRI or a list of IRIs." ;
   sh:severity sh:Violation ;
   sh:or ([
     sh:not [
@@ -1501,9 +1501,22 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       sh:hasValue odrl:spatial
     ]
   ] [
-    sh:nodeKind sh:IRI ;
-    sh:path odrl:rightOperand
+    sh:path odrl:rightOperand ;
+    sh:or ([
+      sh:nodeKind sh:IRI
+    ] [
+      sh:node <http://example.com/IriListShape>
+    ])
   ]) .
+
+<http://example.com/IriListShape> a sh:NodeShape ;
+  sh:property [
+    sh:nodeKind sh:IRI ;
+    sh:path ([
+      sh:zeroOrMorePath rdf:rest
+    ] rdf:first)
+  ] ;
+  sh:node <http://example.com/RdfListShape> .
 
 <http://example.com/SystemDeviceRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;

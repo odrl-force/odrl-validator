@@ -100,7 +100,7 @@ Each XSD datatype also includes its subtypes (e.g. xsd:integer is an xsd:decimal
 - R84: odrl:relativeSize is only compatible with comparison operators - Violation - **New**
 - R85: odrl:resolution is only compatible with comparison operators - Violation - **New**
 - R86: odrl:spatial is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
-- R87: The rightOperand for odrl:spatial must be an IRI - Violation - **New**
+- R87: The rightOperand for odrl:spatial must be an IRI or a list of IRIs - Violation - **New**
 - R88: odrl:spatialCoordinates is only compatible with eq, neq - Violation - **New**
 - R89: odrl:systemDevice is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
 - R90: The rightOperand for odrl:systemDevice must be an IRI or a string - Warning - **New**

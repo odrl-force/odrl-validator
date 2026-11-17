@@ -1507,7 +1507,7 @@
     sh:message "The rightOperand of odrl:recipient should be an IRI, a string, or a list of these." .
 
 
-# R87: the rightOperand of odrl:spatial must be an IRI
+# R87: the rightOperand of odrl:spatial must be an IRI or a list of IRIs
 
 :SpatialRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
@@ -1515,9 +1515,9 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
-        [ sh:path odrl:rightOperand ; sh:nodeKind sh:IRI ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :IriListShape ] ) ]
     ) ;
-    sh:message "The rightOperand of odrl:spatial must be an IRI." .
+    sh:message "The rightOperand of odrl:spatial must be an IRI or a list of IRIs." .
 
 
 # R90: the rightOperand of odrl:systemDevice must be an IRI or a string
@@ -1592,6 +1592,14 @@
     sh:property [
         sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
         sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] ) ;
+    ] .
+
+# An RDF list whose members are IRIs
+:IriListShape a sh:NodeShape ;
+    sh:node :RdfListShape ;
+    sh:property [
+        sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+        sh:nodeKind sh:IRI ;
     ] .
 
 # An RDF list whose members are strings
