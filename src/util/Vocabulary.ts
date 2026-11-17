@@ -21,7 +21,10 @@ export const SH = createVocabulary('http://www.w3.org/ns/shacl#',
     'path',
     'targetClass',
     'alternativePath',
-    'targetSubjectsOf');
+    'targetSubjectsOf',
+    'Violation',
+    'Warning'
+);
  
 export const RDF = createVocabulary('http://www.w3.org/1999/02/22-rdf-syntax-ns#',
     'Property',
