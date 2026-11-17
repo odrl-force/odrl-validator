@@ -7,7 +7,7 @@ import { EyelingReasoner } from 'n3-utility'
 import { RDF } from "odrl-atomization";
 import { RULES } from "./rules/Rules";
 import { SHAPES } from "./shapes/Shapes";
-import { DETECTION, ODRL, SH } from "./util/Vocabulary";
+import { DETECTION, ODRL, RDFS, SH } from "./util/Vocabulary";
 import { Normalizer } from "./Normalisation";
 import { addProfileToShape, subclassesOf } from "./profiles/Profile";
 
@@ -25,7 +25,7 @@ const POLICY_TYPES: readonly string[] = [
 /** One policy, with everything needed to validate it on its own. */
 interface PolicyUnit {
     policy: Term;
-    /** All quads reachable from the policy. Other policies are not entered: only their types are included. */
+    /** All quads reachable from the policy. Quads that point to other policies are left out. */
     quads: Quad[];
     /** The supported profiles the policy declares, sorted. */
     profiles: string[];
@@ -119,7 +119,10 @@ export class ODRLValidator implements IODRLValidator {
             }
 
             // SHACL Validation of the policy, with the shapes of plain ODRL and the profiles it declares
-            const report = await this.shaclValidatorFor(unit.profiles).validate({ dataset: new Store(unit.quads) });
+            const dataset = new Store(unit.quads)
+            // Add the Assets and Parties from the profiles such that they not flag SHACL Warnings
+            dataset.addQuads(this.profileFeatures(unit.profiles))
+            const report = await this.shaclValidatorFor(unit.profiles).validate({ dataset });
             for (const result of report.results as any[]) {
                 results.push(...this.parseResult(result).map((parsed): ValidationResult =>
                     ({ ...parsed, policies: [unit.policy.value] })));
@@ -305,5 +308,38 @@ export class ODRLValidator implements IODRLValidator {
             valueNode: result.value?.value,
             severity: result.severity?.value
         }));
+    }
+
+    // extracts all instances and declarations of Party from a profile.
+    // Declarations are not resolved transitively
+    private profileParties(profile: string): Quad[] {
+        const profileStore = new Store(this.profiles.get(profile)?.quads)
+        const quads: Quad[] = []
+        quads.push(...profileStore.getQuads(null, RDF.terms.type, ODRL.terms.Party, null));
+        quads.push(...profileStore.getQuads(null, RDFS.terms.subClassOf, ODRL.terms.Party, null));
+        return quads
+
+    }
+
+    // extracts all instances and declarations of Asset from a profile.
+    // Declarations are not resolved transitively
+    private profileAssets(profile:string): Quad[] {
+        const profileStore = new Store(this.profiles.get(profile)?.quads)
+        const quads: Quad[] = []
+        quads.push(...profileStore.getQuads(null, RDF.terms.type, ODRL.terms.Asset, null));
+        quads.push(...profileStore.getQuads(null, RDFS.terms.subClassOf, ODRL.terms.Asset, null));
+        return quads
+    }
+    /**
+     * extracts all the parties and assets for the profiles.
+     * NOTE: currently not cached
+     */
+    private profileFeatures(profiles: string[]): Quad[] {
+        const quads: Quad[] = []
+        for (const profile of profiles) {
+            quads.push(...this.profileParties(profile))
+            quads.push(...this.profileAssets(profile))
+        }
+        return quads
     }
 }
