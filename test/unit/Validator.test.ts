@@ -292,6 +292,7 @@ describe('The ODRL Validator', (): void => {
                 // This rule is invalid: it has no action and no target.
                 // Only a validator that knows the profile has a RuleShape that targets the subclass.
                 policyQuads.push(
+                    quad(namedNode(policyIRI), profileRuleRelation, newRuleNode),
                     profileDeclaration,
                     quad(newRuleNode, RDF.terms.type, profileRule),
                 )
@@ -302,7 +303,7 @@ describe('The ODRL Validator', (): void => {
         describe('with a subproperty of odrl:operand', (): void => {
             // A logical constraint on newRuleNode: ex:myLogicalOp ( constraint1 constraint2 )
             const logicalConstraintQuads = (): Quad[] => {
-                const logicalConstraint = namedNode("https://example.org/logicalconstraint").
+                const logicalConstraint = namedNode("https://example.org/logicalconstraint")
                 const constraint1 = namedNode("https://example.org/constraint1")
                 const constraint2 = namedNode("https://example.org/constraint2")
                 const list1 = blankNode()

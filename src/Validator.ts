@@ -109,7 +109,7 @@ export class ODRLValidator implements IODRLValidator {
             // Warn about profiles that the policy uses, but that the validator does not support
             for (const profile of unit.unsupportedProfiles) {
                 results.push({
-                    message: `Profile ${profile} is not supported: terms from this profile are not recognised.`,
+                    message: `Profile ${profile} is not supported: terms from this profile are not validated.`,
                     focusNode: unit.policy.value,
                     severity: SH.Warning,
                     policies: [unit.policy.value]

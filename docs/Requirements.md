@@ -137,7 +137,7 @@ Before the validation, the policies are normalized (`src/Normalisation.ts`). The
 ## Constraint rightOperand values
 Each XSD datatype also includes its subtypes (e.g. xsd:integer is an xsd:decimal), see https://www.w3.org/TR/xmlschema11-2/#built-in-datatypes.
 
-- R50: The rightOperand for odrl:count must be an xsd:integer, not negative - Violation - [Vocab](https://www.w3.org/TR/odrl-vocab/#term-count)
+- R50: The rightOperand of odrl:count must be an xsd:integer, not negative and greather than 1. - Violation - [Vocab](https://www.w3.org/TR/odrl-vocab/#term-count)
 - R52: The rightOperand for odrl:dateTime must be xsd:date or xsd:dateTime - Violation - [Vocab](https://www.w3.org/TR/odrl-vocab/#term-dateTime)
 - R54: The rightOperand for odrl:delayPeriod must be an xsd:duration - Violation - [Vocab](https://www.w3.org/TR/odrl-vocab/#term-delayPeriod)
 - R56: The rightOperand for odrl:deliveryChannel must be an IRI, a string, or a list of these - Warning - [Vocab](https://www.w3.org/TR/odrl-vocab/#term-deliveryChannel)

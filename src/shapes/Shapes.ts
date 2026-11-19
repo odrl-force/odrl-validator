@@ -41,28 +41,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       ])
     ]
   ], [
-    sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
-    sh:path odrl:permission ;
-    sh:not [
-      sh:or ([
-        sh:class odrl:Prohibition
-      ] [
-        sh:class odrl:Duty
-      ])
-    ]
-  ], [
     sh:path odrl:obligation ;
     sh:node <http://example.com/DutyShape>
-  ], [
-    sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
-    sh:path odrl:obligation ;
-    sh:not [
-      sh:or ([
-        sh:class odrl:Permission
-      ] [
-        sh:class odrl:Prohibition
-      ])
-    ]
   ], [
     sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
     sh:path odrl:obligation ;
@@ -137,16 +117,6 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
         sh:class odrl:Prohibition
       ])
     ]
-  ], [
-    sh:message "A duty must be an odrl:Duty, not a Permission or Prohibition." ;
-    sh:path odrl:duty ;
-    sh:not [
-      sh:or ([
-        sh:class odrl:Permission
-      ] [
-        sh:class odrl:Prohibition
-      ])
-    ]
   ] ;
   sh:node <http://example.com/RuleShape> .
 
@@ -186,16 +156,6 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
         sh:maxCount 0
       ] ;
       sh:node <http://example.com/DutyShape>
-    ]
-  ], [
-    sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
-    sh:path odrl:remedy ;
-    sh:not [
-      sh:or ([
-        sh:class odrl:Permission
-      ] [
-        sh:class odrl:Prohibition
-      ])
     ]
   ], [
     sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;

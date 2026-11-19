@@ -110,6 +110,54 @@ export function subclassesOf(profile: Store, superClass: Term): NamedNode[] {
   return descendantsOf(profile, superClass, RDFS.terms.subClassOf);
 }
 
+/** All named classes above `subClass` in the profile, direct and indirect. `subClass` itself is not included. */
+function superclassesOf(profile: Store, subClass: Term): NamedNode[] {
+  const found = new Map<string, NamedNode>();
+  const queue: Term[] = [ subClass ];
+  while (queue.length > 0) {
+    for (const sup of namedNodes(profile.getObjects(queue.shift()!, RDFS.terms.subClassOf, null))) {
+      if (!found.has(sup.value) && !sup.equals(subClass)) {
+        found.set(sup.value, sup);
+        queue.push(sup);
+      }
+    }
+  }
+  return [ ...found.values() ];
+}
+ 
+/** The ODRL rule classes a profile rule class is disjoint with, unless the profile makes it a subclass of one. */
+const ODRL_RULE_CLASSES: readonly NamedNode[] = [ ODRL.terms.Permission, ODRL.terms.Prohibition, ODRL.terms.Duty ];
+ 
+/**
+ * The rule classes that an instance of `ruleClass` must not also be: the ODRL rule classes and the
+ * other rule classes of the profile. Classes above or below `ruleClass` in the profile are left out,
+ * since an instance of a subclass is, and may be typed as, an instance of its superclass.
+ */
+function disjointRuleClasses(profile: Store, ruleClass: NamedNode, profileRuleClasses: NamedNode[]): NamedNode[] {
+  const related = new Set([
+    ruleClass.value,
+    ...superclassesOf(profile, ruleClass).map((cls): string => cls.value),
+    ...subclassesOf(profile, ruleClass).map((cls): string => cls.value),
+  ]);
+  const disjoint = new Map<string, NamedNode>();
+  for (const cls of [ ...ODRL_RULE_CLASSES, ...profileRuleClasses ]) {
+    if (!related.has(cls.value)) {
+      disjoint.set(cls.value, cls);
+    }
+  }
+  return [ ...disjoint.values() ];
+}
+ 
+/** An RDF list of `items`. Returns its head (`rdf:nil` when empty) and the quads that make it up. */
+function rdfList(items: Term[]): { head: Term, quads: Quad[] } {
+  const nodes = items.map(() => blankNode());
+  const quads = items.map((item, i): Quad[] => [
+    quad(nodes[i], RDF.terms.first, item as NamedNode),
+    quad(nodes[i], RDF.terms.rest, nodes[i + 1] ?? RDF.terms.nil),
+  ]).flat();
+  return { head: nodes[0] ?? RDF.terms.nil, quads };
+}
+
 /**
  * The profile properties that relate a policy to `ruleClass`:
  * `rdfs:range ruleClass` and `rdfs:domain` either `odrl:Policy` or a profile subclass of it.
@@ -199,50 +247,6 @@ function ruleShapeFor(ruleClass: NamedNode): NamedNode {
 
 
 /**
- * A shape of its own that checks that a rule is referenced through at least one of `properties`:
- *
- * ```ttl
- * <myRuleShape/referenced> a sh:NodeShape ;
- *     sh:targetClass p:MyRule ;
- *     sh:or (
- *         [ sh:path [ sh:inversePath p:a ] ; sh:minCount 1 ]
- *         [ sh:path [ sh:inversePath p:b ] ; sh:minCount 1 ]
- *     ) ;
- *     sh:message "..." .
- * ```
- *
- * It is `sh:or` over single inverse paths because SHACL engines disagree on inverse and alternative paths combined:
- * rdf-validate-shacl throws on the inverse of an alternative, and shacl-engine gives wrong results for both nestings.
- * It is a separate shape so the message only belongs to this check.
- *
- * @param ruleClass - The rule class to check.
- * @param properties - The properties that may reference the rule. At least one.
- */
-function referencedCheck(ruleClass: NamedNode, properties: NamedNode[]): Quad[] {
-  const checkShape = namedNode(`${ruleShapeFor(ruleClass).value}/referenced`);
-  const names = properties.map((property): string => property.value).join(' or ');
-  const listNodes = properties.map(() => blankNode());
-  const quads = [
-    quad(checkShape, RDF.terms.type, SH.terms.NodeShape),
-    quad(checkShape, SH.terms.targetClass, ruleClass),
-    quad(checkShape, SH.terms.or, listNodes[0]),
-    quad(checkShape, SH.terms.message, literal(`A ${ruleClass.value} must be referenced through ${names}.`)),
-  ];
-  properties.forEach((property, i): void => {
-    const option = blankNode();
-    const path = blankNode();
-    quads.push(
-      quad(listNodes[i], RDF.terms.first, option),
-      quad(listNodes[i], RDF.terms.rest, listNodes[i + 1] ?? RDF.terms.nil),
-      quad(option, SH.terms.path, path),
-      quad(option, SH.terms.minCount, literal('1', XSD.terms.integer)),
-      quad(path, SH.terms.inversePath, property),
-    );
-  });
-  return quads;
-}
-
-/**
  * Supports the profile's own rule types. For each subclass `p:MyRule` of `odrl:Rule` (transitively):
  *
  * 1. `:RuleShape sh:targetClass p:MyRule`, so its instances are validated like any other rule;
@@ -255,9 +259,11 @@ function referencedCheck(ruleClass: NamedNode, properties: NamedNode[]): Quad[] 
  */
 function addRuleTypes(shape: Quad[], profile: Store): Quad[] {
   const added: Quad[] = [];
-  for (const ruleClass of subclassesOf(profile, ODRL.terms.Rule)) {
+  const ruleClasses = subclassesOf(profile, ODRL.terms.Rule);
+  for (const ruleClass of ruleClasses) {
     const ruleShape = ruleShapeFor(ruleClass);
     const properties = policyPropertiesFor(profile, ruleClass);
+    const disjoint = disjointRuleClasses(profile, ruleClass, ruleClasses);
  
     added.push(
       quad(SHAPE.terms.RuleShape, SH.terms.targetClass, ruleClass),
@@ -274,11 +280,30 @@ function addRuleTypes(shape: Quad[], profile: Store): Quad[] {
         quad(propertyShape, SH.terms.path, property),
         quad(propertyShape, SH.terms.node, ruleShape),
       );
-    }
  
-    if (properties.length > 0) {
-      added.push(...referencedCheck(ruleClass, properties));
+      // The values of the property must not also be another kind of rule, like the handcrafted
+      // `odrl:permission`, `odrl:prohibition` and `odrl:obligation` checks of :PolicyShape.
+      if (disjoint.length > 0) {
+        const disjointShape = blankNode();
+        const notShape = blankNode();
+        const options = disjoint.map((cls): { node: Term, quads: Quad[] } => {
+          const option = blankNode();
+          return { node: option, quads: [ quad(option, SH.terms.class, cls) ] };
+        });
+        const list = rdfList(options.map((option): Term => option.node));
+        added.push(
+          quad(SHAPE.terms.PolicyShape, SH.terms.property, disjointShape),
+          quad(disjointShape, SH.terms.path, property),
+          quad(disjointShape, SH.terms.not, notShape),
+          quad(notShape, SH.terms.or, list.head as NamedNode),
+          quad(disjointShape, SH.terms.message, literal(
+            `A ${property.value} must be a ${ruleClass.value}, not a ${disjoint.map((cls): string => cls.value).join(' or ')}.`)),
+          ...options.flatMap((option): Quad[] => option.quads),
+          ...list.quads,
+        );
+      }
     }
+
   }
   return [ ...shape, ...added ];
 }
