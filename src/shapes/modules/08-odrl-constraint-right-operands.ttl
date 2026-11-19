@@ -10,9 +10,9 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
-        [ sh:path odrl:rightOperand ; sh:node :IntegerShape ; sh:minInclusive 0 ]
+        [ sh:path odrl:rightOperand ; sh:node :IntegerShape ; sh:minInclusive 1 ]
     ) ;
-    sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative." .
+    sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative and greather than 1." .
 
 
 # R52: the rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime
