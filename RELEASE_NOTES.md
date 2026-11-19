@@ -1,8 +1,10 @@
 # Release Notes
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-11-19)
 
-Adds validation of policies that use [ODRL profiles](https://www.w3.org/TR/odrl-model/#profile), and makes vocabulary checks stricter.
+- Validates policies that use [ODRL profiles](https://www.w3.org/TR/odrl-model/#profile).
+- Makes vocabulary checks stricter: now that profiles are supported, terms that are neither in ODRL nor in a loaded profile are violations.
+- Checks constraints on the combination of left operand, operator and right operand. The choices behind these checks are explained in the [requirements](./docs/Requirements.md).
 
 ### New
 - **Profile support**: `new ODRLValidator({ profiles: [{ uri, quads }] })` (new `ODRLProfile` type). A profile extends the shapes with:
@@ -12,6 +14,8 @@ Adds validation of policies that use [ODRL profiles](https://www.w3.org/TR/odrl-
 - **Bundled profiles**: `TOSL_PROFILE`, `DPV_ODRL_PROFILE` and `ODRL_COMM_PROFILE`, plus the `PROFILES` map.
 - **Profile utilities exported**: `addProfileToShape`, `subclassesOf`, `ALLOWED_VALUE_LISTS` and the list helpers.
 - **Unsupported profile warning**: a policy that declares an `odrl:profile` the validator was not given gets a `sh:Warning`.
+- **Operator checks** ([`07-odrl-constraint-operators.ttl`](src/shapes/modules/07-odrl-constraint-operators.ttl)): an operator that does not fit the left operand is a violation. Which combinations fit is our own interpretation; the ODRL specification does not define it.
+- **Right operand checks** ([`08-odrl-constraint-right-operands.ttl`](src/shapes/modules/08-odrl-constraint-right-operands.ttl)): the right operand must match the left operand, based on the left operand's description in the [ODRL Vocabulary](https://www.w3.org/TR/odrl-vocab/).
 
 ### Changed (stricter)
 - **Unknown terms are violations, not warnings**: actions, left operands and operators that are not in the ODRL vocabulary, nor in a loaded profile, now make the policy invalid.
