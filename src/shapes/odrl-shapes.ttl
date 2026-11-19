@@ -302,6 +302,13 @@
     sh:targetClass odrl:Permission ;
     sh:node :RuleShape ;
 
+    # At least one policy points to this permission with odrl:permission
+    sh:property [
+        sh:path [ sh:inversePath odrl:permission ] ;
+        sh:minCount 1 ;
+        sh:message "A Permission must be referenced by a Policy through odrl:permission." ;
+    ] ;
+
     sh:property [
         sh:path odrl:target ;
         sh:minCount 1 ;
