@@ -3,6 +3,7 @@
 #################################################
 
 :AssetShape a sh:NodeShape ;
+    sh:targetClass odrl:Asset ;
 
     sh:property [
         sh:path odrl:uid ;
@@ -15,6 +16,12 @@
         sh:path odrl:partOf ;
         sh:node :AssetCollectionShape ;
         sh:message "partOf should point to an AssetCollection." ;
+    ] ;
+    # The collection may have no type, but it must not be a Party.
+    sh:property [
+        sh:path odrl:partOf ;
+        sh:not [ sh:or ( [ sh:class odrl:Party ] [ sh:class odrl:PartyCollection ] ) ] ;
+        sh:message "An Asset must be partOf an AssetCollection, not a Party or PartyCollection." ;
     ] ;
 
     sh:property [

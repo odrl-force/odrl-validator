@@ -49,6 +49,9 @@
 # relationship of the parties shall require the prior approval of the parties. #
 ################################################################################
 
+:collection01 a odrl:AssetCollection ;
+    dcterms:description "Elsevier's brand assets: trademarks, logos and other brand features." .
+
 :asset01 a odrl:Asset ;
     odrl:partOf :collection01 ;
     dcterms:description "Trademarks, logos and brand features associated with the brand." .

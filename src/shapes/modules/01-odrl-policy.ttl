@@ -31,19 +31,36 @@
         sh:message "Policies must have at least one permission, obligation or prohibition." ;
     ] ;
 
+    # A rule may have no type (it follows from the property), but it must not have the type of another rule.
+
     sh:property [
         sh:path odrl:permission ;
         sh:node :PermissionShape ;
+    ] ;
+    sh:property [
+        sh:path odrl:permission ;
+        sh:not [ sh:or ( [ sh:class odrl:Prohibition ] [ sh:class odrl:Duty ] ) ] ;
+        sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
     ] ;
 
     sh:property [
         sh:path odrl:obligation ;
         sh:node :DutyShape ;
     ] ;
+    sh:property [
+        sh:path odrl:obligation ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
+    ] ;
 
     sh:property [
         sh:path odrl:prohibition ;
         sh:node :ProhibitionShape ;
+    ] ;
+    sh:property [
+        sh:path odrl:prohibition ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Duty ] ) ] ;
+        sh:message "A prohibition must be an odrl:Prohibition, not a Permission or Duty." ;
     ] ;
 
     sh:property [

@@ -41,19 +41,36 @@
         sh:message "Policies must have at least one permission, obligation or prohibition." ;
     ] ;
 
+    # A rule may have no type (it follows from the property), but it must not have the type of another rule.
+
     sh:property [
         sh:path odrl:permission ;
         sh:node :PermissionShape ;
+    ] ;
+    sh:property [
+        sh:path odrl:permission ;
+        sh:not [ sh:or ( [ sh:class odrl:Prohibition ] [ sh:class odrl:Duty ] ) ] ;
+        sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
     ] ;
 
     sh:property [
         sh:path odrl:obligation ;
         sh:node :DutyShape ;
     ] ;
+    sh:property [
+        sh:path odrl:obligation ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
+    ] ;
 
     sh:property [
         sh:path odrl:prohibition ;
         sh:node :ProhibitionShape ;
+    ] ;
+    sh:property [
+        sh:path odrl:prohibition ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Duty ] ) ] ;
+        sh:message "A prohibition must be an odrl:Prohibition, not a Permission or Duty." ;
     ] ;
 
     sh:property [
@@ -320,6 +337,11 @@
         sh:path odrl:duty ;  
         sh:node :DutyShape ;  
         sh:message "Each Permission duty must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:duty ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A duty must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
 # Prohibition = must have one target
@@ -347,6 +369,11 @@
             ]
         ] ;
         sh:message "Each Prohibition remedy must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:remedy ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
 # Duty = Rule
@@ -359,6 +386,11 @@
         sh:path odrl:consequence ;  
         sh:node :DutyShape ;  
         sh:message "Each Duty consequence must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:consequence ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A consequence must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
 # Rules for offer
@@ -685,6 +717,7 @@
 #################################################
 
 :PartyShape a sh:NodeShape ;
+    sh:targetClass odrl:Party ;
 
     sh:property [
         sh:path odrl:uid ;
@@ -697,6 +730,12 @@
         sh:path odrl:partOf ;
         sh:node :PartyCollectionShape ;
         sh:message "partOf should point to an PartyCollection." ;
+    ] ;
+    # The collection may have no type, but it must not be an Asset.
+    sh:property [
+        sh:path odrl:partOf ;
+        sh:not [ sh:or ( [ sh:class odrl:Asset ] [ sh:class odrl:AssetCollection ] ) ] ;
+        sh:message "A Party must be partOf a PartyCollection, not an Asset or AssetCollection." ;
     ] .
 
 
@@ -843,6 +882,7 @@
 #################################################
 
 :AssetShape a sh:NodeShape ;
+    sh:targetClass odrl:Asset ;
 
     sh:property [
         sh:path odrl:uid ;
@@ -855,6 +895,12 @@
         sh:path odrl:partOf ;
         sh:node :AssetCollectionShape ;
         sh:message "partOf should point to an AssetCollection." ;
+    ] ;
+    # The collection may have no type, but it must not be a Party.
+    sh:property [
+        sh:path odrl:partOf ;
+        sh:not [ sh:or ( [ sh:class odrl:Party ] [ sh:class odrl:PartyCollection ] ) ] ;
+        sh:message "An Asset must be partOf an AssetCollection, not a Party or PartyCollection." ;
     ] ;
 
     sh:property [
