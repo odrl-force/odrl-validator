@@ -8,7 +8,7 @@ const MESSAGES = {
     R47: 'odrl:absoluteTemporalPosition is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R48: 'odrl:absoluteSize is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R49: 'odrl:count is only compatible with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
-    R50: 'The rightOperand of odrl:count must be an xsd:integer, not negative.',
+    R50: 'The rightOperand of odrl:count must be an xsd:integer, not negative and greather than 1.',
     R51: 'odrl:dateTime must only be used with comparison operators odrl:eq, odrl:gt, odrl:gteq, odrl:lt, odrl:lteq or odrl:neq.',
     R52: 'The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime.',
     R53: 'odrl:delayPeriod must only be used with odrl:eq, odrl:gt or odrl:gteq.',
@@ -149,7 +149,7 @@ describe('The constraint rightOperand shapes', () => {
         [ 'R50', 'odrl:count', '"5"^^xsd:integer' ],
         [ 'R50', 'odrl:count', '"5"^^xsd:nonNegativeInteger' ],
         [ 'R50', 'odrl:count', '"1"^^xsd:positiveInteger' ],
-        [ 'R50', 'odrl:count', '"0"^^xsd:integer' ],
+        [ 'R50', 'odrl:count', '"1"^^xsd:integer' ],
         [ 'R52', 'odrl:dateTime', '"2026-12-31"^^xsd:date' ],
         [ 'R52', 'odrl:dateTime', '"2026-12-31T10:00:00Z"^^xsd:dateTime' ],
         [ 'R52', 'odrl:dateTime', '"2026-12-31T10:00:00Z"^^xsd:dateTimeStamp' ],
@@ -299,5 +299,82 @@ describe('The constraint shapes on constraints without an explicit type', () => 
 
         expect(result.valid).toBe(false);
         expect(result.validationResults.map(r => r.message).sort()).toEqual([ MESSAGES.R52, MESSAGES.R51 ].sort());
+    });
+});
+
+// Expected message per requirement
+const CONSTRAINT_MESSAGES = {
+    R36: 'A Constraint must have one odrl:leftOperand.',
+    R37: 'A Constraint must have one odrl:operator.',
+    R38: 'A Constraint must have one of odrl:rightOperand or odrl:rightOperandReference (neither both nor none).',
+    R39: 'A Constraint must declare exactly one odrl:rightOperand, given as a literal, an IRI, an odrl:RightOperand instance, or a list of these.',
+    R40: 'A Constraint must declare exactly one odrl:rightOperandReference, given as an IRI or a list of IRIs.',
+    R41: 'The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand in a profile.',
+    R42: 'The operator should be a standard ODRL operators or typed as odrl:Operator in a profile.',
+    R43: 'A LogicalConstraint must contain one of odrl:and, odrl:or, odrl:xone, or odrl:andSequence.',
+    R44: 'Each value in a logical constraint must be a Constraint.',
+    R115: 'A Constraint may have one uid, and it must be an IRI.',
+    R116: 'A Constraint may have one dataType.',
+    R117: 'A Constraint may have at most one unit.',
+    R118: 'A Constraint unit should be an IRI.',
+    R119: 'A Constraint may have one status.',
+    R120: 'A Logical Constraint may have one uid, and it must be an IRI.',
+};
+
+// The rule of the policy has constraint1, the triples of each case describe it
+function constraintPolicy(triples: string): string {
+    return `
+    @prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+    @prefix : <http://example.com/> .
+
+    :policy1 a odrl:Set ; odrl:permission :permission1 .
+    :permission1 a odrl:Permission ; odrl:action odrl:use ; odrl:target :asset1 ; odrl:constraint :constraint1 .
+    :asset1 a odrl:Asset .
+
+    ${triples}
+    `;
+}
+
+async function validateConstraint(triples: string) {
+    const result = await new ODRLValidator().validate(new Parser().parse(constraintPolicy(triples)));
+    return { valid: result.valid, messages: result.validationResults.map(r => r.message) };
+}
+
+describe('The constraint shapes', () => {
+
+    // [requirement, constraint]
+    test.each([
+        [ '', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 .' ],
+        [ 'R38', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperandReference :maxCount .' ],
+        [ 'R43', ':constraint1 odrl:and ( :c1 :c2 ) . :c1 odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 . :c2 odrl:leftOperand odrl:purpose ; odrl:operator odrl:eq ; odrl:rightOperand :research .' ],
+    ])('%s: a valid constraint is accepted (%s).', async (_, triples) => {
+        expect(await validateConstraint(triples)).toEqual({ valid: true, messages: [] });
+    });
+
+    // [requirement, constraint that breaks it, severity]
+    test.each([
+        [ 'R36', ':constraint1 a odrl:Constraint ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R36', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count, odrl:percentage ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R37', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R38', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt .', 'Violation' ],
+        [ 'R38', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 ; odrl:rightOperandReference :maxCount .', 'Violation' ],
+        [ 'R39', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand [ odrl:value 5 ] .', 'Violation' ],
+        [ 'R40', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperandReference "maxCount" .', 'Violation' ],
+        [ 'R41', ':constraint1 a odrl:Constraint ; odrl:leftOperand :myOperand ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R42', ':constraint1 a odrl:Constraint ; odrl:leftOperand odrl:count ; odrl:operator :myOperator ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R43', ':constraint1 odrl:and ( :c1 ) ; odrl:or ( :c1 ) . :c1 odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R44', ':constraint1 odrl:and ( :c1 :c2 ) . :c1 odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 . :c2 odrl:operator odrl:eq .', 'Violation' ],
+        [ 'R115', ':constraint1 a odrl:Constraint ; odrl:uid "constraint1" ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R116', ':constraint1 a odrl:Constraint ; odrl:dataType xsd:integer, xsd:decimal ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R117', ':constraint1 a odrl:Constraint ; odrl:unit :euro, :dollar ; odrl:leftOperand odrl:payAmount ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R118', ':constraint1 a odrl:Constraint ; odrl:unit "EUR" ; odrl:leftOperand odrl:payAmount ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Warning' ],
+        [ 'R119', ':constraint1 a odrl:Constraint ; odrl:status 1, 2 ; odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+        [ 'R120', ':constraint1 odrl:uid "constraint1" ; odrl:and ( :c1 ) . :c1 odrl:leftOperand odrl:count ; odrl:operator odrl:lt ; odrl:rightOperand 5 .', 'Violation' ],
+    ])('%s: %s is reported.', async (requirement, triples, severity) => {
+        const result = await validateConstraint(triples);
+
+        expect(result.valid).toBe(severity === 'Warning');
+        expect(result.messages).toContain(CONSTRAINT_MESSAGES[requirement as keyof typeof CONSTRAINT_MESSAGES]);
     });
 });

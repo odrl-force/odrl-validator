@@ -9,6 +9,7 @@ export const DETECTION = createVocabulary('https://w3id.org/force/detection#',
     'reason'
 )
 
+
 export const SH = createVocabulary('http://www.w3.org/ns/shacl#',
     'NodeShape',
     'in',
@@ -22,6 +23,8 @@ export const SH = createVocabulary('http://www.w3.org/ns/shacl#',
     'targetClass',
     'alternativePath',
     'targetSubjectsOf',
+    'class',
+    'not',
     'Violation',
     'Warning'
 );

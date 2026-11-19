@@ -5,6 +5,7 @@
 :ConstraintShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
 
+    # R115: a constraint may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -12,31 +13,29 @@
         sh:message "A Constraint may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R116: a constraint may have at most one dataType, and it must be an IRI
     sh:property [
-        sh:path odrl:datatype ;
+        sh:path odrl:dataType ;
         sh:maxCount 1 ;
-        sh:nodeKind rdfs:Datatype;
+        sh:nodeKind sh:IRI ;
         sh:message "A Constraint may have one dataType." ;
     ] ;
 
+    # R117: a constraint may have at most one unit
     sh:property [
         sh:path odrl:unit ;
         sh:maxCount 1 ;
         sh:message "A Constraint may have at most one unit." ;
     ] ;
-    sh:property [
-        sh:severity sh:Warning ;
-        sh:path odrl:unit ;
-        sh:nodeKind sh:IRI ;
-        sh:message "A Constraint unit should be an IRI." ;
-    ] ;
 
+    # R119: a constraint may have at most one status
     sh:property [
         sh:path odrl:status ;
         sh:maxCount 1 ;
         sh:message "A Constraint may have one status." ;
     ] ;
 
+    # R36: a constraint must have exactly one leftOperand
     sh:property [
         sh:path odrl:leftOperand ;
         sh:minCount 1 ;
@@ -44,6 +43,7 @@
         sh:message "A Constraint must have one odrl:leftOperand." ;
     ] ;
 
+    # R37: a constraint must have exactly one operator
     sh:property [
         sh:path odrl:operator ;
         sh:minCount 1 ;
@@ -51,6 +51,7 @@
         sh:message "A Constraint must have one odrl:operator." ;
     ] ;
     
+    # R38: a constraint must have either rightOperand or rightOperandReference, but not both and not neither
     sh:xone (
         [ 
             sh:property [ 
@@ -66,6 +67,7 @@
         ] ]
     ) ;
 
+    # R39: the rightOperand must be a literal, IRI, odrl:RightOperand instance, or a list of these
     sh:property [
         sh:path odrl:rightOperand ;
         sh:maxCount 1 ;
@@ -78,6 +80,7 @@
         sh:message "A Constraint must declare exactly one odrl:rightOperand, given as a literal, an IRI, an odrl:RightOperand instance, or a list of these." ;
     ] ;
 
+    # R40: the rightOperandReference must be an IRI or a list of IRIs
     sh:property [
         sh:path odrl:rightOperandReference ;
         sh:maxCount 1 ;
@@ -86,6 +89,18 @@
             [ sh:node :RightOperandReferenceListShape ]
         ) ;
         sh:message "A Constraint must declare exactly one odrl:rightOperandReference, given as an IRI or a list of IRIs." ;
+    ] .
+
+# R118: a constraint unit should be an IRI
+# It is a separate shape: as a Warning inside :ConstraintShape, it would make the rule constraint (R23) a Violation.
+
+:ConstraintUnitShape a sh:NodeShape ;
+    sh:targetSubjectsOf odrl:unit ;
+    sh:property [
+        sh:severity sh:Warning ;
+        sh:path odrl:unit ;
+        sh:nodeKind sh:IRI ;
+        sh:message "A Constraint unit should be an IRI." ;
     ] .
 
 :RightOperandListShape a sh:NodeShape ;
@@ -125,6 +140,7 @@
     sh:targetSubjectsOf odrl:and ;
     sh:targetSubjectsOf odrl:andSequence ;
     
+    # R120: a LogicalConstraint may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -132,6 +148,7 @@
         sh:message "A Logical Constraint may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R43: a LogicalConstraint must contain exactly one of: odrl:and, odrl:or, odrl:xone, odrl:andSequence
     sh:property [
         sh:path [ sh:alternativePath ( odrl:or odrl:xone odrl:and odrl:andSequence ) ] ;
         sh:minCount 1 ;
@@ -140,6 +157,7 @@
         sh:message "A LogicalConstraint must contain one of odrl:and, odrl:or, odrl:xone, or odrl:andSequence." ;
     ] .
 
+# R44: each element of a LogicalConstraint must be a valid Constraint
 :ConstraintListShape a sh:NodeShape ;
     sh:node :RdfListShape ;
     sh:property [
@@ -195,6 +213,7 @@
 :AllowedConstraintValueShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ; 
 
+    # R41: the leftOperand should belong to the ODRL vocabulary or be typed as odrl:LeftOperand
     sh:property [
         sh:severity sh:Violation ;
         sh:path odrl:leftOperand ;
@@ -239,6 +258,7 @@
         sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand in a profile." ;
     ] ;
     
+    # R42: the operator should be a standard ODRL operator
     sh:property [
         sh:severity sh:Violation ;
         sh:path odrl:operator ;

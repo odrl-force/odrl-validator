@@ -2,7 +2,7 @@
 [![npm](https://img.shields.io/npm/v/odrl-validator)](https://www.npmjs.com/package/odrl-validator)
 [![Tests](https://github.com/odrl-force/odrl-validator/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/odrl-force/odrl-validator/actions/workflows/test.yml)
 [![Code coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/odrl-force/odrl-validator/badges/code-coverage.json)](https://github.com/odrl-force/odrl-validator/actions/workflows/test.yml)
-[![Shapes tested](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/odrl-force/odrl-validator/badges/shape-coverage.json)](test/unit/ShapeCoverage.test.ts)
+[![Requirements tested](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/odrl-force/odrl-validator/badges/shape-coverage.json)](test/unit/ShapeCoverage.test.ts)
 
 
 The ODRL Validator is a Typescript tool to aid development of consistent [ODRL](https://www.w3.org/TR/odrl-model/) policies.

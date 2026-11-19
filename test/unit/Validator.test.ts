@@ -100,6 +100,18 @@ describe('The ODRL Validator', (): void => {
             new ODRLValidator();
         })
 
+        it("R122: warns when the policy declares a profile that is not loaded.", async ()=> {
+            policyQuads.push(profileDeclaration)
+            const warning = `Profile ${profile.uri} is not supported: terms from this profile are not validated.`;
+
+            const withoutProfile = await new ODRLValidator().validate(policyQuads);
+            expect(withoutProfile.valid).toBe(true);
+            expect(withoutProfile.validationResults.map(r => r.message)).toContain(warning);
+
+            const withProfile = await new ODRLValidator({profiles:[profile]}).validate(policyQuads);
+            expect(withProfile.validationResults.map(r => r.message)).not.toContain(warning);
+        })
+
         describe('with an action', (): void => {
             it("validates policies that use a profile action.", async ()=> {
                 const validator = new ODRLValidator({profiles:[profile]});
@@ -280,6 +292,7 @@ describe('The ODRL Validator', (): void => {
                 // This rule is invalid: it has no action and no target.
                 // Only a validator that knows the profile has a RuleShape that targets the subclass.
                 policyQuads.push(
+                    quad(namedNode(policyIRI), profileRuleRelation, newRuleNode),
                     profileDeclaration,
                     quad(newRuleNode, RDF.terms.type, profileRule),
                 )
@@ -290,7 +303,7 @@ describe('The ODRL Validator', (): void => {
         describe('with a subproperty of odrl:operand', (): void => {
             // A logical constraint on newRuleNode: ex:myLogicalOp ( constraint1 constraint2 )
             const logicalConstraintQuads = (): Quad[] => {
-                const logicalConstraint = namedNode("https://example.org/logicalconstraint").
+                const logicalConstraint = namedNode("https://example.org/logicalconstraint")
                 const constraint1 = namedNode("https://example.org/constraint1")
                 const constraint2 = namedNode("https://example.org/constraint2")
                 const list1 = blankNode()
