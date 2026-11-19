@@ -56,12 +56,14 @@ The extraction of these requirements is based on the [ODRL 2.2 information model
 - R44: Each element of a LogicalConstraint must be a valid Constraint - Violation - [Wiki V19](https://www.w3.org/2016/poe/wiki/Validation#V19._The_values_of_every_logical_constraint_must_be_constraints)
 
 ### Constraint operator compatibility
+Each XSD datatype also includes its subtypes (e.g. xsd:integer is an xsd:decimal), see https://www.w3.org/TR/xmlschema11-2/#built-in-datatypes.
+
 - R45: odrl:absolutePosition is only compatible with eq, gt, gteq, lt, lteq, neq - Violation - **New**
 - R46: odrl:absoluteSpatialPosition is only compatible with comparison operators - Violation - **New**
 - R47: odrl:absoluteTemporalPosition is only compatible with comparison operators - Violation - **New**
 - R48: odrl:absoluteSize is only compatible with comparison operators - Violation - **New**
 - R49: odrl:count is only compatible with comparison operators - Violation - **New**
-- R50: The rightOperand for odrl:count must be an xsd:integer - Violation - **New**
+- R50: The rightOperand for odrl:count must be an xsd:integer, not negative - Violation - **New**
 - R51: odrl:dateTime is only compatible with comparison operators - Violation - **New**
 - R52: The rightOperand for odrl:dateTime must be xsd:date or xsd:dateTime - Violation - **New**
 - R53: odrl:delayPeriod is only compatible with eq, gt, gteq - Violation - **New**
@@ -98,7 +100,7 @@ The extraction of these requirements is based on the [ODRL 2.2 information model
 - R84: odrl:relativeSize is only compatible with comparison operators - Violation - **New**
 - R85: odrl:resolution is only compatible with comparison operators - Violation - **New**
 - R86: odrl:spatial is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
-- R87: The rightOperand for odrl:spatial must be an IRI - Violation - **New**
+- R87: The rightOperand for odrl:spatial must be an IRI or a list of IRIs - Violation - **New**
 - R88: odrl:spatialCoordinates is only compatible with eq, neq - Violation - **New**
 - R89: odrl:systemDevice is only compatible with eq, neq, isAnyOf, isNoneOf - Violation - **New**
 - R90: The rightOperand for odrl:systemDevice must be an IRI or a string - Warning - **New**

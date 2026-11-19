@@ -2,7 +2,7 @@
 # RightOperand datatype per leftOperand
 #################################################
 
-# R50: the rightOperand of odrl:count must be an xsd:integer
+# R50: the rightOperand of odrl:count must be an xsd:integer, not negative
 
 :CountRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
@@ -10,9 +10,9 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:integer ]
+        [ sh:path odrl:rightOperand ; sh:node :IntegerShape ; sh:minInclusive 0 ]
     ) ;
-    sh:message "The rightOperand of odrl:count must be an xsd:integer." .
+    sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative." .
 
 
 # R52: the rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime
@@ -23,7 +23,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:dateTime ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:dateTime ] ) ]
+        [ sh:path odrl:rightOperand ; sh:node :DateTimeShape ]
     ) ;
     sh:message "The rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime." .
 
@@ -36,7 +36,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:delayPeriod ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+        [ sh:path odrl:rightOperand ; sh:node :DurationShape ]
     ) ;
     sh:message "The rightOperand of odrl:delayPeriod must be an xsd:duration." .
 
@@ -49,7 +49,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:deliveryChannel ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:deliveryChannel should be an IRI, a string, or a list of these." .
 
@@ -62,7 +62,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:elapsedTime ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+        [ sh:path odrl:rightOperand ; sh:node :DurationShape ]
     ) ;
     sh:message "The rightOperand of odrl:elapsedTime must be an xsd:duration." .
 
@@ -75,7 +75,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:event ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:event should be an IRI or a string." .
 
@@ -88,7 +88,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:fileFormat ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:fileFormat should be an IRI, a string, or a list of these." .
 
@@ -101,7 +101,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:industry ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:industry should be an IRI, a string, or a list of these." .
 
@@ -114,7 +114,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:language ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:node :StringShape ] [ sh:node :StringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:language should be a string or a list of strings." .
 
@@ -127,7 +127,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:media ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:node :StringShape ] [ sh:node :StringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:media should be a string or a list of strings." .
 
@@ -140,7 +140,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:meteredTime ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+        [ sh:path odrl:rightOperand ; sh:node :DurationShape ]
     ) ;
     sh:message "The rightOperand of odrl:meteredTime must be an xsd:duration." .
 
@@ -153,7 +153,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:payAmount ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ]
+        [ sh:path odrl:rightOperand ; sh:node :DecimalShape ]
     ) ;
     sh:message "The rightOperand of odrl:payAmount must be an xsd:decimal." .
 
@@ -166,7 +166,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:percentage ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:maxInclusive 100 ]
+        [ sh:path odrl:rightOperand ; sh:node :DecimalShape ; sh:minInclusive 0 ; sh:maxInclusive 100 ]
     ) ;
     sh:message "The rightOperand of odrl:percentage must be an xsd:decimal from 0 to 100." .
 
@@ -179,7 +179,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:product ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:product should be an IRI, a string, or a list of these." .
 
@@ -192,7 +192,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:purpose ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:purpose should be an IRI, a string, or a list of these." .
 
@@ -205,12 +205,12 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:recipient ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:recipient should be an IRI, a string, or a list of these." .
 
 
-# R87: the rightOperand of odrl:spatial must be an IRI
+# R87: the rightOperand of odrl:spatial must be an IRI or a list of IRIs
 
 :SpatialRightOperandShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
@@ -218,9 +218,9 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:spatial ] ]
-        [ sh:path odrl:rightOperand ; sh:nodeKind sh:IRI ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :IriListShape ] ) ]
     ) ;
-    sh:message "The rightOperand of odrl:spatial must be an IRI." .
+    sh:message "The rightOperand of odrl:spatial must be an IRI or a list of IRIs." .
 
 
 # R90: the rightOperand of odrl:systemDevice must be an IRI or a string
@@ -231,7 +231,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:systemDevice ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] [ sh:node :IriOrStringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] [ sh:node :IriOrStringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:systemDevice should be an IRI, a string, or a list of these." .
 
@@ -244,7 +244,7 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:timeInterval ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:duration ]
+        [ sh:path odrl:rightOperand ; sh:node :DurationShape ]
     ) ;
     sh:message "The rightOperand of odrl:timeInterval must be an xsd:duration." .
 
@@ -257,7 +257,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:unitOfCount ] ]
-        [ sh:path odrl:rightOperand ; sh:datatype xsd:string ]
+        [ sh:path odrl:rightOperand ; sh:node :StringShape ]
     ) ;
     sh:message "The rightOperand of odrl:unitOfCount should be a string." .
 
@@ -270,7 +270,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:version ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:node :StringShape ] [ sh:node :StringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:version should be a string or a list of strings." .
 
@@ -283,7 +283,7 @@
     sh:severity sh:Warning ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:virtualLocation ] ]
-        [ sh:path odrl:rightOperand ; sh:or ( [ sh:datatype xsd:string ] [ sh:node :StringListShape ] ) ]
+        [ sh:path odrl:rightOperand ; sh:or ( [ sh:node :StringShape ] [ sh:node :StringListShape ] ) ]
     ) ;
     sh:message "The rightOperand of odrl:virtualLocation should be a string or a list of strings." .
 
@@ -294,7 +294,15 @@
     sh:node :RdfListShape ;
     sh:property [
         sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
-        sh:or ( [ sh:nodeKind sh:IRI ] [ sh:datatype xsd:string ] ) ;
+        sh:or ( [ sh:nodeKind sh:IRI ] [ sh:node :StringShape ] ) ;
+    ] .
+
+# An RDF list whose members are IRIs
+:IriListShape a sh:NodeShape ;
+    sh:node :RdfListShape ;
+    sh:property [
+        sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
+        sh:nodeKind sh:IRI ;
     ] .
 
 # An RDF list whose members are strings
@@ -302,5 +310,63 @@
     sh:node :RdfListShape ;
     sh:property [
         sh:path ( [ sh:zeroOrMorePath rdf:rest ] rdf:first ) ;
-        sh:datatype xsd:string ;
+        sh:node :StringShape ;
     ] .
+
+# Subtypes: https://www.w3.org/TR/xmlschema11-2/#built-in-datatypes
+
+# xsd:decimal and subtypes
+:DecimalShape a sh:NodeShape ;
+    sh:or (
+        [ sh:datatype xsd:decimal ]
+        [ sh:node :IntegerShape ]
+    ) .
+
+# xsd:integer and subtypes
+:IntegerShape a sh:NodeShape ;
+    sh:or (
+        [ sh:datatype xsd:integer ]
+        [ sh:datatype xsd:long ]
+        [ sh:datatype xsd:int ]
+        [ sh:datatype xsd:short ]
+        [ sh:datatype xsd:byte ]
+        [ sh:datatype xsd:nonNegativeInteger ]
+        [ sh:datatype xsd:positiveInteger ]
+        [ sh:datatype xsd:unsignedLong ]
+        [ sh:datatype xsd:unsignedInt ]
+        [ sh:datatype xsd:unsignedShort ]
+        [ sh:datatype xsd:unsignedByte ]
+        [ sh:datatype xsd:nonPositiveInteger ]
+        [ sh:datatype xsd:negativeInteger ]
+    ) .
+
+#  xsd:date, xsd:dateTime and subtypes
+:DateTimeShape a sh:NodeShape ;
+    sh:or (
+        [ sh:datatype xsd:date ]
+        [ sh:datatype xsd:dateTime ]
+        [ sh:datatype xsd:dateTimeStamp ]
+    ) .
+
+# xsd:duration and subtypes
+:DurationShape a sh:NodeShape ;
+    sh:or (
+        [ sh:datatype xsd:duration ]
+        [ sh:datatype xsd:dayTimeDuration ]
+        [ sh:datatype xsd:yearMonthDuration ]
+    ) .
+
+# xsd:string and subtypes
+:StringShape a sh:NodeShape ;
+    sh:or (
+        [ sh:datatype xsd:string ]
+        [ sh:datatype xsd:normalizedString ]
+        [ sh:datatype xsd:token ]
+        [ sh:datatype xsd:language ]
+        [ sh:datatype xsd:Name ]
+        [ sh:datatype xsd:NCName ]
+        [ sh:datatype xsd:ENTITY ]
+        [ sh:datatype xsd:ID ]
+        [ sh:datatype xsd:IDREF ]
+        [ sh:datatype xsd:NMTOKEN ]
+    ) .
