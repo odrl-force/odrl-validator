@@ -309,23 +309,19 @@ export class ODRLValidator implements IODRLValidator {
     }
 
     // extracts all instances and declarations of Party from a profile.
-    // Declarations are not resolved transitively
     private profileParties(profile: string): Quad[] {
         const profileStore = new Store(this.profiles.get(profile)?.quads)
         const quads: Quad[] = []
         quads.push(...profileStore.getQuads(null, RDF.terms.type, ODRL.terms.Party, null));
-        quads.push(...profileStore.getQuads(null, RDFS.terms.subClassOf, ODRL.terms.Party, null));
         return quads
 
     }
 
     // extracts all instances and declarations of Asset from a profile.
-    // Declarations are not resolved transitively
     private profileAssets(profile:string): Quad[] {
         const profileStore = new Store(this.profiles.get(profile)?.quads)
         const quads: Quad[] = []
         quads.push(...profileStore.getQuads(null, RDF.terms.type, ODRL.terms.Asset, null));
-        quads.push(...profileStore.getQuads(null, RDFS.terms.subClassOf, ODRL.terms.Asset, null));
         return quads
     }
     /**
