@@ -21,11 +21,6 @@ Adds validation of policies that use [ODRL profiles](https://www.w3.org/TR/odrl-
 - **Input without a policy**: input that contains no typed ODRL policy now returns `valid: false` with "No valid policy provided".
 - **Normalisation errors**: a failing normalisation step returns a result with the error instead of throwing.
 
-### Known limitations
-- **Profiles are not scoped per policy**: all loaded profiles are merged into one shape. Terms from one loaded profile are therefore accepted in a policy that declares only another profile, or no profile at all.
-- **Profile policy types leak between instances**: the constructor modifies the shared `POLICY_TYPES` list, so profile policy types also count as policy types in validators created later.
-- **Policy subclasses**: only profile subclasses of `odrl:Policy` itself are recognised as policy types, not subclasses of `odrl:Set`, `odrl:Offer`, etc.
-- **New rule types**: a profile subclass of `odrl:Rule` has no property that links it to a policy, and profiles do not define one yet. 
 
 ## 0.1.0 (2026-06-29)
 

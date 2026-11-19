@@ -15,6 +15,8 @@ export interface ValidationResult {
      focusNode?: string;
      valueNode?: string;
      severity?: string;
+     /** The policies the result applies to. Absent for results about quads that no policy reaches. */
+     policies?: string[];
    }
 
 /**

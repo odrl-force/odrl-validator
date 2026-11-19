@@ -10,10 +10,21 @@ export const DETECTION = createVocabulary('https://w3id.org/force/detection#',
 )
 
 export const SH = createVocabulary('http://www.w3.org/ns/shacl#',
+    'NodeShape',
     'in',
+    'inversePath',
+    'message',
+    'minCount',
+    'node',
+    'or',
     'property',
     'path',
-    'targetClass');
+    'targetClass',
+    'alternativePath',
+    'targetSubjectsOf',
+    'Violation',
+    'Warning'
+);
  
 export const RDF = createVocabulary('http://www.w3.org/1999/02/22-rdf-syntax-ns#',
     'Property',
