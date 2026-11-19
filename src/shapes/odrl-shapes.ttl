@@ -319,11 +319,11 @@
     sh:targetClass odrl:Permission ;
     sh:node :RuleShape ;
 
-    # At least one policy points to this permission with odrl:permission
+    # At least one node points to this permission with odrl:permission 
     sh:property [
         sh:path [ sh:inversePath odrl:permission ] ;
         sh:minCount 1 ;
-        sh:message "A Permission must be referenced by a Policy through odrl:permission." ;
+        sh:message "A Permission must be referenced through odrl:permission." ;
     ] ;
 
     sh:property [
@@ -349,6 +349,13 @@
 :ProhibitionShape a sh:NodeShape ;
     sh:targetClass odrl:Prohibition ;
     sh:node :RuleShape ;
+
+    # At least one node points to this prohibition with odrl:prohibition 
+    sh:property [
+        sh:path [ sh:inversePath odrl:prohibition ] ;
+        sh:minCount 1 ;
+        sh:message "A Prohibition must be referenced through odrl:prohibition." ;
+    ] ;
 
     sh:property [
         sh:path odrl:target ;
@@ -376,11 +383,19 @@
         sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
-# Duty = Rule
 
+
+# Duty = Rule
 :DutyShape a sh:NodeShape ;
     sh:targetClass odrl:Duty ;
     sh:node :RuleShape ;
+
+    # At least one node points to this duty with odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation
+    sh:property [
+        sh:path [ sh:inversePath [ sh:alternativePath ( odrl:duty odrl:consequence odrl:remedy odrl:obligation ) ] ] ;
+        sh:minCount 1 ;
+        sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." ;
+    ] ;
 
     sh:property [
         sh:path odrl:consequence ;  
@@ -393,8 +408,19 @@
         sh:message "A consequence must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
-# Rules for offer
+# At least one node points to this duty with odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation
+:DutyReferencedShape a sh:NodeShape ;
+    sh:targetClass odrl:Duty ;
+    sh:or (
+        [ sh:path [ sh:inversePath odrl:duty ] ; sh:minCount 1 ]
+        [ sh:path [ sh:inversePath odrl:consequence ] ; sh:minCount 1 ]
+        [ sh:path [ sh:inversePath odrl:remedy ] ; sh:minCount 1 ]
+        [ sh:path [ sh:inversePath odrl:obligation ] ; sh:minCount 1 ]
+    ) ;
+    sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." .
 
+
+# Rules for offer
 :OfferPermissionShape a sh:NodeShape ;
     sh:node :PermissionShape ;
     sh:node :OfferRequiredAssignerShape .
@@ -1360,9 +1386,9 @@
     sh:severity sh:Violation ;
     sh:or (
         [ sh:not [ sh:path odrl:leftOperand ; sh:hasValue odrl:count ] ]
-        [ sh:path odrl:rightOperand ; sh:node :IntegerShape ; sh:minInclusive 0 ]
+        [ sh:path odrl:rightOperand ; sh:node :IntegerShape ; sh:minInclusive 1 ]
     ) ;
-    sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative." .
+    sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative and greather than 1." .
 
 
 # R52: the rightOperand of odrl:dateTime must be an xsd:date or xsd:dateTime

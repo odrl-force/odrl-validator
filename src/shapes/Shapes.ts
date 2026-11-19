@@ -85,7 +85,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/PermissionShape> a sh:NodeShape ;
   sh:targetClass odrl:Permission ;
   sh:property [
-    sh:message "A Permission must be referenced by a Policy through odrl:permission." ;
+    sh:message "A Permission must be referenced through odrl:permission." ;
     sh:path [
       sh:inversePath odrl:permission
     ] ;
@@ -115,6 +115,14 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/DutyShape> a sh:NodeShape ;
   sh:targetClass odrl:Duty ;
   sh:property [
+    sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." ;
+    sh:path [
+      sh:inversePath [
+        sh:alternativePath (odrl:duty odrl:consequence odrl:remedy odrl:obligation)
+      ]
+    ] ;
+    sh:minCount 1
+  ], [
     sh:message "Each Duty consequence must conform to ODRL duty." ;
     sh:path odrl:consequence ;
     sh:node <http://example.com/DutyShape>
@@ -134,6 +142,12 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/ProhibitionShape> a sh:NodeShape ;
   sh:targetClass odrl:Prohibition ;
   sh:property [
+    sh:message "A Prohibition must be referenced through odrl:prohibition." ;
+    sh:path [
+      sh:inversePath odrl:prohibition
+    ] ;
+    sh:minCount 1
+  ], [
     sh:message "A Prohibition must have one odrl:target." ;
     sh:path odrl:target ;
     sh:maxCount 1 ;
@@ -611,6 +625,31 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       ] odrl:constraint) ;
       sh:node <http://example.com/AllowedConstraintValueShape>
     ]
+  ]) .
+
+<http://example.com/DutyReferencedShape> a sh:NodeShape ;
+  sh:targetClass odrl:Duty ;
+  sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." ;
+  sh:or ([
+    sh:path [
+      sh:inversePath odrl:duty
+    ] ;
+    sh:minCount 1
+  ] [
+    sh:path [
+      sh:inversePath odrl:consequence
+    ] ;
+    sh:minCount 1
+  ] [
+    sh:path [
+      sh:inversePath odrl:remedy
+    ] ;
+    sh:minCount 1
+  ] [
+    sh:path [
+      sh:inversePath odrl:obligation
+    ] ;
+    sh:minCount 1
   ]) .
 
 <http://example.com/OfferRequiredAssignerShape> a sh:NodeShape ;
@@ -1191,7 +1230,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/CountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
-  sh:message "The rightOperand of odrl:count must be an xsd:integer." ;
+  sh:message "The rightOperand of odrl:count must be an xsd:integer, not negative and greather than 1." ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1200,14 +1239,38 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/IntegerShape> ;
-    sh:minInclusive 0
-  ]) .
+    sh:minInclusive 1
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/IntegerShape> a sh:NodeShape ;
   sh:or ([
     sh:datatype xsd:integer
-  ]) ;
-  sh:severity sh:Violation .
+  ] [
+    sh:datatype xsd:long
+  ] [
+    sh:datatype xsd:int
+  ] [
+    sh:datatype xsd:short
+  ] [
+    sh:datatype xsd:byte
+  ] [
+    sh:datatype xsd:nonNegativeInteger
+  ] [
+    sh:datatype xsd:positiveInteger
+  ] [
+    sh:datatype xsd:unsignedLong
+  ] [
+    sh:datatype xsd:unsignedInt
+  ] [
+    sh:datatype xsd:unsignedShort
+  ] [
+    sh:datatype xsd:unsignedByte
+  ] [
+    sh:datatype xsd:nonPositiveInteger
+  ] [
+    sh:datatype xsd:negativeInteger
+  ]) .
 
 <http://example.com/DateTimeRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -1221,7 +1284,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/DateTimeShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/DateTimeShape> a sh:NodeShape ;
   sh:or ([
@@ -1244,7 +1308,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/DurationShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/DurationShape> a sh:NodeShape ;
   sh:or ([
@@ -1324,7 +1389,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/DurationShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/EventRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -1446,7 +1512,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/DurationShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/PayAmountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -1460,7 +1527,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/DecimalShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/DecimalShape> a sh:NodeShape ;
   sh:or ([
@@ -1553,7 +1621,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:targetClass odrl:Constraint ;
   sh:targetSubjectsOf odrl:leftOperand ;
   sh:message "The rightOperand of odrl:spatial must be an IRI or a list of IRIs." ;
-  sh:severity sh:Violation ;
   sh:or ([
     sh:not [
       sh:path odrl:leftOperand ;
@@ -1566,7 +1633,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] [
       sh:node <http://example.com/IriListShape>
     ])
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/IriListShape> a sh:NodeShape ;
   sh:property [
@@ -1610,7 +1678,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/DurationShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Violation .
 
 <http://example.com/UnitOfCountRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
@@ -1624,7 +1693,8 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] [
     sh:path odrl:rightOperand ;
     sh:node <http://example.com/StringShape>
-  ]) .
+  ]) ;
+  sh:severity sh:Warning .
 
 <http://example.com/VersionRightOperandShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
