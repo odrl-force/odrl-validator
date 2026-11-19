@@ -5,6 +5,7 @@
 :AssetShape a sh:NodeShape ;
     sh:targetClass odrl:Asset ;
 
+    # R103: an asset may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -12,6 +13,7 @@
         sh:message "An Asset may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R104: an asset partOf must point to an AssetCollection
     sh:property [
         sh:path odrl:partOf ;
         sh:node :AssetCollectionShape ;
@@ -24,6 +26,7 @@
         sh:message "An Asset must be partOf an AssetCollection, not a Party or PartyCollection." ;
     ] ;
 
+    # R121: an asset hasPolicy must point to a Policy IRI
     sh:property [
         sh:path odrl:hasPolicy ;
         sh:nodeKind sh:IRI ;
@@ -31,7 +34,9 @@
     ] .
 
 :AssetCollectionShape a sh:NodeShape ;
+    sh:targetClass odrl:AssetCollection ;
     
+    # R105: an AssetCollection may have at most one source, and it must be an IRI
     sh:property [
         sh:path odrl:source ;
         sh:maxCount 1 ;
@@ -39,6 +44,7 @@
         sh:message "An AssetCollection may have one source, and it must be an IRI." ;
     ] ;
     
+    # R106: each refinement of an AssetCollection must be a Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:refinement ;
         sh:or (

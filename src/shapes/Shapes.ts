@@ -41,8 +41,28 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       ])
     ]
   ], [
+    sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
+    sh:path odrl:permission ;
+    sh:not [
+      sh:or ([
+        sh:class odrl:Prohibition
+      ] [
+        sh:class odrl:Duty
+      ])
+    ]
+  ], [
     sh:path odrl:obligation ;
     sh:node <http://example.com/DutyShape>
+  ], [
+    sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
+    sh:path odrl:obligation ;
+    sh:not [
+      sh:or ([
+        sh:class odrl:Permission
+      ] [
+        sh:class odrl:Prohibition
+      ])
+    ]
   ], [
     sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
     sh:path odrl:obligation ;
@@ -82,15 +102,23 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:maxCount 1
   ] .
 
+odrl:Agreement rdfs:subClassOf odrl:Policy .
+
+odrl:Assertion rdfs:subClassOf odrl:Policy .
+
+odrl:Offer rdfs:subClassOf odrl:Policy .
+
+odrl:Privacy rdfs:subClassOf odrl:Policy .
+
+odrl:Request rdfs:subClassOf odrl:Policy .
+
+odrl:Set rdfs:subClassOf odrl:Policy .
+
+odrl:Ticket rdfs:subClassOf odrl:Policy .
+
 <http://example.com/PermissionShape> a sh:NodeShape ;
   sh:targetClass odrl:Permission ;
   sh:property [
-    sh:message "A Permission must be referenced through odrl:permission." ;
-    sh:path [
-      sh:inversePath odrl:permission
-    ] ;
-    sh:minCount 1
-  ], [
     sh:message "A Permission must have one odrl:target." ;
     sh:path odrl:target ;
     sh:maxCount 1 ;
@@ -109,20 +137,22 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
         sh:class odrl:Prohibition
       ])
     ]
+  ], [
+    sh:message "A duty must be an odrl:Duty, not a Permission or Prohibition." ;
+    sh:path odrl:duty ;
+    sh:not [
+      sh:or ([
+        sh:class odrl:Permission
+      ] [
+        sh:class odrl:Prohibition
+      ])
+    ]
   ] ;
   sh:node <http://example.com/RuleShape> .
 
 <http://example.com/DutyShape> a sh:NodeShape ;
   sh:targetClass odrl:Duty ;
   sh:property [
-    sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." ;
-    sh:path [
-      sh:inversePath [
-        sh:alternativePath (odrl:duty odrl:consequence odrl:remedy odrl:obligation)
-      ]
-    ] ;
-    sh:minCount 1
-  ], [
     sh:message "Each Duty consequence must conform to ODRL duty." ;
     sh:path odrl:consequence ;
     sh:node <http://example.com/DutyShape>
@@ -142,12 +172,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 <http://example.com/ProhibitionShape> a sh:NodeShape ;
   sh:targetClass odrl:Prohibition ;
   sh:property [
-    sh:message "A Prohibition must be referenced through odrl:prohibition." ;
-    sh:path [
-      sh:inversePath odrl:prohibition
-    ] ;
-    sh:minCount 1
-  ], [
     sh:message "A Prohibition must have one odrl:target." ;
     sh:path odrl:target ;
     sh:maxCount 1 ;
@@ -162,6 +186,16 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
         sh:maxCount 0
       ] ;
       sh:node <http://example.com/DutyShape>
+    ]
+  ], [
+    sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
+    sh:path odrl:remedy ;
+    sh:not [
+      sh:or ([
+        sh:class odrl:Permission
+      ] [
+        sh:class odrl:Prohibition
+      ])
     ]
   ], [
     sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
@@ -248,6 +282,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:maxCount 1 ;
     sh:minCount 1
   ], [
+    sh:nodeKind sh:BlankNodeOrIRI ;
     sh:message "Action should be a supported action or a blank node with rdf:value and odrl:refinement." ;
     sh:path odrl:action ;
     sh:or ([
@@ -256,15 +291,18 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       sh:node <http://example.com/ActionWithRefinementShape>
     ])
   ], [
-    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." ;
+    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action in a profile." ;
     sh:path odrl:action ;
-    sh:node <http://example.com/AllowedActionValueShape> ;
-    sh:severity sh:Warning
+    sh:or ([
+      sh:node <http://example.com/AllowedActionValueShape>
+    ] [
+      sh:node <http://example.com/ActionWithRefinementShape>
+    ]) ;
+    sh:severity sh:Violation
   ], [
-    sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." ;
     sh:path (odrl:action rdf:value) ;
     sh:node <http://example.com/AllowedActionValueShape> ;
-    sh:severity sh:Warning
+    sh:severity sh:Violation
   ], [
     sh:message "A Rule may have one target." ;
     sh:path odrl:target ;
@@ -291,6 +329,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:assignee ;
     sh:maxCount 1
   ], [
+    sh:message "Assignee should be a supported party or a blank node with rdf:value." ;
     sh:path odrl:assignee ;
     sh:or ([
       sh:node <http://example.com/PartyShape>
@@ -336,10 +375,9 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       sh:node <http://example.com/LogicalConstraintShape>
     ])
   ], [
-    sh:message "Constraint elements are neither part of the ODRL Vocabulary nor typed as odrl:LeftOperand, odrl:Operator or odrl:Right." ;
     sh:path odrl:constraint ;
     sh:node <http://example.com/AllowedConstraintValueShape> ;
-    sh:severity sh:Warning
+    sh:severity sh:Violation
   ] .
 
 <http://example.com/ActionShape> a sh:NodeShape ;
@@ -408,6 +446,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] .
 
 <http://example.com/AssetCollectionShape> a sh:NodeShape ;
+  sh:targetClass odrl:AssetCollection ;
   sh:property [
     sh:nodeKind sh:IRI ;
     sh:message "An AssetCollection may have one source, and it must be an IRI." ;
@@ -447,6 +486,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   ] .
 
 <http://example.com/PartyCollectionShape> a sh:NodeShape ;
+  sh:targetClass odrl:PartyCollection ;
   sh:property [
     sh:nodeKind sh:IRI ;
     sh:message "A PartyCollection may have one source, and it must be an IRI." ;
@@ -470,19 +510,14 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     sh:path odrl:uid ;
     sh:maxCount 1
   ], [
-    sh:nodeKind rdfs:Datatype ;
+    sh:nodeKind sh:IRI ;
     sh:message "A Constraint may have one dataType." ;
-    sh:path odrl:datatype ;
+    sh:path odrl:dataType ;
     sh:maxCount 1
   ], [
     sh:message "A Constraint may have at most one unit." ;
     sh:path odrl:unit ;
     sh:maxCount 1
-  ], [
-    sh:nodeKind sh:IRI ;
-    sh:message "A Constraint unit should be an IRI." ;
-    sh:path odrl:unit ;
-    sh:severity sh:Warning
   ], [
     sh:message "A Constraint may have one status." ;
     sh:path odrl:status ;
@@ -606,7 +641,14 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
         sh:node <http://example.com/AllowedActionValueShape>
       ] [
         sh:nodeKind sh:Literal
+      ] [
+        sh:node <http://example.com/ActionWithRefinementShape>
       ])
+    ], [
+      sh:path ([
+        sh:alternativePath (odrl:permission odrl:prohibition odrl:obligation)
+      ] odrl:action rdf:value) ;
+      sh:node <http://example.com/AllowedActionValueShape>
     ]
   ]) .
 
@@ -625,31 +667,6 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
       ] odrl:constraint) ;
       sh:node <http://example.com/AllowedConstraintValueShape>
     ]
-  ]) .
-
-<http://example.com/DutyReferencedShape> a sh:NodeShape ;
-  sh:targetClass odrl:Duty ;
-  sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." ;
-  sh:or ([
-    sh:path [
-      sh:inversePath odrl:duty
-    ] ;
-    sh:minCount 1
-  ] [
-    sh:path [
-      sh:inversePath odrl:consequence
-    ] ;
-    sh:minCount 1
-  ] [
-    sh:path [
-      sh:inversePath odrl:remedy
-    ] ;
-    sh:minCount 1
-  ] [
-    sh:path [
-      sh:inversePath odrl:obligation
-    ] ;
-    sh:minCount 1
   ]) .
 
 <http://example.com/OfferRequiredAssignerShape> a sh:NodeShape ;
@@ -698,6 +715,15 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
     ] rdf:first)
   ] ;
   sh:node <http://example.com/RdfListShape> .
+
+<http://example.com/ConstraintUnitShape> a sh:NodeShape ;
+  sh:targetSubjectsOf odrl:unit ;
+  sh:property [
+    sh:nodeKind sh:IRI ;
+    sh:message "A Constraint unit should be an IRI." ;
+    sh:path odrl:unit ;
+    sh:severity sh:Warning
+  ] .
 
 <http://example.com/RdfListShape> a sh:NodeShape ;
   sh:property [

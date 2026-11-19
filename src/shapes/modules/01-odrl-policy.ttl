@@ -6,9 +6,11 @@
     sh:targetClass odrl:Policy ;
     # Only policies have rules: this also finds policies whose class is unknown (e.g. from a profile that is not loaded).
     sh:targetSubjectsOf odrl:permission, odrl:prohibition, odrl:obligation ;
+    # R03: a policy must be identified by an IRI
     sh:nodeKind sh:IRI ;
     sh:message "Policies must be identified by an IRI." ;
 
+    # R107: a policy must be typed as an ODRL policy class, or as a subclass of odrl:Policy from a loaded profile
     sh:property [
         sh:path rdf:type ;
         sh:qualifiedValueShape [
@@ -18,6 +20,7 @@
         sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
     ] ;
 
+    # R04: a policy uid must be an IRI and appear at most once
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -25,6 +28,7 @@
         sh:message "A Policy may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R02: a policy must include at least one rule (permission, prohibition or obligation)
     sh:property [
         sh:path [ sh:alternativePath ( odrl:permission odrl:prohibition odrl:obligation ) ] ;
         sh:minCount 1 ;
@@ -33,6 +37,8 @@
 
     # A rule may have no type (it follows from the property), but it must not have the type of another rule.
 
+    # A rule may have no type (it follows from the property), but it must not have the type of another rule.
+    # R108: a permission of a policy must not be typed as a Prohibition or Duty
     sh:property [
         sh:path odrl:permission ;
         sh:node :PermissionShape ;
@@ -42,7 +48,13 @@
         sh:not [ sh:or ( [ sh:class odrl:Prohibition ] [ sh:class odrl:Duty ] ) ] ;
         sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
     ] ;
+    sh:property [
+        sh:path odrl:permission ;
+        sh:not [ sh:or ( [ sh:class odrl:Prohibition ] [ sh:class odrl:Duty ] ) ] ;
+        sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
+    ] ;
 
+    # R109: an obligation of a policy must not be typed as a Permission or Prohibition
     sh:property [
         sh:path odrl:obligation ;
         sh:node :DutyShape ;
@@ -52,7 +64,13 @@
         sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
         sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
     ] ;
+    sh:property [
+        sh:path odrl:obligation ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
+    ] ;
 
+    # R110: a prohibition of a policy must not be typed as a Permission or Duty
     sh:property [
         sh:path odrl:prohibition ;
         sh:node :ProhibitionShape ;
@@ -63,12 +81,14 @@
         sh:message "A prohibition must be an odrl:Prohibition, not a Permission or Duty." ;
     ] ;
 
+    # R05: a policy profile must be an IRI
     sh:property [
         sh:path odrl:profile ;
         sh:nodeKind sh:IRI ;
         sh:message "Profile must be an IRI." ;
     ] ;
 
+    # R06: a policy inheritFrom must reference an existing odrl:Policy
     sh:property [
         sh:path odrl:inheritFrom ;
         sh:nodeKind sh:IRI ;
@@ -76,12 +96,15 @@
         sh:message "inheritFrom must reference an existing odrl:Policy." ;
     ] ;
 
+    # R07: a policy conflict strategy must appear at most once and be an IRI
     sh:property [
         sh:path odrl:conflict ;
         sh:nodeKind sh:IRI ;
         sh:maxCount 1 ;
         sh:message "Conflict strategy must appear at most once and be a ConflictTerm: odrl:perm, odrl:prohibit, or odrl:invalid." ;
     ] .
+
+# R08: a policy conflict strategy must be a known ODRL value or a profile must be declared
 
 :ConflictStrategyShape a sh:NodeShape ;
     sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
@@ -100,6 +123,7 @@
 
 
 # Offer = Rules must have one assigner
+# R09: every rule in an Offer must have exactly one assigner
 
 :OfferPolicyShape a sh:NodeShape ;
     sh:targetClass odrl:Offer ;
@@ -122,6 +146,7 @@
 
 
 # Agreement = Rules must have one assigner and one assignee
+# R10: every rule in an Agreement must have exactly one assigner and one assignee
 
 :AgreementPolicyShape a sh:NodeShape ;
     sh:targetClass odrl:Agreement ;
@@ -141,3 +166,13 @@
         sh:path odrl:obligation ;
         sh:node :AgreementDutyShape ;
     ] .
+
+# R06: shacl-engine only knows the subclasses declared in the shapes graph
+
+odrl:Agreement rdfs:subClassOf odrl:Policy .
+odrl:Assertion rdfs:subClassOf odrl:Policy .
+odrl:Offer rdfs:subClassOf odrl:Policy .
+odrl:Privacy rdfs:subClassOf odrl:Policy .
+odrl:Request rdfs:subClassOf odrl:Policy .
+odrl:Set rdfs:subClassOf odrl:Policy .
+odrl:Ticket rdfs:subClassOf odrl:Policy .

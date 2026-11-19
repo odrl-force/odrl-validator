@@ -5,6 +5,7 @@
 :PartyShape a sh:NodeShape ;
     sh:targetClass odrl:Party ;
 
+    # R99: a party may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -12,6 +13,7 @@
         sh:message "A Party may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R100: a party partOf must point to a PartyCollection
     sh:property [
         sh:path odrl:partOf ;
         sh:node :PartyCollectionShape ;
@@ -26,7 +28,9 @@
 
 
 :PartyCollectionShape a sh:NodeShape ;
+    sh:targetClass odrl:PartyCollection ;
 
+    # R101: a PartyCollection may have at most one source, and it must be an IRI
     sh:property [
         sh:path odrl:source ;
         sh:maxCount 1 ;
@@ -34,6 +38,7 @@
         sh:message "A PartyCollection may have one source, and it must be an IRI." ;
     ] ;
     
+    # R102: each refinement of a PartyCollection must be a Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:refinement ;
         sh:or (

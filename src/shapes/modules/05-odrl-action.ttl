@@ -4,6 +4,7 @@
 
 :ActionShape a sh:NodeShape ;
 
+    # R35: odrl:includedIn must be odrl:use or odrl:transfer and appear at most once
     sh:property [
         sh:path odrl:includedIn ;
         sh:maxCount 1 ;
@@ -11,6 +12,7 @@
         sh:message "The value of odrl:includedIn should be either odrl:use or odrl:transfer." ;
     ] ;
 
+    # R113: each implies value must be an Action
     sh:property [
         sh:path odrl:implies ;
         sh:node :AllowedActionValueShape ;
@@ -19,6 +21,7 @@
 
 :ActionWithRefinementShape a sh:NodeShape ;
 
+    # R34: an action refinement must have exactly one rdf:value
     sh:property [
         sh:path rdf:value ;
         sh:minCount 1 ;
@@ -26,6 +29,7 @@
         sh:message "An action refinement must have one rdf:value." ;
     ] ;
 
+    # R114: each refinement of an action must be a valid Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:refinement ;
         sh:minCount 1 ;
@@ -36,6 +40,7 @@
         sh:message "An action with refinement must have a valid refinement." ;
     ] .
 
+# R13: an action should belong to the ODRL vocabulary or be typed as odrl:Action
 :AllowedActionValueShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:or ([

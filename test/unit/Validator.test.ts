@@ -100,6 +100,18 @@ describe('The ODRL Validator', (): void => {
             new ODRLValidator();
         })
 
+        it("R122: warns when the policy declares a profile that is not loaded.", async ()=> {
+            policyQuads.push(profileDeclaration)
+            const warning = `Profile ${profile.uri} is not supported: terms from this profile are not validated.`;
+
+            const withoutProfile = await new ODRLValidator().validate(policyQuads);
+            expect(withoutProfile.valid).toBe(true);
+            expect(withoutProfile.validationResults.map(r => r.message)).toContain(warning);
+
+            const withProfile = await new ODRLValidator({profiles:[profile]}).validate(policyQuads);
+            expect(withProfile.validationResults.map(r => r.message)).not.toContain(warning);
+        })
+
         describe('with an action', (): void => {
             it("validates policies that use a profile action.", async ()=> {
                 const validator = new ODRLValidator({profiles:[profile]});

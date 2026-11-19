@@ -11,7 +11,7 @@ const { quad } = DataFactory;
 
 describe('The conflict detection rules', () => {
 
-    test('fires a conflict detection error when two constraints in a rule have the same left operand and operator, but a different right operand.', async () => {
+    test('I3: fires a conflict detection error when two constraints in a rule have the same left operand and operator, but a different right operand.', async () => {
 
         const policy = [
             quad(TEST.terms.permission1, RDF.terms.type, ODRL.terms.Permission),

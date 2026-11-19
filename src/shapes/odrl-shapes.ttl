@@ -16,9 +16,11 @@
     sh:targetClass odrl:Policy ;
     # Only policies have rules: this also finds policies whose class is unknown (e.g. from a profile that is not loaded).
     sh:targetSubjectsOf odrl:permission, odrl:prohibition, odrl:obligation ;
+    # R03: a policy must be identified by an IRI
     sh:nodeKind sh:IRI ;
     sh:message "Policies must be identified by an IRI." ;
 
+    # R107: a policy must be typed as an ODRL policy class, or as a subclass of odrl:Policy from a loaded profile
     sh:property [
         sh:path rdf:type ;
         sh:qualifiedValueShape [
@@ -28,6 +30,7 @@
         sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
     ] ;
 
+    # R04: a policy uid must be an IRI and appear at most once
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -35,6 +38,7 @@
         sh:message "A Policy may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R02: a policy must include at least one rule (permission, prohibition or obligation)
     sh:property [
         sh:path [ sh:alternativePath ( odrl:permission odrl:prohibition odrl:obligation ) ] ;
         sh:minCount 1 ;
@@ -43,6 +47,8 @@
 
     # A rule may have no type (it follows from the property), but it must not have the type of another rule.
 
+    # A rule may have no type (it follows from the property), but it must not have the type of another rule.
+    # R108: a permission of a policy must not be typed as a Prohibition or Duty
     sh:property [
         sh:path odrl:permission ;
         sh:node :PermissionShape ;
@@ -52,7 +58,13 @@
         sh:not [ sh:or ( [ sh:class odrl:Prohibition ] [ sh:class odrl:Duty ] ) ] ;
         sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
     ] ;
+    sh:property [
+        sh:path odrl:permission ;
+        sh:not [ sh:or ( [ sh:class odrl:Prohibition ] [ sh:class odrl:Duty ] ) ] ;
+        sh:message "A permission must be an odrl:Permission, not a Prohibition or Duty." ;
+    ] ;
 
+    # R109: an obligation of a policy must not be typed as a Permission or Prohibition
     sh:property [
         sh:path odrl:obligation ;
         sh:node :DutyShape ;
@@ -62,7 +74,13 @@
         sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
         sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
     ] ;
+    sh:property [
+        sh:path odrl:obligation ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "An obligation must be an odrl:Duty, not a Permission or Prohibition." ;
+    ] ;
 
+    # R110: a prohibition of a policy must not be typed as a Permission or Duty
     sh:property [
         sh:path odrl:prohibition ;
         sh:node :ProhibitionShape ;
@@ -73,12 +91,14 @@
         sh:message "A prohibition must be an odrl:Prohibition, not a Permission or Duty." ;
     ] ;
 
+    # R05: a policy profile must be an IRI
     sh:property [
         sh:path odrl:profile ;
         sh:nodeKind sh:IRI ;
         sh:message "Profile must be an IRI." ;
     ] ;
 
+    # R06: a policy inheritFrom must reference an existing odrl:Policy
     sh:property [
         sh:path odrl:inheritFrom ;
         sh:nodeKind sh:IRI ;
@@ -86,12 +106,15 @@
         sh:message "inheritFrom must reference an existing odrl:Policy." ;
     ] ;
 
+    # R07: a policy conflict strategy must appear at most once and be an IRI
     sh:property [
         sh:path odrl:conflict ;
         sh:nodeKind sh:IRI ;
         sh:maxCount 1 ;
         sh:message "Conflict strategy must appear at most once and be a ConflictTerm: odrl:perm, odrl:prohibit, or odrl:invalid." ;
     ] .
+
+# R08: a policy conflict strategy must be a known ODRL value or a profile must be declared
 
 :ConflictStrategyShape a sh:NodeShape ;
     sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
@@ -110,6 +133,7 @@
 
 
 # Offer = Rules must have one assigner
+# R09: every rule in an Offer must have exactly one assigner
 
 :OfferPolicyShape a sh:NodeShape ;
     sh:targetClass odrl:Offer ;
@@ -132,6 +156,7 @@
 
 
 # Agreement = Rules must have one assigner and one assignee
+# R10: every rule in an Agreement must have exactly one assigner and one assignee
 
 :AgreementPolicyShape a sh:NodeShape ;
     sh:targetClass odrl:Agreement ;
@@ -152,6 +177,16 @@
         sh:node :AgreementDutyShape ;
     ] .
 
+# R06: shacl-engine only knows the subclasses declared in the shapes graph
+
+odrl:Agreement rdfs:subClassOf odrl:Policy .
+odrl:Assertion rdfs:subClassOf odrl:Policy .
+odrl:Offer rdfs:subClassOf odrl:Policy .
+odrl:Privacy rdfs:subClassOf odrl:Policy .
+odrl:Request rdfs:subClassOf odrl:Policy .
+odrl:Set rdfs:subClassOf odrl:Policy .
+odrl:Ticket rdfs:subClassOf odrl:Policy .
+
 
 #################################################
 # Shape for Rule = must have one action
@@ -160,6 +195,7 @@
 :RuleShape a sh:NodeShape ;
     sh:targetClass odrl:Permission, odrl:Prohibition, odrl:Duty ;
 
+    # R112: a rule may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -167,38 +203,46 @@
         sh:message "A Rule may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R11: every rule must have exactly one action
     sh:property [
         sh:path odrl:action ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:message "A Rule must have one action." ;
     ] ;
+    # R12: an action must be a known value, or a blank node with rdf:value and refinement
     sh:property [
         sh:path odrl:action ;
+        sh:nodeKind sh:BlankNodeOrIRI ;
         sh:or (
             [ sh:node :ActionShape ]
             [ sh:node :ActionWithRefinementShape ]
         );
         sh:message "Action should be a supported action or a blank node with rdf:value and odrl:refinement." ;    
     ] ;
+    # R13: an action should belong to the ODRL vocabulary or be typed as odrl:Action
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:action ;
-        sh:node :AllowedActionValueShape ;
-        sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." ;
+        sh:or (
+            [ sh:node :AllowedActionValueShape ]
+            [ sh:node :ActionWithRefinementShape ]
+        ) ;
+        sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action in a profile." ;
     ] ;
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path (odrl:action rdf:value) ;
         sh:node :AllowedActionValueShape ;
-        sh:message "Action is neither part of the ODRL Vocabulary nor typed as odrl:Action." ;
     ] ;
 
+    # R14: a rule may have at most one target
     sh:property [
         sh:path odrl:target ;
         sh:maxCount 1 ;
         sh:message "A Rule may have one target." ;
     ] ;
+    # R15: a target must be an Asset or an AssetCollection
     sh:property [
         sh:path odrl:target ;
         sh:or (
@@ -207,6 +251,7 @@
         );
         sh:message "Target should be a supported asset or a blank node with rdf:value." ;    
     ] ;
+    # R16: a target should be typed as odrl:Asset or odrl:AssetCollection
     sh:property [
         sh:severity sh:Warning ;
         sh:path odrl:target ;
@@ -217,18 +262,22 @@
         sh:message "Target should be a Asset or AssetCollection." ;
     ] ;
 
+    # R17: a rule may have at most one assignee
     sh:property [
     sh:path odrl:assignee ;
     sh:maxCount 1 ;
     sh:message "A Rule may have at most one assignee." ;
     ] ;
+    # R18: an assignee must conform to the Party or PartyCollection shape
     sh:property [
         sh:path odrl:assignee ;
         sh:or (
             [ sh:node :PartyShape ]
             [ sh:node :PartyCollectionShape ]
         );
+        sh:message "Assignee should be a supported party or a blank node with rdf:value." ;
     ] ;
+    # R19: an assignee should be typed as odrl:Party or odrl:PartyCollection
     sh:property [
         sh:severity sh:Warning ;
         sh:path odrl:assignee ;
@@ -239,11 +288,13 @@
         sh:message "The assignee should be a Party or PartyCollection." ;
     ] ;
 
+    # R20: a rule may have at most one assigner
     sh:property [
         sh:path odrl:assigner ;
         sh:maxCount 1 ;
         sh:message "A Rule may have at most one assigner." ;
     ] ;
+    # R21: an assigner must conform to the Party or PartyCollection shape
     sh:property [
         sh:path odrl:assigner ;
         sh:or (
@@ -252,6 +303,7 @@
         );        
         sh:message "Assigner should be a supported party or a blank node with rdf:value." ;    
     ] ;
+    # R22: an assigner should be typed as odrl:Party or odrl:PartyCollection
     sh:property [
         sh:severity sh:Warning ;
         sh:path odrl:assigner ;
@@ -262,6 +314,7 @@
         sh:message "The assigner should be a Party or PartyCollection." ;
     ] ;
 
+    # R23: each constraint in a rule must be a valid Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:constraint ;
         sh:or (
@@ -270,15 +323,17 @@
         ) ;
         sh:message "Each constraint must conform to ODRL constraint or ODRL logical constraint." ;
     ] ;
+    # R24: constraint terms should belong to the ODRL vocabulary or be correctly typed
+    # message error comes from R41 and R42
     sh:property [
-        sh:severity sh:Warning ;
+        sh:severity sh:Violation ;
         sh:path odrl:constraint ;
         sh:node :AllowedConstraintValueShape ;
-        sh:message "Constraint elements are neither part of the ODRL Vocabulary nor typed as odrl:LeftOperand, odrl:Operator or odrl:Right." ;
     ] .
 
 # Needs profile
 
+# R31: a collection with odrl:refinement must have an odrl:source or rdf:value
 :RefinementNeedsSourceShape a sh:NodeShape ;
     sh:targetSubjectsOf odrl:refinement ;
     sh:or (
@@ -287,20 +342,29 @@
     ) ;
     sh:message "A collection with refinement must have one source." .
 
+# R32: an action outside the ODRL vocabulary requires a declared odrl:profile
 :ActionRequiresProfileShape a sh:NodeShape ;
     sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
     sh:or (
         [ sh:property [ sh:path odrl:profile ; sh:minCount 1 ] ]
-        [ sh:property [
-            sh:path ( [ sh:alternativePath ( odrl:permission odrl:prohibition odrl:obligation ) ] odrl:action ) ;
-            sh:or (
-                [ sh:node :AllowedActionValueShape ]
-                [ sh:nodeKind sh:Literal ]
-            ) ;
-        ] ]
+        [
+            sh:property [
+                sh:path ( [ sh:alternativePath ( odrl:permission odrl:prohibition odrl:obligation ) ] odrl:action ) ;
+                sh:or (
+                    [ sh:node :AllowedActionValueShape ]
+                    [ sh:nodeKind sh:Literal ]
+                    [ sh:node :ActionWithRefinementShape ]
+                ) ;
+            ] ;
+            sh:property [
+                sh:path ( [ sh:alternativePath ( odrl:permission odrl:prohibition odrl:obligation ) ] odrl:action rdf:value ) ;
+                sh:node :AllowedActionValueShape ;
+            ] ;
+        ]
     ) ;
     sh:message "An action outside the ODRL vocabulary requires a declared odrl:profile." .
 
+# R33: a constraint term outside the ODRL vocabulary requires a declared odrl:profile
 :ConstraintVocabRequiresProfileShape a sh:NodeShape ;
     sh:targetClass odrl:Policy, odrl:Set, odrl:Offer, odrl:Agreement ;
     sh:or (
@@ -319,13 +383,8 @@
     sh:targetClass odrl:Permission ;
     sh:node :RuleShape ;
 
-    # At least one node points to this permission with odrl:permission 
-    sh:property [
-        sh:path [ sh:inversePath odrl:permission ] ;
-        sh:minCount 1 ;
-        sh:message "A Permission must be referenced through odrl:permission." ;
-    ] ;
 
+    # R25: a permission must have exactly one target
     sh:property [
         sh:path odrl:target ;
         sh:minCount 1 ;
@@ -333,10 +392,16 @@
         sh:message "A Permission must have one odrl:target." ;
     ] ;
 
+    # R26: each duty of a permission must conform to the Duty shape
     sh:property [
         sh:path odrl:duty ;  
         sh:node :DutyShape ;  
         sh:message "Each Permission duty must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:duty ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A duty must be an odrl:Duty, not a Permission or Prohibition." ;
     ] ;
     sh:property [
         sh:path odrl:duty ;
@@ -350,13 +415,7 @@
     sh:targetClass odrl:Prohibition ;
     sh:node :RuleShape ;
 
-    # At least one node points to this prohibition with odrl:prohibition 
-    sh:property [
-        sh:path [ sh:inversePath odrl:prohibition ] ;
-        sh:minCount 1 ;
-        sh:message "A Prohibition must be referenced through odrl:prohibition." ;
-    ] ;
-
+    # R27: a prohibition must have exactly one target
     sh:property [
         sh:path odrl:target ;
         sh:minCount 1 ;
@@ -364,11 +423,13 @@
         sh:message "A Prohibition must have one odrl:target." ;
     ] ;
 
+    # R28: each remedy of a prohibition must conform to the Duty shape
     sh:property [
         sh:path odrl:remedy ;
         sh:node [
             sh:node :DutyShape ;
 
+            # R29: a remedy must not have a consequence
             sh:property [
                 sh:path odrl:consequence ;
                 sh:maxCount 0 ;
@@ -376,6 +437,11 @@
             ]
         ] ;
         sh:message "Each Prohibition remedy must conform to ODRL duty." ;
+    ] ;
+    sh:property [
+        sh:path odrl:remedy ;
+        sh:not [ sh:or ( [ sh:class odrl:Permission ] [ sh:class odrl:Prohibition ] ) ] ;
+        sh:message "A remedy must be an odrl:Duty, not a Permission or Prohibition." ;
     ] ;
     sh:property [
         sh:path odrl:remedy ;
@@ -390,13 +456,7 @@
     sh:targetClass odrl:Duty ;
     sh:node :RuleShape ;
 
-    # At least one node points to this duty with odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation
-    sh:property [
-        sh:path [ sh:inversePath [ sh:alternativePath ( odrl:duty odrl:consequence odrl:remedy odrl:obligation ) ] ] ;
-        sh:minCount 1 ;
-        sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." ;
-    ] ;
-
+    # R30: each consequence of a duty must conform to the Duty shape
     sh:property [
         sh:path odrl:consequence ;  
         sh:node :DutyShape ;  
@@ -408,19 +468,8 @@
         sh:message "A consequence must be an odrl:Duty, not a Permission or Prohibition." ;
     ] .
 
-# At least one node points to this duty with odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation
-:DutyReferencedShape a sh:NodeShape ;
-    sh:targetClass odrl:Duty ;
-    sh:or (
-        [ sh:path [ sh:inversePath odrl:duty ] ; sh:minCount 1 ]
-        [ sh:path [ sh:inversePath odrl:consequence ] ; sh:minCount 1 ]
-        [ sh:path [ sh:inversePath odrl:remedy ] ; sh:minCount 1 ]
-        [ sh:path [ sh:inversePath odrl:obligation ] ; sh:minCount 1 ]
-    ) ;
-    sh:message "A Duty must be referenced through odrl:duty, odrl:consequence, odrl:remedy or odrl:obligation." .
+# R09: every rule in an Offer must have exactly one assigner
 
-
-# Rules for offer
 :OfferPermissionShape a sh:NodeShape ;
     sh:node :PermissionShape ;
     sh:node :OfferRequiredAssignerShape .
@@ -440,7 +489,7 @@
         sh:message "An Offer rule must have one assigner." ;
     ] .
 
-# Rules for Agreement
+# R10: every rule in an Agreement must have exactly one assigner and one assignee
 
 :AgreementPermissionShape a sh:NodeShape ;
     sh:node :PermissionShape ;
@@ -479,6 +528,7 @@
 :ConstraintShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
 
+    # R115: a constraint may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -486,31 +536,29 @@
         sh:message "A Constraint may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R116: a constraint may have at most one dataType, and it must be an IRI
     sh:property [
-        sh:path odrl:datatype ;
+        sh:path odrl:dataType ;
         sh:maxCount 1 ;
-        sh:nodeKind rdfs:Datatype;
+        sh:nodeKind sh:IRI ;
         sh:message "A Constraint may have one dataType." ;
     ] ;
 
+    # R117: a constraint may have at most one unit
     sh:property [
         sh:path odrl:unit ;
         sh:maxCount 1 ;
         sh:message "A Constraint may have at most one unit." ;
     ] ;
-    sh:property [
-        sh:severity sh:Warning ;
-        sh:path odrl:unit ;
-        sh:nodeKind sh:IRI ;
-        sh:message "A Constraint unit should be an IRI." ;
-    ] ;
 
+    # R119: a constraint may have at most one status
     sh:property [
         sh:path odrl:status ;
         sh:maxCount 1 ;
         sh:message "A Constraint may have one status." ;
     ] ;
 
+    # R36: a constraint must have exactly one leftOperand
     sh:property [
         sh:path odrl:leftOperand ;
         sh:minCount 1 ;
@@ -518,6 +566,7 @@
         sh:message "A Constraint must have one odrl:leftOperand." ;
     ] ;
 
+    # R37: a constraint must have exactly one operator
     sh:property [
         sh:path odrl:operator ;
         sh:minCount 1 ;
@@ -525,6 +574,7 @@
         sh:message "A Constraint must have one odrl:operator." ;
     ] ;
     
+    # R38: a constraint must have either rightOperand or rightOperandReference, but not both and not neither
     sh:xone (
         [ 
             sh:property [ 
@@ -540,6 +590,7 @@
         ] ]
     ) ;
 
+    # R39: the rightOperand must be a literal, IRI, odrl:RightOperand instance, or a list of these
     sh:property [
         sh:path odrl:rightOperand ;
         sh:maxCount 1 ;
@@ -552,6 +603,7 @@
         sh:message "A Constraint must declare exactly one odrl:rightOperand, given as a literal, an IRI, an odrl:RightOperand instance, or a list of these." ;
     ] ;
 
+    # R40: the rightOperandReference must be an IRI or a list of IRIs
     sh:property [
         sh:path odrl:rightOperandReference ;
         sh:maxCount 1 ;
@@ -560,6 +612,18 @@
             [ sh:node :RightOperandReferenceListShape ]
         ) ;
         sh:message "A Constraint must declare exactly one odrl:rightOperandReference, given as an IRI or a list of IRIs." ;
+    ] .
+
+# R118: a constraint unit should be an IRI
+# It is a separate shape: as a Warning inside :ConstraintShape, it would make the rule constraint (R23) a Violation.
+
+:ConstraintUnitShape a sh:NodeShape ;
+    sh:targetSubjectsOf odrl:unit ;
+    sh:property [
+        sh:severity sh:Warning ;
+        sh:path odrl:unit ;
+        sh:nodeKind sh:IRI ;
+        sh:message "A Constraint unit should be an IRI." ;
     ] .
 
 :RightOperandListShape a sh:NodeShape ;
@@ -599,6 +663,7 @@
     sh:targetSubjectsOf odrl:and ;
     sh:targetSubjectsOf odrl:andSequence ;
     
+    # R120: a LogicalConstraint may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -606,6 +671,7 @@
         sh:message "A Logical Constraint may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R43: a LogicalConstraint must contain exactly one of: odrl:and, odrl:or, odrl:xone, odrl:andSequence
     sh:property [
         sh:path [ sh:alternativePath ( odrl:or odrl:xone odrl:and odrl:andSequence ) ] ;
         sh:minCount 1 ;
@@ -614,6 +680,7 @@
         sh:message "A LogicalConstraint must contain one of odrl:and, odrl:or, odrl:xone, or odrl:andSequence." ;
     ] .
 
+# R44: each element of a LogicalConstraint must be a valid Constraint
 :ConstraintListShape a sh:NodeShape ;
     sh:node :RdfListShape ;
     sh:property [
@@ -669,6 +736,7 @@
 :AllowedConstraintValueShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ; 
 
+    # R41: the leftOperand should belong to the ODRL vocabulary or be typed as odrl:LeftOperand
     sh:property [
         sh:severity sh:Violation ;
         sh:path odrl:leftOperand ;
@@ -713,6 +781,7 @@
         sh:message "The constraint leftOperand should be part of the ODRL vocabulary or typed as odrl:LeftOperand in a profile." ;
     ] ;
     
+    # R42: the operator should be a standard ODRL operator
     sh:property [
         sh:severity sh:Violation ;
         sh:path odrl:operator ;
@@ -745,6 +814,7 @@
 :PartyShape a sh:NodeShape ;
     sh:targetClass odrl:Party ;
 
+    # R99: a party may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -752,6 +822,7 @@
         sh:message "A Party may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R100: a party partOf must point to a PartyCollection
     sh:property [
         sh:path odrl:partOf ;
         sh:node :PartyCollectionShape ;
@@ -766,7 +837,9 @@
 
 
 :PartyCollectionShape a sh:NodeShape ;
+    sh:targetClass odrl:PartyCollection ;
 
+    # R101: a PartyCollection may have at most one source, and it must be an IRI
     sh:property [
         sh:path odrl:source ;
         sh:maxCount 1 ;
@@ -774,6 +847,7 @@
         sh:message "A PartyCollection may have one source, and it must be an IRI." ;
     ] ;
     
+    # R102: each refinement of a PartyCollection must be a Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:refinement ;
         sh:or (
@@ -790,6 +864,7 @@
 
 :ActionShape a sh:NodeShape ;
 
+    # R35: odrl:includedIn must be odrl:use or odrl:transfer and appear at most once
     sh:property [
         sh:path odrl:includedIn ;
         sh:maxCount 1 ;
@@ -797,6 +872,7 @@
         sh:message "The value of odrl:includedIn should be either odrl:use or odrl:transfer." ;
     ] ;
 
+    # R113: each implies value must be an Action
     sh:property [
         sh:path odrl:implies ;
         sh:node :AllowedActionValueShape ;
@@ -805,6 +881,7 @@
 
 :ActionWithRefinementShape a sh:NodeShape ;
 
+    # R34: an action refinement must have exactly one rdf:value
     sh:property [
         sh:path rdf:value ;
         sh:minCount 1 ;
@@ -812,6 +889,7 @@
         sh:message "An action refinement must have one rdf:value." ;
     ] ;
 
+    # R114: each refinement of an action must be a valid Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:refinement ;
         sh:minCount 1 ;
@@ -822,6 +900,7 @@
         sh:message "An action with refinement must have a valid refinement." ;
     ] .
 
+# R13: an action should belong to the ODRL vocabulary or be typed as odrl:Action
 :AllowedActionValueShape a sh:NodeShape ;
     sh:severity sh:Violation ;
     sh:or ([
@@ -910,6 +989,7 @@
 :AssetShape a sh:NodeShape ;
     sh:targetClass odrl:Asset ;
 
+    # R103: an asset may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
         sh:maxCount 1 ;
@@ -917,6 +997,7 @@
         sh:message "An Asset may have one uid, and it must be an IRI." ;
     ] ;
 
+    # R104: an asset partOf must point to an AssetCollection
     sh:property [
         sh:path odrl:partOf ;
         sh:node :AssetCollectionShape ;
@@ -929,6 +1010,7 @@
         sh:message "An Asset must be partOf an AssetCollection, not a Party or PartyCollection." ;
     ] ;
 
+    # R121: an asset hasPolicy must point to a Policy IRI
     sh:property [
         sh:path odrl:hasPolicy ;
         sh:nodeKind sh:IRI ;
@@ -936,7 +1018,9 @@
     ] .
 
 :AssetCollectionShape a sh:NodeShape ;
+    sh:targetClass odrl:AssetCollection ;
     
+    # R105: an AssetCollection may have at most one source, and it must be an IRI
     sh:property [
         sh:path odrl:source ;
         sh:maxCount 1 ;
@@ -944,6 +1028,7 @@
         sh:message "An AssetCollection may have one source, and it must be an IRI." ;
     ] ;
     
+    # R106: each refinement of an AssetCollection must be a Constraint or LogicalConstraint
     sh:property [
         sh:path odrl:refinement ;
         sh:or (
