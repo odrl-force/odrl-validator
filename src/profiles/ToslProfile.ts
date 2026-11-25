@@ -355,7 +355,7 @@ tosl:assign a skos:Concept, owl:NamedIndividual, odrl:Action ;
 tosl:constraintLeftOperands a skos:Collection ;
   skos:prefLabel "Constraint Left Operands"@en ;
   skos:scopeNote "TOSL Profile Terms"@en ;
-  skos:member tosl:justification, tosl:totalAmount, tosl:inactivityPeriod, tosl:consumerResidentCountry, tosl:consentType, tosl:compliance, tosl:licensingType, tosl:effect .
+  skos:member tosl:justification, tosl:totalAmount, tosl:inactivityPeriod, tosl:consumerResidentCountry, tosl:consentType, tosl:compliance, tosl:licensingType, tosl:effect, <http://xmlns.com/foaf/0.1/age> .
 
 tosl:justification a skos:Concept, owl:NamedIndividual, odrl:LeftOperand ;
   rdfs:label "Justification" ;
@@ -396,6 +396,11 @@ tosl:effect a skos:Concept, owl:NamedIndividual, odrl:LeftOperand ;
   rdfs:label "Effect" ;
   rdfs:isDefinedBy tosl: ;
   skos:definition "This stipulates the effect or impact that an action may or must not cause, serving as a parameter to evaluate the outcomes of an action." .
+
+<http://xmlns.com/foaf/0.1/age> a skos:Concept, owl:NamedIndividual, odrl:LeftOperand ;
+  rdfs:label "Age" ;
+  rdfs:isDefinedBy <http://xmlns.com/foaf/0.1/> ;
+  skos:definition "The age in years of a party, used to compare against a minimum or maximum age in the context of a constraint." .
 
 tosl:constraintRightOperands a skos:Collection ;
   skos:prefLabel "Constraint Right Operands"@en ;
