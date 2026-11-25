@@ -1009,7 +1009,7 @@ tosl:consumerPlaceLaw a tosl:Law .
                 a odrl:Constraint ;
                 odrl:leftOperand odrl:spatial ;
                 odrl:operator odrl:isAnyOf ;
-                odrl:rightOperand ( "CU" "IR" "KP" "SY" "RU" );
+                odrl:rightOperand ( <https://www.wikidata.org/wiki/Q241> <https://www.wikidata.org/wiki/Q794> <https://www.wikidata.org/wiki/Q423> <https://www.wikidata.org/wiki/Q858> <https://www.wikidata.org/wiki/Q159> );
             ]
             [ 
                 a odrl:Constraint ;
