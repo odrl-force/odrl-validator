@@ -291,8 +291,9 @@ export class ODRLValidator implements IODRLValidator {
 
     /** Flattens a SHACL result with its nested results into one result per message. */
     private parseResult(result: any): ValidationResult[] {
-        if (result.results && result.results.length > 0) {
-            return result.results.flatMap((r: any) => this.parseResult(r));
+        const nested = (result.results ?? []).filter((r: any) => r.shape?.message?.length > 0 || r.results?.length > 0);
+        if (nested.length > 0) {
+            return nested.flatMap((r: any) => this.parseResult(r));
         };
 
         const messages =
