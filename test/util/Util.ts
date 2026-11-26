@@ -3,7 +3,11 @@ import { createVocabulary } from "rdf-vocabulary";
 export const TEST = createVocabulary(
     'http://example.org/',
     'policy1',
+    'policy2',
+    'policy3',
     'permission1',
+    'permission2',
+    'permission3',
     'prohibition1',
     'duty1',
     'asset',

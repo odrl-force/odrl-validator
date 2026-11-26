@@ -9,6 +9,8 @@ export const DETECTION = createVocabulary('https://w3id.org/force/detection#',
     'reason'
 )
 
+export const DCT = createVocabulary('http://purl.org/dc/terms/',
+    'isReplacedBy')
 
 export const SH = createVocabulary('http://www.w3.org/ns/shacl#',
     'NodeShape',
