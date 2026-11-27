@@ -30,6 +30,15 @@ async function main() {
             console.log("Created the following profile:", result.constantName);
         } catch(e) {
             console.log("Error creating profile:", profile,  e);
+            // fall back to the previously generated version of the profile (if any),
+            // so a failed fetch does not drop it from the index
+            const previous = existingProfile(profile);
+            if (previous) {
+                generated.push(previous);
+                console.log("Falling back to previously generated profile:", previous.constantName);
+            } else {
+                console.log("No previously generated version found for profile:", profile);
+            }
         }
     }
     writeProfileIndex(generated);
@@ -59,20 +68,31 @@ interface GeneratedProfile {
     moduleName: string; // file name without .ts
 }
 
+function profileNames(slug: string): GeneratedProfile {
+    const moduleName = `${toPascalCase(slug)}Profile`;       // dpv-odrl -> DpvOdrlProfile
+    const constantName = `${toConstantCase(slug)}_PROFILE`;  // dpv-odrl -> DPV_ODRL_PROFILE
+    return { slug, constantName, moduleName };
+}
+
+// returns the previously generated profile, if its TS module still exists on disk
+function existingProfile(slug: string): GeneratedProfile | undefined {
+    const names = profileNames(slug);
+    return fs.existsSync(path.join(profileDir, `${names.moduleName}.ts`)) ? names : undefined;
+}
+
 // persists the profile to 
 // `src/profiles/source` as ttl
 // `src/profiles/` as TS file
 // returns a list of the TS constant created
 function persistProfile(slug: string, profileSerialized: string): GeneratedProfile {
-    const moduleName = `${toPascalCase(slug)}Profile`;       // dpv-odrl -> DpvOdrlProfile
-    const constantName = `${toConstantCase(slug)}_PROFILE`;  // dpv-odrl -> DPV_ODRL_PROFILE
-    // persist to typescript file and to 
-
+    const names = profileNames(slug);
+    const { moduleName, constantName } = names;
 
     const profileTSContent = `export const ${constantName}: string = \`${profileSerialized}\``
     fs.writeFileSync(path.join(profileDir, `${moduleName}.ts`), profileTSContent);
     fs.writeFileSync(path.join(profileDir, "source", `${slug}.ttl`), profileSerialized);
-    return { slug, constantName, moduleName };}
+    return names;
+}
 
 async function fetchProfile(url: string): Promise<Quad[]> {
     const { data } = await rdfDereferencer.dereference(url)

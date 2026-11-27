@@ -14,3 +14,4 @@ Thumbs.db
 !.env.test
 
 .devcontainer
+.claude
