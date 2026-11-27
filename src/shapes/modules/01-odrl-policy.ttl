@@ -22,6 +22,9 @@
         sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
     ] ;
 
+# ignore metadata DC terms
+    sh:ignoredProperties ( dcterms:abstract dcterms:accessRights dcterms:accrualMethod dcterms:accrualPeriodicity dcterms:accrualPolicy dcterms:alternative dcterms:audience dcterms:available dcterms:bibliographicCitation dcterms:conformsTo dcterms:contributor dcterms:coverage dcterms:created dcterms:creator dcterms:date dcterms:dateAccepted dcterms:dateCopyrighted dcterms:dateSubmitted dcterms:description dcterms:educationLevel dcterms:extent dcterms:format dcterms:hasFormat dcterms:hasPart dcterms:hasVersion dcterms:identifier dcterms:instructionalMethod dcterms:isFormatOf dcterms:isPartOf dcterms:isReferencedBy dcterms:isReplacedBy dcterms:isRequiredBy dcterms:isVersionOf dcterms:issued dcterms:language dcterms:license dcterms:mediator dcterms:medium dcterms:modified dcterms:provenance dcterms:publisher dcterms:references dcterms:relation dcterms:replaces dcterms:requires dcterms:rights dcterms:rightsHolder dcterms:source dcterms:spatial dcterms:subject dcterms:tableOfContents dcterms:temporal dcterms:title dcterms:type dcterms:valid ) ;
+
     # R04: a policy uid must be an IRI and appear at most once
     sh:property [
         sh:path odrl:uid ;
