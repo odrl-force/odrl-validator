@@ -10,6 +10,8 @@
     sh:nodeKind sh:IRI ;
     sh:message "Policies must be identified by an IRI." ;
 
+    sh:closed true;
+
     # R107: a policy must be typed as an ODRL policy class, or as a subclass of odrl:Policy from a loaded profile
     sh:property [
         sh:path rdf:type ;

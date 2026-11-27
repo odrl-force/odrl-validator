@@ -1,4 +1,5 @@
-export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+export const SHAPES: string = `@prefix ex: <http://example.org/> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -9,6 +10,7 @@ export const SHAPES: string = `@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
   sh:targetSubjectsOf odrl:permission, odrl:prohibition, odrl:obligation ;
   sh:nodeKind sh:IRI ;
   sh:message "Policies must be identified by an IRI." ;
+  sh:closed true ;
   sh:property [
     sh:message "The policy type must be an ODRL policy class, or a subclass of odrl:Policy defined in a loaded profile." ;
     sh:path rdf:type ;
@@ -231,7 +233,11 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
 
 <http://example.com/RuleShape> a sh:NodeShape ;
   sh:targetClass odrl:Prohibition, odrl:Duty, odrl:Permission ;
+  sh:message "A rule must be typed as odrl:Permission, odrl:Prohibition or odrl:Duty." ;
+  sh:closed true ;
   sh:property [
+    sh:path rdf:type
+  ], [
     sh:nodeKind sh:IRI ;
     sh:message "A Rule may have one uid, and it must be an IRI." ;
     sh:path odrl:uid ;
@@ -338,7 +344,15 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
     sh:path odrl:constraint ;
     sh:node <http://example.com/AllowedConstraintValueShape> ;
     sh:severity sh:Violation
-  ] .
+  ] ;
+  sh:or ([
+    sh:class odrl:Permission
+  ] [
+    sh:class odrl:Prohibition
+  ] [
+    sh:class odrl:Duty
+  ]) ;
+  sh:ignoredProperties (odrl:duty odrl:remedy odrl:consequence <http://example.org/ns/derivedFrom>) .
 
 <http://example.com/ActionShape> a sh:NodeShape ;
   sh:property [
@@ -464,7 +478,12 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
 
 <http://example.com/ConstraintShape> a sh:NodeShape ;
   sh:targetClass odrl:Constraint ;
+  sh:closed true ;
   sh:property [
+    sh:message "A constraint must have the type of odrl:Constraint." ;
+    sh:path rdf:type ;
+    sh:hasValue odrl:Constraint
+  ], [
     sh:nodeKind sh:IRI ;
     sh:message "A Constraint may have one uid, and it must be an IRI." ;
     sh:path odrl:uid ;
@@ -532,7 +551,12 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
 <http://example.com/LogicalConstraintShape> a sh:NodeShape ;
   sh:targetClass odrl:LogicalConstraint ;
   sh:targetSubjectsOf odrl:or, odrl:xone, odrl:and, odrl:andSequence ;
+  sh:closed true ;
   sh:property [
+    sh:message "A logical constraint must have the type of odrl:LogicalConstraint." ;
+    sh:path rdf:type ;
+    sh:hasValue odrl:LogicalConstraint
+  ], [
     sh:nodeKind sh:IRI ;
     sh:message "A Logical Constraint may have one uid, and it must be an IRI." ;
     sh:path odrl:uid ;

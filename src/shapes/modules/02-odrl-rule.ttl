@@ -1,10 +1,25 @@
-
 #################################################
 # Shape for Rule = must have one action
 #################################################
 
 :RuleShape a sh:NodeShape ;
     sh:targetClass odrl:Permission, odrl:Prohibition, odrl:Duty ;
+
+    sh:closed true;
+    sh:ignoredProperties ( odrl:duty odrl:remedy odrl:consequence <http://example.org/ns/derivedFrom> ) ;
+
+    # R???: a rule must be typed as an ODRL Permission, ODRL Prohibition or ODRL Duty.
+    sh:or (
+        [ sh:class odrl:Permission ]
+        [ sh:class odrl:Prohibition ]
+        [ sh:class odrl:Duty ]
+    ) ;
+    sh:message "A rule must be typed as odrl:Permission, odrl:Prohibition or odrl:Duty." ;
+
+    # Declares rdf:type so the closed shape allows it (the type itself is checked by the sh:or above).
+    sh:property [
+        sh:path rdf:type ;
+    ] ;
 
     # R112: a rule may have at most one uid, and it must be an IRI
     sh:property [
@@ -193,7 +208,6 @@
 :PermissionShape a sh:NodeShape ;
     sh:targetClass odrl:Permission ;
     sh:node :RuleShape ;
-
 
     # R25: a permission must have exactly one target
     sh:property [

@@ -4,6 +4,13 @@
 
 :ConstraintShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:closed true;
+
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue odrl:Constraint ;
+        sh:message "A constraint must have the type of odrl:Constraint." ;
+    ] ;
 
     # R115: a constraint may have at most one uid, and it must be an IRI
     sh:property [
@@ -139,7 +146,15 @@
     sh:targetSubjectsOf odrl:xone ;
     sh:targetSubjectsOf odrl:and ;
     sh:targetSubjectsOf odrl:andSequence ;
+
+    sh:closed true;
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue odrl:LogicalConstraint ;
+        sh:message "A logical constraint must have the type of odrl:LogicalConstraint." ;
+    ] ;
     
+
     # R120: a LogicalConstraint may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;

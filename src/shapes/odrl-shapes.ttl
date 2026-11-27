@@ -20,6 +20,8 @@
     sh:nodeKind sh:IRI ;
     sh:message "Policies must be identified by an IRI." ;
 
+    sh:closed true;
+
     # R107: a policy must be typed as an ODRL policy class, or as a subclass of odrl:Policy from a loaded profile
     sh:property [
         sh:path rdf:type ;
@@ -182,6 +184,22 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
 
 :RuleShape a sh:NodeShape ;
     sh:targetClass odrl:Permission, odrl:Prohibition, odrl:Duty ;
+
+    sh:closed true;
+    sh:ignoredProperties ( odrl:duty odrl:remedy odrl:consequence <http://example.org/ns/derivedFrom> ) ;
+
+    # R???: a rule must be typed as an ODRL Permission, ODRL Prohibition or ODRL Duty.
+    sh:or (
+        [ sh:class odrl:Permission ]
+        [ sh:class odrl:Prohibition ]
+        [ sh:class odrl:Duty ]
+    ) ;
+    sh:message "A rule must be typed as odrl:Permission, odrl:Prohibition or odrl:Duty." ;
+
+    # Declares rdf:type so the closed shape allows it (the type itself is checked by the sh:or above).
+    sh:property [
+        sh:path rdf:type ;
+    ] ;
 
     # R112: a rule may have at most one uid, and it must be an IRI
     sh:property [
@@ -371,7 +389,6 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
     sh:targetClass odrl:Permission ;
     sh:node :RuleShape ;
 
-
     # R25: a permission must have exactly one target
     sh:property [
         sh:path odrl:target ;
@@ -505,6 +522,13 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
 
 :ConstraintShape a sh:NodeShape ;
     sh:targetClass odrl:Constraint ;
+    sh:closed true;
+
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue odrl:Constraint ;
+        sh:message "A constraint must have the type of odrl:Constraint." ;
+    ] ;
 
     # R115: a constraint may have at most one uid, and it must be an IRI
     sh:property [
@@ -640,7 +664,15 @@ odrl:Ticket rdfs:subClassOf odrl:Policy .
     sh:targetSubjectsOf odrl:xone ;
     sh:targetSubjectsOf odrl:and ;
     sh:targetSubjectsOf odrl:andSequence ;
+
+    sh:closed true;
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue odrl:LogicalConstraint ;
+        sh:message "A logical constraint must have the type of odrl:LogicalConstraint." ;
+    ] ;
     
+
     # R120: a LogicalConstraint may have at most one uid, and it must be an IRI
     sh:property [
         sh:path odrl:uid ;
