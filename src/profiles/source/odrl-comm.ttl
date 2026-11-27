@@ -7,28 +7,28 @@
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-odrl: a owl:Ontology ;
+<https://w3id.org/force/community#> a owl:Ontology ;
   rdfs:label "ODRL Community Vocabulary"@en ;
   owl:versionInfo "0.1" ;
   dct:created "2024-08-10"^^xsd:date ;
-  dct:modified "2026-03-02"^^xsd:date ;
+  dct:modified "2026-11-25"^^xsd:date ;
   dct:creator "Beatriz Esteves", "Renato Iannella" ;
   dct:contributor "W3C ODRL Community Group" ;
   dct:publisher "W3C ODRL Community Group" ;
   dct:description "This ontology contains a community-supplied set of general terms that are useful across difference use cases where the usage of ODRL policies is desirable."@en ;
   vann:preferredNamespacePrefix "odrl-comm"@en ;
-  vann:preferredNamespaceUri "http://www.w3.org/ns/odrl/2/" ;
+  vann:preferredNamespaceUri "https://w3id.org/force/community#" ;
   dct:conformsTo <https://www.w3.org/TR/odrl-model/> ;
   dct:license <https://www.w3.org/Consortium/Legal/2002/ipr-notice-20021231#Copyright/> .
 
-<http://www.w3.org/ns/odrl/2/#policySubClassesCommunity> a skos:Collection ;
+<https://w3id.org/force/community#policySubClassesCommunity> a skos:Collection ;
   skos:prefLabel "Policy Community Subclasses"@en ;
   skos:scopeNote "ODRL Community Vocabulary Terms"@en ;
-  skos:member odrl:Preference .
+  skos:member <https://w3id.org/force/community#Preference> .
 
-odrl:Preference a skos:Concept, rdfs:Class, owl:Class ;
+<https://w3id.org/force/community#Preference> a skos:Concept, rdfs:Class, owl:Class ;
   rdfs:label "Preference Policy"@en ;
-  rdfs:isDefinedBy odrl: ;
+  rdfs:isDefinedBy <https://w3id.org/force/community#> ;
   rdfs:comment "A Preference Policy is a policy that contains information about the assigner's preferences over an Asset which MAY not be satisfied."@en ;
   skos:definition "A Preference Policy is a policy that contains information about the assigner's preferences over an Asset which MAY not be satisfied."@en ;
   dct:source <https://github.com/w3c/odrl/issues/21>, <https://w3id.org/oac#Preference> ;
@@ -36,14 +36,14 @@ odrl:Preference a skos:Concept, rdfs:Class, owl:Class ;
   rdfs:subClassOf odrl:Policy ;
   owl:disjointWith odrl:Agreement, odrl:Offer, odrl:Privacy, odrl:Request, odrl:Ticket, odrl:Assertion .
 
-<http://www.w3.org/ns/odrl/2/#partyRolesCommunity> a skos:Collection ;
+<https://w3id.org/force/community#partyRolesCommunity> a skos:Collection ;
   skos:prefLabel "Party Community Functions"@en ;
   skos:scopeNote "ODRL Community Vocabulary Terms"@en ;
-  skos:member odrl:issuedPolicy .
+  skos:member <https://w3id.org/force/community#issuedPolicy> .
 
-odrl:issuedPolicy a skos:Concept, rdf:Property, owl:ObjectProperty ;
+<https://w3id.org/force/community#issuedPolicy> a skos:Concept, rdf:Property, owl:ObjectProperty ;
   rdfs:label "Issued policy"@en ;
-  rdfs:isDefinedBy odrl: ;
+  rdfs:isDefinedBy <https://w3id.org/force/community#> ;
   rdfs:comment "Indicates that a Party issued a Policy."@en ;
   skos:definition "Indicates that a Party issued a Policy."@en ;
   dct:source <https://github.com/w3c/odrl/issues/21> ;
@@ -51,47 +51,47 @@ odrl:issuedPolicy a skos:Concept, rdf:Property, owl:ObjectProperty ;
   rdfs:domain odrl:Party ;
   rdfs:range odrl:Policy .
 
-<http://www.w3.org/ns/odrl/2/#actionsCommunity> a skos:Collection ;
+<https://w3id.org/force/community#actionsCommunity> a skos:Collection ;
   skos:prefLabel "Community Actions for Rules"@en ;
   skos:scopeNote "ODRL Community Vocabulary Terms"@en ;
-  skos:member odrl:create .
+  skos:member <https://w3id.org/force/community#create> .
 
-odrl:create a skos:Concept, odrl:Action ;
+<https://w3id.org/force/community#create> a skos:Concept, odrl:Action ;
   rdfs:label "Create"@en ;
-  rdfs:isDefinedBy odrl: ;
+  rdfs:isDefinedBy <https://w3id.org/force/community#> ;
   rdfs:comment "To create the Asset."@en ;
   skos:definition "To create the Asset."@en ;
   dct:source <https://github.com/w3c/odrl/issues/35> .
 
-<http://www.w3.org/ns/odrl/2/#constraintRelationalOperatorsCommunity> a skos:Collection ;
+<https://w3id.org/force/community#constraintRelationalOperatorsCommunity> a skos:Collection ;
   skos:prefLabel "Community Constraint Operators"@en ;
   skos:scopeNote "ODRL Community Vocabulary Terms"@en ;
-  skos:member odrl:isNotA, odrl:typeOf .
+  skos:member <https://w3id.org/force/community#isNotA>, <https://w3id.org/force/community#typeOf> .
 
-odrl:isNotA a skos:Concept, odrl:Operator, owl:NamedIndividual ;
+<https://w3id.org/force/community#isNotA> a skos:Concept, odrl:Operator, owl:NamedIndividual ;
   rdfs:label "Is not a"@en ;
-  rdfs:isDefinedBy odrl: ;
+  rdfs:isDefinedBy <https://w3id.org/force/community#> ;
   rdfs:comment "Indicates that a given value is not an instance of the Right Operand of the Constraint."@en ;
   skos:definition "Indicates that a given value is not an instance of the Right Operand of the Constraint."@en ;
   dct:source <https://github.com/w3c/odrl/issues/27>, <https://w3id.org/oac#isNotA> ;
   skos:example "The purpose constraint of a rule can not be an instance of academic research purpose."@en .
 
-odrl:typeOf a skos:Concept, odrl:Operator, owl:NamedIndividual ;
+<https://w3id.org/force/community#typeOf> a skos:Concept, odrl:Operator, owl:NamedIndividual ;
   rdfs:label "Type of"@en ;
-  rdfs:isDefinedBy odrl: ;
+  rdfs:isDefinedBy <https://w3id.org/force/community#> ;
   rdfs:comment "Indicates that a given value is of a similar type of the Right Operand of the Constraint."@en ;
   skos:definition "Indicates that a given value is of a similar type of the Right Operand of the Constraint."@en ;
   dct:source <https://github.com/w3c/odrl/issues/28>, <https://w3id.org/oac#semantic>, <https://w3id.org/aiup#seq>, <https://w3id.org/oac#subclass> ;
   skos:example "The purpose constraint of a rule can be a subclass of research and development such as academic research, non-commercial research or commercial research."@en .
 
-<http://www.w3.org/ns/odrl/2/#constraintLeftOperandsCommunity> a skos:Collection ;
+<https://w3id.org/force/community#constraintLeftOperandsCommunity> a skos:Collection ;
   skos:prefLabel "Community Constraint Left Operands"@en ;
   skos:scopeNote "ODRL Community Vocabulary Terms"@en ;
-  skos:member odrl:payPercentage .
+  skos:member <https://w3id.org/force/community#payPercentage> .
 
-odrl:payPercentage a skos:Concept, owl:NamedIndividual, odrl:LeftOperand ;
+<https://w3id.org/force/community#payPercentage> a skos:Concept, owl:NamedIndividual, odrl:LeftOperand ;
   rdfs:label "Payment Percentage"@en ;
-  rdfs:isDefinedBy odrl: ;
+  rdfs:isDefinedBy <https://w3id.org/force/community#> ;
   rdfs:comment "The payment is a percentage of the transaction amount."@en ;
   skos:definition "The payment is a percentage of the transaction amount."@en ;
   dct:source <https://github.com/w3c/odrl/issues/148> .

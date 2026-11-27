@@ -21,13 +21,17 @@ async function main() {
     
     const generated: GeneratedProfile[] = [];
     for (const {source, profile} of profiles) {
-        const quads = await fetchProfile(source)
-        const cleanedQuads = cleanProfile(quads); // there are some issues with the TOSL. It's valid ttl, but the libraries struggle with it. It removes `skos:note`
-        const ontology = await write(cleanedQuads, { prefixes })
-        const result = persistProfile(profile, ontology);
-        generated.push(result);
-        console.log("Created the following profile:", result.constantName);    }
-
+        try {
+            const quads = await fetchProfile(source)
+            const cleanedQuads = cleanProfile(quads); // there are some issues with the TOSL. It's valid ttl, but the libraries struggle with it. It removes `skos:note`
+            const ontology = await write(cleanedQuads, {prefixes})
+            const result = persistProfile(profile, ontology);
+            generated.push(result);
+            console.log("Created the following profile:", result.constantName);
+        } catch(e) {
+            console.log("Error creating profile:", profile,  e);
+        }
+    }
     writeProfileIndex(generated);
 }
 main()
